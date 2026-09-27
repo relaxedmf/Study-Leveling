@@ -469,7 +469,66 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-display) !important; font-weigh
 .fm-main{ flex:1; min-width:0; }
 .fm-actions{ display:flex; gap:8px; flex-shrink:0; }
 .fm-term{ color:var(--text-hi); font-weight:700; font-size:13.5px; }
-.fm-expr{ margin-top:6px; font-size:14px; color:var(--accent-blue); overflow-x:auto; }
+.fm-expr{
+  margin-top:6px;
+  font-size:14px;
+  line-height:1.55;
+  color:var(--text-hi);
+  overflow-x:auto;
+  overflow-y:visible;
+  padding:8px 2px 10px;
+  min-height:34px;
+}
+#view-formulas .fm-expr,
+#view-formulas .fm-expr .katex,
+#view-formulas .fm-expr .katex *{
+  color:var(--text-hi) !important;
+}
+#view-formulas .fm-expr .katex-display{
+  margin:.35em 0;
+  padding:.35em 0 .45em;
+  overflow-x:auto;
+  overflow-y:visible !important;
+  min-height:1.8em;
+}
+#view-formulas .fm-expr .katex{
+  line-height:1.35;
+  vertical-align:middle;
+}
+#view-formulas .fm-card{
+  overflow:visible;
+}
+#view-formulas .fm-main{
+  overflow:visible;
+}
+#view-formulas .fm-var-row{
+  display:grid;
+  grid-template-columns:max-content 16px minmax(0,1fr);
+  align-items:baseline;
+  gap:6px;
+  padding:4px 0;
+  line-height:1.45;
+}
+#view-formulas .fm-var-symbol{
+  color:var(--text-hi);
+  font-size:1.02em;
+  min-width:24px;
+}
+#view-formulas .fm-var-symbol .katex{
+  color:var(--text-hi) !important;
+}
+#view-formulas .fm-var-sep{
+  color:var(--text-dim);
+  text-align:center;
+}
+#view-formulas .fm-var-meaning{
+  color:var(--text-mid);
+  min-width:0;
+}
+#view-formulas .fm-var-meaning .katex{
+  color:var(--text-hi) !important;
+}
+
 .fm-def{ margin-top:6px; font-size:12.5px; color:var(--text-mid); line-height:1.5; }
 .fm-edit-field{ display:block; width:100%; border-radius:8px; padding:8px 10px; margin-top:6px; resize:vertical; line-height:1.4; }
 .fm-edit-field:focus{ outline:none; border-color:var(--accent-blue); }
@@ -3122,6 +3181,35 @@ function wrapFormulaLatex(f){
   if(!f.trim()) return '';
   return /\$|\\\(|\\\[/.test(f) ? f : `$$${f}$$`;
 }
+
+function wrapInlineLatex(value){
+  const s = repairLatexArtifacts(String(value == null ? '' : value)).trim();
+  if(!s) return '';
+  return /\$|\\\(|\\\[/.test(s) ? s : `\\(${s}\\)`;
+}
+
+function formulaVariableLineHtml(line){
+  const raw = String(line == null ? '' : line).trim();
+  if(!raw) return '';
+
+  // Formula AI imports are stored as "symbol — meaning". Render the symbol
+  // through KaTeX while keeping the explanation readable. Inline LaTeX already
+  // present inside the meaning is preserved and rendered by renderMath().
+  const parts = raw.split(/\s+(?:—|–|-)\s+/, 2);
+  if(parts.length === 2){
+    const symbol = wrapInlineLatex(parts[0]);
+    const meaning = repairLatexArtifacts(parts[1]);
+    return `<div class="fm-var-row">
+      <span class="fm-var-symbol">${escapeHtml(symbol)}</span>
+      <span class="fm-var-sep">—</span>
+      <span class="fm-var-meaning">${escapeHtml(meaning)}</span>
+    </div>`;
+  }
+
+  // For manually entered variable text without a separator, still allow any
+  // explicit $...$/\( ... \) LaTeX in the line to render.
+  return `<div class="fm-var-row"><span class="fm-var-meaning">${escapeHtml(repairLatexArtifacts(raw))}</span></div>`;
+}
 // Only one formula card is edited at a time. kind: 'rf' (Formula Reference) or 'fm' (quiz formula sheet).
 const FormulaEditState = { kind: null, id: null };
 
@@ -3163,7 +3251,7 @@ function formulaCardHtml(kind, f){
   }
 
   const wrapped = wrapFormulaLatex(f.formula || '');
-  const variableHtml = variables ? variables.split(/\n+/).filter(Boolean).map(v=>`<div style="padding:3px 0;">${escapeHtml(v)}</div>`).join('') : '';
+  const variableHtml = variables ? variables.split(/\n+/).filter(Boolean).map(formulaVariableLineHtml).join('') : '';
   return `<div class="fm-card" ${attrs}>
     <div class="fm-row">
       <div class="fm-main">
@@ -4711,6 +4799,9 @@ const FormulaAIBridge = (function(){
 - Preserve the original notation and symbols used by the source.
 - Write each formula as raw LaTeX only, without $, \\( \\), or \\[ \\] delimiters.
 - Explain every variable or symbol used in the formula.
+- Write each variable "symbol" as raw LaTeX whenever it is mathematical notation (for example: Q, Q_{avg}, h_L, \mu, \rho, C_{in}).
+- If a variable meaning contains mathematical notation, units with exponents, subscripts, superscripts, Greek letters, or another formula, put that mathematical part in inline LaTeX using $...$.
+- Do not convert mathematical symbols into plain-text substitutes when proper LaTeX is available.
 - State what the formula is used for and any conditions or assumptions explicitly supported by the source.
 - Keep information grounded in the document. If a variable is not defined by the source, write "Not defined in source" rather than guessing.`;
 
@@ -6622,10 +6713,11 @@ const UI = {
         <input type="checkbox" data-formula-ai-include="${f.id}" ${f.include?'checked':''} style="margin-top:10px;">
         <div style="flex:1;min-width:0;">
           <input type="text" class="select-mini" data-formula-ai-field="term" data-formula-ai-id="${f.id}" value="${escapeHtml(f.term)}" style="width:100%;padding:7px 9px;font-weight:700;">
-          <textarea class="select-mini" data-formula-ai-field="formula" data-formula-ai-id="${f.id}" rows="2" style="width:100%;margin-top:8px;padding:8px;color:var(--accent-blue);">${escapeHtml(f.formula)}</textarea>
+          <textarea class="select-mini" data-formula-ai-field="formula" data-formula-ai-id="${f.id}" rows="2" style="width:100%;margin-top:8px;padding:8px;color:var(--text-hi);">${escapeHtml(f.formula)}</textarea>
           <div class="fm-expr" style="margin-top:8px;">${escapeHtml(wrapFormulaLatex(f.formula))}</div>
           <label class="small-note" style="display:block;margin-top:8px;">Variables</label>
           <textarea class="select-mini" data-formula-ai-field="variables" data-formula-ai-id="${f.id}" rows="3" style="width:100%;padding:8px;">${escapeHtml(f.variables)}</textarea>
+          <div class="fm-def" style="margin-top:6px;">${String(f.variables||'').split(/\n+/).filter(Boolean).map(formulaVariableLineHtml).join('')}</div>
           <label class="small-note" style="display:block;margin-top:8px;">Use / purpose</label>
           <textarea class="select-mini" data-formula-ai-field="use" data-formula-ai-id="${f.id}" rows="3" style="width:100%;padding:8px;">${escapeHtml(f.use)}</textarea>
           <label class="small-note" style="display:block;margin-top:8px;">Footnotes (optional)</label>
