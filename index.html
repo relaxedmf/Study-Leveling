@@ -529,6 +529,73 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-display) !important; font-weigh
   color:var(--text-hi) !important;
 }
 
+#view-formulas .rf-topic-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:10px;
+}
+#view-formulas .rf-topic-card{
+  border:1px solid var(--panel-border);
+  background:rgba(255,255,255,.025);
+  color:var(--text-hi);
+  border-radius:10px;
+  padding:12px 14px;
+  cursor:pointer;
+  transition:.15s ease;
+  font-family:var(--font-body);
+}
+#view-formulas .rf-topic-card:hover,
+#view-formulas .rf-topic-card.active{
+  border-color:var(--accent-blue);
+  background:rgba(41,211,255,.07);
+  color:var(--text-hi);
+  box-shadow:0 0 14px rgba(41,211,255,.08);
+}
+#view-formulas .rf-topic-card:hover .nm,
+#view-formulas .rf-topic-card.active .nm{
+  color:var(--accent-blue) !important;
+}
+#view-formulas .rf-topic-card .nm{
+  font-family:var(--font-display);
+  font-size:12px;
+  font-weight:800;
+  color:var(--text-hi) !important;
+}
+#view-formulas .rf-topic-card .ct{
+  margin-top:4px;
+  color:var(--text-dim);
+  font:10px var(--font-mono);
+}
+#view-formulas .rf-lesson-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+#view-formulas .rf-lesson-chip{
+  border:1px solid var(--panel-border);
+  background:rgba(255,255,255,.025);
+  color:var(--text-mid);
+  border-radius:999px;
+  padding:7px 11px;
+  cursor:pointer;
+  font-size:11px;
+}
+#view-formulas .rf-lesson-chip:hover,
+#view-formulas .rf-lesson-chip.active{
+  border-color:var(--accent-purple);
+  color:var(--text-hi);
+  background:rgba(176,107,255,.10);
+}
+#view-formulas .rf-nav-title{
+  font-family:var(--font-display);
+  font-size:11px;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  margin-bottom:8px;
+}
+
 .fm-def{ margin-top:6px; font-size:12.5px; color:var(--text-mid); line-height:1.5; }
 .fm-edit-field{ display:block; width:100%; border-radius:8px; padding:8px 10px; margin-top:6px; resize:vertical; line-height:1.4; }
 .fm-edit-field:focus{ outline:none; border-color:var(--accent-blue); }
@@ -2008,6 +2075,13 @@ html.no-animations *{
 .hierarchy-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap}.hier-topic{border:1px solid var(--panel-border);border-radius:10px;padding:12px 14px;margin-top:10px;background:rgba(255,255,255,.018)}.hier-topic-head{display:flex;justify-content:space-between;gap:10px}.hier-lessons{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.hier-lessons span{font-size:11px;padding:5px 8px;border-radius:999px;background:rgba(41,211,255,.08);border:1px solid rgba(41,211,255,.15);color:var(--text-mid)}.hier-lessons .muted{background:transparent;border-style:dashed;color:var(--text-dim)}.classification-btn{max-width:320px;white-space:normal;text-align:left;line-height:1.25;padding:7px 9px!important}
 .discipline-modal-backdrop{position:fixed;inset:0;background:rgba(4,7,14,.78);backdrop-filter:blur(8px);z-index:99999;display:grid;place-items:center;padding:18px}.discipline-modal{width:min(520px,100%);background:var(--panel-bg);border:1px solid var(--panel-border);border-radius:16px;padding:20px;box-shadow:0 24px 80px rgba(0,0,0,.45)}.discipline-modal-title{font-size:18px;font-weight:800;color:var(--text-hi);margin-bottom:16px}.discipline-modal label{display:block;font-size:11px;color:var(--text-mid);margin:12px 0 5px;text-transform:uppercase;letter-spacing:.05em}.discipline-modal .select-mini{width:100%;padding:10px}.discipline-readonly{padding:10px;border:1px solid var(--panel-border);border-radius:8px;color:var(--accent-blue);background:rgba(41,211,255,.05)}.discipline-modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px;flex-wrap:wrap}
 @media(max-width:700px){.discipline-switch-host{justify-content:stretch}.discipline-switch{width:100%}.discipline-switch button{font-size:10px;padding:9px 7px}}
+
+@media(max-width:620px){
+  #ai-review-panel > div[style*="grid-template-columns:minmax(180px,1fr)"]{
+    grid-template-columns:1fr !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2459,7 +2533,7 @@ html.no-animations *{
           </div>
           <div id="formula-ai-review-list" class="session-log mt-16" style="max-height:520px; overflow-y:auto;"></div>
           <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" id="btn-formula-ai-add">+ Add Selected to Formula Library</button>
+            <button class="btn btn-primary btn-sm" id="btn-formula-ai-add">+ Add Selected to Formula Library</button><span class="small-note" style="align-self:center;">You will choose one topic and lesson for the selected batch next.</span>
             <button class="btn btn-ghost btn-sm" id="btn-formula-ai-discard">Discard</button>
           </div>
         </div>
@@ -2485,6 +2559,8 @@ html.no-animations *{
             <button class="btn btn-danger btn-sm" id="btn-clear-all-resource-formulas">Clear Library</button>
           </div>
         </div>
+        <div id="rf-topic-nav" class="mt-16"></div>
+        <div id="rf-lesson-nav" class="mt-16"></div>
         <div id="rf-list" class="mt-16"></div>
       </div>
 
@@ -2574,8 +2650,10 @@ html.no-animations *{
               </select>
             </div>
             <div style="flex:1; min-width:180px;">
-              <label class="small-note" style="display:block; margin-bottom:4px;">Bank name (optional)</label>
-              <input type="text" id="ai-gen-bank-name" class="select-mini" placeholder="e.g. Chapter 4 — AI Generated" style="padding:8px; width:100%;">
+              <label class="small-note" style="display:block; margin-bottom:4px;">Assign lesson</label>
+              <select class="select-mini" id="ai-gen-lesson" style="padding:8px; width:100%;">
+                <option value="">Unassigned / All Lessons</option>
+              </select>
             </div>
           </div>
 
@@ -2621,6 +2699,21 @@ html.no-animations *{
             <span id="ai-review-title">3. Review Questions</span>
             <span class="small-note" id="ai-review-count"></span>
           </div>
+          <div style="display:grid; grid-template-columns:minmax(180px,1fr) minmax(180px,1fr); gap:12px; margin-top:12px; padding:12px; border:1px solid var(--panel-border); border-radius:10px; background:rgba(255,255,255,.02);">
+            <div>
+              <label class="small-note" style="display:block; margin-bottom:5px;">Assign topic before adding</label>
+              <select class="select-mini" id="ai-review-topic" style="width:100%; padding:9px;">
+                <option value="">Unassigned</option>
+              </select>
+            </div>
+            <div>
+              <label class="small-note" style="display:block; margin-bottom:5px;">Assign lesson before adding</label>
+              <select class="select-mini" id="ai-review-lesson" style="width:100%; padding:9px;">
+                <option value="">Unassigned / All Lessons</option>
+              </select>
+            </div>
+          </div>
+          <div class="small-note" style="margin-top:7px;">You can change the topic and lesson here even if you selected different values before generating the prompt.</div>
           <div id="ai-review-list" class="session-log mt-16" style="max-height:460px; overflow-y:auto;"></div>
           <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
             <button class="btn btn-primary btn-sm" id="btn-ai-add-to-bank">+ Add Selected to Question Bank</button>
@@ -3212,6 +3305,7 @@ function formulaVariableLineHtml(line){
 }
 // Only one formula card is edited at a time. kind: 'rf' (Formula Reference) or 'fm' (quiz formula sheet).
 const FormulaEditState = { kind: null, id: null };
+const FormulaLibraryNav = { topic:'', lesson:'' };
 
 function formulaCardHtml(kind, f){
   const isRf = kind === 'rf';
@@ -3220,12 +3314,12 @@ function formulaCardHtml(kind, f){
   const useText = String(f.use || (isRf ? f.definition : f.notes) || '').trim();
   const footnotes = String(f.footnotes || '').trim();
   const topic = String(f.topic || '').trim();
+  const lesson = String(f.lesson || '').trim();
   const titleLabel = isRf ? 'Formula name / term' : 'Formula name';
   const editing = FormulaEditState.kind === kind && FormulaEditState.id === f.id;
   const attrs = `data-fm-card data-fm-kind="${kind}" data-fm-id="${f.id}"`;
 
   if(editing){
-    const topicOptions = (QuestionBankManager.getTopics ? QuestionBankManager.getTopics() : []).map(t=>`<option value="${escapeHtml(t)}" ${topic===t?'selected':''}>${escapeHtml(t)}</option>`).join('');
     return `<div class="fm-card fm-editing" ${attrs}>
       <label class="fm-edit-label">${titleLabel}</label>
       <input type="text" class="select-mini fm-edit-field fm-edit-term" data-fm-field="title" value="${escapeHtml(title)}" placeholder="${titleLabel}">
@@ -3237,10 +3331,10 @@ function formulaCardHtml(kind, f){
       <textarea class="select-mini fm-edit-field fm-edit-def" data-fm-field="variables" rows="3" placeholder="One per line, e.g. m — mass\nc — speed of light">${escapeHtml(variables)}</textarea>
       <label class="fm-edit-label">Use / purpose</label>
       <textarea class="select-mini fm-edit-field fm-edit-def" data-fm-field="use" rows="3" placeholder="What the formula calculates and when it is used">${escapeHtml(useText)}</textarea>
-      <label class="fm-edit-label">Topic (optional)</label>
-      <select class="select-mini fm-edit-field" data-fm-field="topic" style="margin-top:6px;">
-        <option value="" ${!topic?'selected':''}>Unassigned</option>${topicOptions}${topic && !(QuestionBankManager.getTopics ? QuestionBankManager.getTopics() : []).includes(topic)?`<option value="${escapeHtml(topic)}" selected>${escapeHtml(topic)}</option>`:''}
-      </select>
+      <div class="small-note" style="margin-top:12px; padding:9px 10px; border:1px solid var(--panel-border); border-radius:8px; background:rgba(255,255,255,.02);">
+        Classification: ${escapeHtml(topic || 'Unassigned')}${lesson ? ` › ${escapeHtml(lesson)}` : ''}
+        <div style="margin-top:3px;">Topic and lesson are assigned in batches when importing Formula JSON.</div>
+      </div>
       <label class="fm-edit-label">Footnotes / personal notes</label>
       <textarea class="select-mini fm-edit-field fm-edit-def" data-fm-field="footnotes" rows="3" placeholder="Add your own reminders, exceptions, shortcuts, or source notes">${escapeHtml(footnotes)}</textarea>
       <div class="fm-edit-buttons">
@@ -3258,6 +3352,7 @@ function formulaCardHtml(kind, f){
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
           <div class="fm-term">${escapeHtml(title)}</div>
           ${topic ? `<span class="nav-badge" style="background:rgba(41,211,255,.10);color:var(--accent-blue);">${escapeHtml(topic)}</span>` : ''}
+          ${lesson ? `<span class="nav-badge" style="background:rgba(176,107,255,.10);color:var(--accent-purple);">${escapeHtml(lesson)}</span>` : ''}
         </div>
         ${wrapped ? `<div class="fm-expr">${escapeHtml(wrapped)}</div>` : ''}
         ${variableHtml ? `<div class="fm-def" style="margin-top:10px;"><strong style="color:var(--text-hi);">Variables</strong>${variableHtml}</div>` : ''}
@@ -3311,7 +3406,6 @@ function fmSaveEdit(card){
     rec.variables = val('variables');
     rec.use = val('use');
     rec.definition = rec.use; // backwards compatibility with old formula records
-    rec.topic = val('topic');
     rec.footnotes = val('footnotes');
   } else {
     rec.name = title || rec.name || 'Formula';
@@ -4759,21 +4853,22 @@ END SOURCE MATERIAL`;
   function removePending(qId){ pendingQuestions=pendingQuestions.filter(x=>x.id!==qId); }
   function clearPending(){ pendingQuestions=[]; generatedPrompt=''; extractionMeta=null; pendingSourceName=''; cachedDocumentText=''; cachedPdfFile=null; }
 
-  function commitToBank(bankName, topic){
+  function commitToBank(bankName, topic, lesson){
     const selected=pendingQuestions.filter(q=>q.include && q.questionText.trim());
     if(!selected.length) return {count:0};
     const bankId=uid('qb');
     const fileName=(bankName&&bankName.trim()) || (pendingSourceName ? `${currentMode==='extract'?'Extracted':'AI'}: ${pendingSourceName.replace(/\.pdf$/i,'')}` : (currentMode==='extract'?'Extracted PDF Bank':'AI Generated Bank'));
     const finalTopic=(topic||'').trim();
+    const finalLesson=(lesson||'').trim();
     const questions=selected.map(q=>({
-      id:q.id, bankId, bankFileName:fileName, topic:finalTopic,
+      id:q.id, bankId, bankFileName:fileName, topic:finalTopic, lesson:finalLesson,
       questionText:q.questionText.trim(), options:q.options,
       correctAnswerId:q.correctAnswerId,
       correctText:(q.options.find(o=>o.id===q.correctAnswerId)||q.options[0]).text,
       explanation:q.explanation, difficulty:q.difficulty
     }));
     STATE.questionBanks.push({
-      id:bankId,fileName,topic:finalTopic,importedAt:new Date().toISOString(),disabled:false,
+      id:bankId,fileName,topic:finalTopic,lesson:finalLesson,importedAt:new Date().toISOString(),disabled:false,
       questionCount:questions.length,questions,validationWarnings:[],source:currentMode==='extract'?'pdf-mcq-extraction':'manual-ai-json',aiProvider:'manual'
     });
     QuestionBankManager.invalidateCache(); persist(); clearPending();
@@ -4910,12 +5005,16 @@ Example:
   function update(id,field,value){const f=pending.find(x=>x.id===id);if(!f)return;if(field==='include')f.include=!!value;else f[field]=value;}
   function remove(id){pending=pending.filter(x=>x.id!==id);}
   function clear(){pending=[];promptText='';extractionMeta=null;sourceName='';}
-  function commit(topic){
+  function commit(topic,lesson){
     const selected=pending.filter(f=>f.include && f.formula.trim());
     if(!selected.length)return{count:0};
     const canonicalTopic=String(topic||'').trim();
+    const canonicalLesson=String(lesson||'').trim();
     STATE.resourceFormulas=STATE.resourceFormulas||[];
-    selected.forEach(f=>STATE.resourceFormulas.push({id:f.id,term:f.term,formula:f.formula,variables:f.variables,use:f.use,definition:f.use,footnotes:f.footnotes,topic:canonicalTopic}));
+    selected.forEach(f=>STATE.resourceFormulas.push({
+      id:f.id,term:f.term,formula:f.formula,variables:f.variables,use:f.use,
+      definition:f.use,footnotes:f.footnotes,topic:canonicalTopic,lesson:canonicalLesson
+    }));
     persist(); clear(); UI.renderResourceFormulas(); UI.renderQuizFormulaSheet();
     return{count:selected.length};
   }
@@ -6655,35 +6754,110 @@ const UI = {
 
   renderResourceFormulas(){
     const listEl = document.getElementById('rf-list'); if(!listEl) return;
-    const all = STATE.resourceFormulas || [];
+    const topicNav = document.getElementById('rf-topic-nav');
+    const lessonNav = document.getElementById('rf-lesson-nav');
+    const activeDiscipline = (typeof DisciplineSystem!=='undefined' && DisciplineSystem.active) ? DisciplineSystem.active() : ((STATE.activeDiscipline==='sanitary')?'sanitary':'civil');
+    const all = (STATE.resourceFormulas || []).filter(f => (f.discipline || 'civil') === activeDiscipline);
 
     const summaryEl = document.getElementById('rf-summary');
     if(summaryEl){
       summaryEl.textContent = all.length
-        ? `${all.length} formula${all.length===1?'':'s'} imported`
+        ? `${all.length} formula${all.length===1?'':'s'} in ${(typeof DisciplineSystem!=='undefined'&&DisciplineSystem.label)?DisciplineSystem.label(activeDiscipline):activeDiscipline}`
         : 'No formulas imported yet.';
     }
 
     const searchInput = document.getElementById('rf-search');
     const query = searchInput ? (searchInput.value||'').trim().toLowerCase() : '';
-    const filtered = query
-      ? all.filter(f =>
-          (f.term && f.term.toLowerCase().includes(query)) ||
-          (f.formula && f.formula.toLowerCase().includes(query)) ||
-          (f.definition && f.definition.toLowerCase().includes(query)) ||
-          (f.variables && f.variables.toLowerCase().includes(query)) ||
-          (f.use && f.use.toLowerCase().includes(query)) ||
-          (f.footnotes && f.footnotes.toLowerCase().includes(query)) ||
-          (f.topic && f.topic.toLowerCase().includes(query))
-        )
-      : all;
 
     if(!all.length){
+      if(topicNav) topicNav.innerHTML='';
+      if(lessonNav) lessonNav.innerHTML='';
       listEl.innerHTML = '<div class="empty-state">No formulas yet. Add one manually, import Excel, or use the PDF formula bridge above.</div>';
       return;
     }
+
+    // Build topics from the manual hierarchy first, then append any legacy formula
+    // topics that are still present so nothing becomes inaccessible.
+    let topicNames = [];
+    if(typeof DisciplineSystem!=='undefined' && DisciplineSystem.topics){
+      topicNames = DisciplineSystem.topics(activeDiscipline).map(t=>t.name).filter(Boolean);
+    }
+    all.forEach(f=>{
+      const t=String(f.topic||'').trim();
+      if(t && !topicNames.some(x=>x.toLowerCase()===t.toLowerCase())) topicNames.push(t);
+    });
+    if(all.some(f=>!String(f.topic||'').trim())) topicNames.push('Unclassified');
+
+    // Keep selection valid.
+    if(!FormulaLibraryNav.topic || !topicNames.some(t=>t===FormulaLibraryNav.topic)){
+      FormulaLibraryNav.topic = topicNames[0] || '';
+      FormulaLibraryNav.lesson = '';
+    }
+
+    if(topicNav){
+      topicNav.innerHTML = `<div class="rf-nav-title">Topics</div><div class="rf-topic-grid">${
+        topicNames.map(topic=>{
+          const topicCount = all.filter(f => topic==='Unclassified' ? !String(f.topic||'').trim() : String(f.topic||'').trim()===topic).length;
+          return `<button type="button" class="rf-topic-card ${FormulaLibraryNav.topic===topic?'active':''}" data-rf-topic="${escapeHtml(topic)}">
+            <div class="nm">${escapeHtml(topic)}</div>
+            <div class="ct">${topicCount} formula${topicCount===1?'':'s'}</div>
+          </button>`;
+        }).join('')
+      }</div>`;
+    }
+
+    const selectedTopic = FormulaLibraryNav.topic;
+    const topicFormulas = all.filter(f => selectedTopic==='Unclassified' ? !String(f.topic||'').trim() : String(f.topic||'').trim()===selectedTopic);
+
+    // Lessons come from the hierarchy plus legacy values already attached to formulas.
+    let lessons = [];
+    if(selectedTopic && selectedTopic!=='Unclassified' && typeof DisciplineSystem!=='undefined' && DisciplineSystem.lessons){
+      lessons = DisciplineSystem.lessons(selectedTopic, activeDiscipline).slice();
+    }
+    topicFormulas.forEach(f=>{
+      const l=String(f.lesson||'').trim();
+      if(l && !lessons.some(x=>x.toLowerCase()===l.toLowerCase())) lessons.push(l);
+    });
+    lessons.sort((a,b)=>a.localeCompare(b));
+
+    const lessonKeys = ['All Lessons', ...lessons];
+    if(topicFormulas.some(f=>!String(f.lesson||'').trim())) lessonKeys.push('Unassigned');
+    if(!lessonKeys.includes(FormulaLibraryNav.lesson || 'All Lessons')) FormulaLibraryNav.lesson='All Lessons';
+    if(!FormulaLibraryNav.lesson) FormulaLibraryNav.lesson='All Lessons';
+
+    if(lessonNav){
+      lessonNav.innerHTML = `<div class="rf-nav-title">Lessons in ${escapeHtml(selectedTopic||'Topic')}</div><div class="rf-lesson-bar">${
+        lessonKeys.map(lesson=>{
+          let count=topicFormulas.length;
+          if(lesson==='Unassigned') count=topicFormulas.filter(f=>!String(f.lesson||'').trim()).length;
+          else if(lesson!=='All Lessons') count=topicFormulas.filter(f=>String(f.lesson||'').trim()===lesson).length;
+          return `<button type="button" class="rf-lesson-chip ${FormulaLibraryNav.lesson===lesson?'active':''}" data-rf-lesson="${escapeHtml(lesson)}">${escapeHtml(lesson)} · ${count}</button>`;
+        }).join('')
+      }</div>`;
+    }
+
+    let filtered = topicFormulas;
+    if(FormulaLibraryNav.lesson==='Unassigned'){
+      filtered = filtered.filter(f=>!String(f.lesson||'').trim());
+    }else if(FormulaLibraryNav.lesson && FormulaLibraryNav.lesson!=='All Lessons'){
+      filtered = filtered.filter(f=>String(f.lesson||'').trim()===FormulaLibraryNav.lesson);
+    }
+
+    if(query){
+      filtered = filtered.filter(f =>
+        (f.term && f.term.toLowerCase().includes(query)) ||
+        (f.formula && f.formula.toLowerCase().includes(query)) ||
+        (f.definition && f.definition.toLowerCase().includes(query)) ||
+        (f.variables && f.variables.toLowerCase().includes(query)) ||
+        (f.use && f.use.toLowerCase().includes(query)) ||
+        (f.footnotes && f.footnotes.toLowerCase().includes(query)) ||
+        (f.topic && f.topic.toLowerCase().includes(query)) ||
+        (f.lesson && f.lesson.toLowerCase().includes(query))
+      );
+    }
+
     if(!filtered.length){
-      listEl.innerHTML = '<div class="empty-state">No formulas match your search.</div>';
+      listEl.innerHTML = '<div class="empty-state">No formulas match this topic, lesson, and search.</div>';
       return;
     }
 
@@ -6904,6 +7078,30 @@ const UI = {
     const pending = AIQuizGenerator.getPending();
     if(!pending.length){ panel.classList.add('hidden'); list.innerHTML = ''; return; }
     panel.classList.remove('hidden');
+
+    // Seed the post-validation classification from the setup selectors only
+    // when the review selector has not been chosen yet. The user can then
+    // freely change topic/lesson before committing the bank.
+    const setupTopic=document.getElementById('ai-gen-topic');
+    const setupLesson=document.getElementById('ai-gen-lesson');
+    const reviewTopic=document.getElementById('ai-review-topic');
+    const reviewLesson=document.getElementById('ai-review-lesson');
+    if(reviewTopic && !reviewTopic.dataset.userChosen){
+      const desired=setupTopic?setupTopic.value:'';
+      if([...reviewTopic.options].some(o=>o.value===desired)) reviewTopic.value=desired;
+    }
+    if(typeof DisciplineSystem!=='undefined' && DisciplineSystem.refreshAll){
+      // Do not call full refresh here; it would rebuild the whole bank view.
+    }
+    if(reviewLesson && !reviewLesson.dataset.userChosen){
+      const topic=reviewTopic?reviewTopic.value:'';
+      const arr=(typeof DisciplineSystem!=='undefined' && DisciplineSystem.lessons && topic)?DisciplineSystem.lessons(topic):[];
+      const desired=setupLesson?setupLesson.value:'';
+      reviewLesson.innerHTML='<option value="">Unassigned / All Lessons</option>'+arr.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');
+      reviewLesson.disabled=!topic;
+      if(arr.includes(desired)) reviewLesson.value=desired;
+    }
+
     const includedCount = pending.filter(q => q.include).length;
     if(countEl) countEl.textContent = `${includedCount} of ${pending.length} selected`;
 
@@ -8064,17 +8262,45 @@ function wireEvents(){
     });
   }
 
+  const aiGenTopicSel=document.getElementById('ai-gen-topic');
+  if(aiGenTopicSel) aiGenTopicSel.addEventListener('change',()=>{
+    if(typeof DisciplineSystem!=='undefined'){
+      const lessonEl=document.getElementById('ai-gen-lesson');
+      const arr=aiGenTopicSel.value?DisciplineSystem.lessons(aiGenTopicSel.value):[];
+      if(lessonEl){
+        lessonEl.innerHTML='<option value="">Unassigned / All Lessons</option>'+arr.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');
+        lessonEl.disabled=!aiGenTopicSel.value;
+      }
+    }
+  });
+
+  const aiReviewTopicSel=document.getElementById('ai-review-topic');
+  if(aiReviewTopicSel) aiReviewTopicSel.addEventListener('change',()=>{
+    aiReviewTopicSel.dataset.userChosen='1';
+    const lessonEl=document.getElementById('ai-review-lesson');
+    const arr=(typeof DisciplineSystem!=='undefined' && aiReviewTopicSel.value)?DisciplineSystem.lessons(aiReviewTopicSel.value):[];
+    if(lessonEl){
+      lessonEl.innerHTML='<option value="">Unassigned / All Lessons</option>'+arr.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');
+      lessonEl.value='';
+      lessonEl.disabled=!aiReviewTopicSel.value;
+      lessonEl.dataset.userChosen='';
+    }
+  });
+  const aiReviewLessonSel=document.getElementById('ai-review-lesson');
+  if(aiReviewLessonSel) aiReviewLessonSel.addEventListener('change',()=>{ aiReviewLessonSel.dataset.userChosen='1'; });
+
   const btnAiAddToBank = document.getElementById('btn-ai-add-to-bank');
   if(btnAiAddToBank){
     btnAiAddToBank.addEventListener('click', () => {
-      const bankNameInput = document.getElementById('ai-gen-bank-name');
-      const topicSel = document.getElementById('ai-gen-topic');
-      const res = AIQuizGenerator.commitToBank(bankNameInput ? bankNameInput.value : '', topicSel ? topicSel.value : '');
+      const topicSel = document.getElementById('ai-review-topic') || document.getElementById('ai-gen-topic');
+      const lessonSel = document.getElementById('ai-review-lesson') || document.getElementById('ai-gen-lesson');
+      const res = AIQuizGenerator.commitToBank('', topicSel ? topicSel.value : '', lessonSel ? lessonSel.value : '');
       if(res.count > 0){
-        Notify.toast('success', 'Bank Created', `Added ${res.count} question(s) to your question bank.`);
+        Notify.toast('success', 'Bank Created', `Added ${res.count} question(s) under ${topicSel&&topicSel.value?topicSel.value:'Unassigned'}${lessonSel&&lessonSel.value?' › '+lessonSel.value:''}.`);
         const reviewPanel = document.getElementById('ai-review-panel');
         if(reviewPanel) reviewPanel.classList.add('hidden');
-        if(bankNameInput) bankNameInput.value = '';
+        if(topicSel) topicSel.dataset.userChosen='';
+        if(lessonSel) lessonSel.dataset.userChosen='';
         if(aiStatusEl) aiStatusEl.textContent = '';
       } else {
         Notify.toast('warning', 'Nothing Selected', 'Check at least one question before adding.');
@@ -8137,7 +8363,80 @@ function wireEvents(){
     fReview.addEventListener('change',e=>{const inc=e.target.closest('[data-formula-ai-include]');if(inc){FormulaAIBridge.update(inc.dataset.formulaAiInclude,'include',inc.checked);UI.renderFormulaAIReview();return;}const fld=e.target.closest('[data-formula-ai-field]');if(fld)FormulaAIBridge.update(fld.dataset.formulaAiId,fld.dataset.formulaAiField,fld.value);});
     fReview.addEventListener('click',e=>{const rm=e.target.closest('[data-formula-ai-remove]');if(rm){FormulaAIBridge.remove(rm.dataset.formulaAiRemove);UI.renderFormulaAIReview();}});
   }
-  const fAdd=document.getElementById('btn-formula-ai-add');if(fAdd)fAdd.addEventListener('click',()=>{const topic=document.getElementById('formula-ai-topic');const r=FormulaAIBridge.commit(topic?topic.value:'');if(r.count){Notify.toast('success','Formulas Added',`${r.count} formula(s) added to the Formula Library.`);if(fAiJson)fAiJson.value='';if(fAiValidation)fAiValidation.textContent='';UI.renderFormulaAIReview();UI.renderResourceFormulas();UI.renderQuizFormulaSheet();}else Notify.toast('warning','Nothing Selected','Select at least one formula.');});
+  function openFormulaBatchClassification(){
+    const selected=FormulaAIBridge.getPending().filter(f=>f.include && String(f.formula||'').trim());
+    if(!selected.length){
+      Notify.toast('warning','Nothing Selected','Select at least one formula.');
+      return;
+    }
+
+    const discipline=(typeof DisciplineSystem!=='undefined'&&DisciplineSystem.active)?DisciplineSystem.active():((STATE.activeDiscipline==='sanitary')?'sanitary':'civil');
+    const topics=(typeof DisciplineSystem!=='undefined'&&DisciplineSystem.topics)?DisciplineSystem.topics(discipline).map(t=>t.name):[];
+    const existing=document.querySelector('[data-formula-batch-modal]');
+    if(existing)existing.remove();
+
+    const topicOptions='<option value="">Unassigned</option>'+topics.map(t=>`<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+    const html=`<div class="discipline-modal-backdrop" data-formula-batch-modal>
+      <div class="discipline-modal">
+        <div class="discipline-modal-title">Assign ${selected.length} Selected Formula${selected.length===1?'':'s'}</div>
+        <div class="small-note" style="line-height:1.55;margin-bottom:12px;">
+          This topic and lesson will be applied to the entire selected JSON batch.
+        </div>
+        <label>Topic</label>
+        <select id="formula-batch-topic" class="select-mini">${topicOptions}</select>
+        <label>Lesson</label>
+        <select id="formula-batch-lesson" class="select-mini" disabled>
+          <option value="">Unassigned / All Lessons</option>
+        </select>
+        <div class="discipline-modal-actions">
+          <button type="button" class="btn btn-ghost btn-sm" data-formula-batch-cancel>Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" data-formula-batch-apply>Apply &amp; Add to Library</button>
+        </div>
+      </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend',html);
+
+    const modal=document.querySelector('[data-formula-batch-modal]');
+    const topicSel=document.getElementById('formula-batch-topic');
+    const lessonSel=document.getElementById('formula-batch-lesson');
+
+    function refreshLessons(){
+      const topic=topicSel?topicSel.value:'';
+      const lessons=(topic && typeof DisciplineSystem!=='undefined' && DisciplineSystem.lessons)
+        ? DisciplineSystem.lessons(topic,discipline)
+        : [];
+      lessonSel.innerHTML='<option value="">Unassigned / All Lessons</option>'+lessons.map(l=>`<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
+      lessonSel.disabled=!topic;
+    }
+    topicSel.addEventListener('change',refreshLessons);
+    refreshLessons();
+
+    modal.addEventListener('click',e=>{
+      if(e.target.closest('[data-formula-batch-cancel]') || e.target===modal){
+        modal.remove();
+        return;
+      }
+      if(e.target.closest('[data-formula-batch-apply]')){
+        const topic=topicSel.value||'';
+        const lesson=lessonSel.value||'';
+        const r=FormulaAIBridge.commit(topic,lesson);
+        if(r.count){
+          modal.remove();
+          Notify.toast('success','Formulas Added',`${r.count} formula(s) added under ${topic||'Unassigned'}${lesson?' › '+lesson:''}.`);
+          if(fAiJson)fAiJson.value='';
+          if(fAiValidation)fAiValidation.textContent='';
+          UI.renderFormulaAIReview();
+          UI.renderResourceFormulas();
+          UI.renderQuizFormulaSheet();
+        }else{
+          Notify.toast('warning','Nothing Selected','Select at least one formula.');
+        }
+      }
+    });
+  }
+
+  const fAdd=document.getElementById('btn-formula-ai-add');
+  if(fAdd)fAdd.addEventListener('click',openFormulaBatchClassification);
   const fDiscard=document.getElementById('btn-formula-ai-discard');if(fDiscard)fDiscard.addEventListener('click',()=>{FormulaAIBridge.clear();UI.renderFormulaAIReview();if(fAiStatus)fAiStatus.textContent='';});
   const addBlank=document.getElementById('btn-add-blank-formula');if(addBlank)addBlank.addEventListener('click',()=>ResourceFormulaOps.addBlankFormula());
 
@@ -8325,6 +8624,20 @@ function wireEvents(){
 
   const rfSearchInput = document.getElementById('rf-search');
   if(rfSearchInput) rfSearchInput.addEventListener('input', debounce(() => UI.renderResourceFormulas(), 200));
+
+  const rfTopicNav=document.getElementById('rf-topic-nav');
+  if(rfTopicNav) rfTopicNav.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-rf-topic]'); if(!btn)return;
+    FormulaLibraryNav.topic=btn.dataset.rfTopic||'';
+    FormulaLibraryNav.lesson='All Lessons';
+    UI.renderResourceFormulas();
+  });
+  const rfLessonNav=document.getElementById('rf-lesson-nav');
+  if(rfLessonNav) rfLessonNav.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-rf-lesson]'); if(!btn)return;
+    FormulaLibraryNav.lesson=btn.dataset.rfLesson||'All Lessons';
+    UI.renderResourceFormulas();
+  });
 
   const rfListEl = document.getElementById('rf-list');
   fmWireList(rfListEl);
@@ -10078,8 +10391,21 @@ const DisciplineSystem = (function(){
     const bank=document.getElementById('quiz-cfg-bank'); if(bank){ const cur=bank.value; const arr=(STATE.questionBanks||[]).filter(b=>(b.discipline||'civil')===active()&&!b.disabled); bank.innerHTML=arr.length?arr.map(b=>`<option value="${escapeHtml(b.id)}">${escapeHtml(b.fileName)} (${b.questionCount} Qs · ${escapeHtml(b.topic||'Unclassified')})</option>`).join(''):'<option value="">No banks in this discipline</option>'; if(arr.some(b=>b.id===cur))bank.value=cur; }
     const tp=document.getElementById('quiz-cfg-subject'); if(tp){const cur=tp.value;const arr=topicNames();tp.innerHTML=arr.length?arr.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join(''):'<option value="">No topics in this discipline</option>';if(arr.includes(cur))tp.value=cur;}
   }
+  function populateAiLessonSelect(topicSelectId, lessonSelectId, preferred){
+    const topicEl=document.getElementById(topicSelectId), lessonEl=document.getElementById(lessonSelectId);
+    if(!lessonEl)return;
+    const topic=topicEl?topicEl.value:'';
+    const cur=preferred!==undefined?preferred:lessonEl.value;
+    const arr=topic ? lessons(topic,active()) : [];
+    lessonEl.innerHTML='<option value="">Unassigned / All Lessons</option>'+arr.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');
+    if(cur && arr.includes(cur)) lessonEl.value=cur;
+    else lessonEl.value='';
+    lessonEl.disabled=!topic;
+  }
   function refreshTopicSelects(){
-    ['ai-gen-topic','formula-ai-topic','fs-upload-topic'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">Unassigned</option>'+topicNames().map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');if(topicNames().includes(cur))el.value=cur;});
+    ['ai-gen-topic','ai-review-topic','formula-ai-topic','fs-upload-topic'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">Unassigned</option>'+topicNames().map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');if(topicNames().includes(cur))el.value=cur;});
+    populateAiLessonSelect('ai-gen-topic','ai-gen-lesson');
+    populateAiLessonSelect('ai-review-topic','ai-review-lesson');
   }
   function filterFormulaCards(){
     document.querySelectorAll('[data-fm-card][data-fm-kind="rf"]').forEach(card=>{ const id=card.dataset.fmId; const f=(STATE.resourceFormulas||[]).find(x=>x.id===id); if(f)card.style.display=(f.discipline||'civil')===active()?'':'none'; });
@@ -10134,10 +10460,10 @@ const DisciplineSystem = (function(){
     QuestionBankManager.addBankFiles=async function(files){ const before=(STATE.questionBanks||[]).length; const r=await oldAddBanks(files,''); (STATE.questionBanks||[]).slice(before).forEach(b=>{b.discipline=active();b.topic='';b.lesson='';(b.questions||[]).forEach(q=>{q.discipline=active();q.topic='';q.lesson='';});}); QuestionBankManager.invalidateCache();persist();UI.renderQuestionBanks();return r; };
 
     const oldAICommit=AIQuizGenerator.commitToBank.bind(AIQuizGenerator);
-    AIQuizGenerator.commitToBank=function(bankName,topic){ const before=(STATE.questionBanks||[]).length; const r=oldAICommit(bankName,topic); const b=(STATE.questionBanks||[])[before]; if(b){b.discipline=active();b.lesson='';(b.questions||[]).forEach(q=>{q.discipline=active();q.lesson='';});persist();} return r; };
+    AIQuizGenerator.commitToBank=function(bankName,topic,lesson){ const before=(STATE.questionBanks||[]).length; const r=oldAICommit(bankName,topic,lesson); const b=(STATE.questionBanks||[])[before]; if(b){b.discipline=active();b.lesson=String(lesson||'').trim();(b.questions||[]).forEach(q=>{q.discipline=active();q.lesson=b.lesson;});persist();} return r; };
 
     const oldFCommit=FormulaAIBridge.commit.bind(FormulaAIBridge);
-    FormulaAIBridge.commit=function(topic){const before=(STATE.resourceFormulas||[]).length;const r=oldFCommit(topic);(STATE.resourceFormulas||[]).slice(before).forEach(f=>{f.discipline=active();f.lesson='';});persist();return r;};
+    FormulaAIBridge.commit=function(topic,lesson){const before=(STATE.resourceFormulas||[]).length;const r=oldFCommit(topic,lesson);(STATE.resourceFormulas||[]).slice(before).forEach(f=>{f.discipline=active();f.lesson=String(lesson||'').trim();});persist();return r;};
     const oldBlank=ResourceFormulaOps.addBlankFormula.bind(ResourceFormulaOps);
     ResourceFormulaOps.addBlankFormula=function(){const before=(STATE.resourceFormulas||[]).length;oldBlank();const f=(STATE.resourceFormulas||[])[0];if(f&&!(f.discipline)){f.discipline=active();persist();}filterFormulaCards();};
     const oldFormulaFiles=ResourceFormulaOps.addFiles.bind(ResourceFormulaOps);
