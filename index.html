@@ -492,8 +492,17 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-display) !important; font-weigh
   min-height:1.8em;
 }
 #view-formulas .fm-expr .katex{
-  line-height:1.35;
+  line-height:1.45;
   vertical-align:middle;
+  font-size:1.08em;
+}
+#view-formulas .fm-expr .katex-display > .katex{
+  padding:.15em 0 .25em;
+}
+#view-formulas .fm-var-meaning .katex,
+#view-formulas .fm-var-symbol .katex{
+  line-height:1.35;
+  vertical-align:baseline;
 }
 #view-formulas .fm-card{
   overflow:visible;
@@ -3233,14 +3242,32 @@ function protectLatexBackslashesInJson(raw){
 
 function repairLatexArtifacts(value){
   let s = String(value == null ? '' : value);
-  // Legacy JSON decoding artifacts caused by valid JSON escapes inside LaTeX.
-  s = s.replace(/\f\s*rac/g, '\\\\frac');
-  s = s.replace(/\t\s*imes/g, '\\\\times');
-  s = s.replace(/\n\s*abla/g, '\\\\nabla');
-  s = s.replace(/\r\s*ho/g, '\\\\rho');
-  s = s.replace(/\b\s*eta/g, '\\\\beta');
-  // Common slash typo from copied/OCR text.
-  s = s.replace(/(^|[\s$({=+\-])\/rac(?=\s*\{)/g, '$1\\\\frac');
+
+  // JSON escape damage: LaTeX commands such as \frac, \times, \nabla,
+  // \rho and \beta can be interpreted as JSON control escapes.
+  s = s.replace(/\f\s*rac/g, '\\frac');
+  s = s.replace(/\t\s*imes/g, '\\times');
+  s = s.replace(/\n\s*abla/g, '\\nabla');
+  s = s.replace(/\r\s*ho/g, '\\rho');
+  s = s.replace(/\x08\s*eta/g, '\\beta');
+
+  // Common copied/OCR typo: /rac{...}{...}.
+  s = s.replace(/(^|[\s$({=+\-])\/rac(?=\s*\{)/g, '$1\\frac');
+
+  // Sometimes the AI/JSON path preserves the LaTeX groups but loses the
+  // command's leading backslash: frac{a}{b}, text{hours}, sqrt{x}, etc.
+  // Repair only known commands followed by a brace, so normal English words
+  // are not changed.
+  const braceCommands = [
+    'frac','sqrt','text','mathrm','mathbf','operatorname',
+    'overline','underline','vec','hat','bar'
+  ];
+  const braceRe = new RegExp(
+    '(^|[^\\\\A-Za-z])(' + braceCommands.join('|') + ')(?=\\s*\\{)',
+    'g'
+  );
+  s = s.replace(braceRe, (m, prefix, cmd) => prefix + '\\' + cmd);
+
   return s;
 }
 
@@ -3281,6 +3308,30 @@ function wrapInlineLatex(value){
   return /\$|\\\(|\\\[/.test(s) ? s : `\\(${s}\\)`;
 }
 
+function formulaMeaningHtml(value){
+  const s = repairLatexArtifacts(String(value == null ? '' : value)).trim();
+  if(!s) return '';
+
+  // If the source already contains math delimiters, preserve them and let
+  // renderMath() process them normally.
+  if(/\$|\\\(|\\\[/.test(s)) return escapeHtml(s);
+
+  // Convert common LaTeX fragments embedded in prose into inline math.
+  // Example: "between \frac{1}{2} and 2 \text{hours}".
+  const tokenRe = /\\(?:frac\s*\{[^{}]*\}\s*\{[^{}]*\}|sqrt\s*\{[^{}]*\}|text\s*\{[^{}]*\}|mathrm\s*\{[^{}]*\}|mathbf\s*\{[^{}]*\}|operatorname\s*\{[^{}]*\}|overline\s*\{[^{}]*\}|underline\s*\{[^{}]*\}|vec\s*\{[^{}]*\}|hat\s*\{[^{}]*\}|bar\s*\{[^{}]*\})/g;
+
+  let out = '';
+  let last = 0;
+  let m;
+  while((m = tokenRe.exec(s))){
+    out += escapeHtml(s.slice(last, m.index));
+    out += escapeHtml(`\\(${m[0]}\\)`);
+    last = m.index + m[0].length;
+  }
+  out += escapeHtml(s.slice(last));
+  return out;
+}
+
 function formulaVariableLineHtml(line){
   const raw = String(line == null ? '' : line).trim();
   if(!raw) return '';
@@ -3291,17 +3342,17 @@ function formulaVariableLineHtml(line){
   const parts = raw.split(/\s+(?:—|–|-)\s+/, 2);
   if(parts.length === 2){
     const symbol = wrapInlineLatex(parts[0]);
-    const meaning = repairLatexArtifacts(parts[1]);
+    const meaningHtml = formulaMeaningHtml(parts[1]);
     return `<div class="fm-var-row">
       <span class="fm-var-symbol">${escapeHtml(symbol)}</span>
       <span class="fm-var-sep">—</span>
-      <span class="fm-var-meaning">${escapeHtml(meaning)}</span>
+      <span class="fm-var-meaning">${meaningHtml}</span>
     </div>`;
   }
 
   // For manually entered variable text without a separator, still allow any
   // explicit $...$/\( ... \) LaTeX in the line to render.
-  return `<div class="fm-var-row"><span class="fm-var-meaning">${escapeHtml(repairLatexArtifacts(raw))}</span></div>`;
+  return `<div class="fm-var-row"><span class="fm-var-meaning">${formulaMeaningHtml(raw)}</span></div>`;
 }
 // Only one formula card is edited at a time. kind: 'rf' (Formula Reference) or 'fm' (quiz formula sheet).
 const FormulaEditState = { kind: null, id: null };
