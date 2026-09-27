@@ -3054,7 +3054,7 @@ html.no-animations *{
         <div class="panel">
           <div class="panel-title"><span class="dot"></span>Google Drive Sync</div>
           <div class="small-note" style="margin-bottom:10px; color:var(--text-mid);">
-            Back up your System to a folder of your choice in your own Google Drive, and restore it on any device.
+            Back up the complete System state — question banks, questions, formulas, topic/lesson hierarchy, resources, progress, achievements, Dungeon data, and settings — to your own Google Drive.
           </div>
           <div class="field-group" id="drive-clientid-row">
             <label>Google OAuth Client ID</label>
@@ -3083,11 +3083,11 @@ html.no-animations *{
             <div class="switch" id="toggle-drive-autosync"><div class="knob"></div></div>
           </div>
           <div class="settings-row">
-            <div><div class="lab">Manual Sync</div><div class="desc">Upload your current progress to Drive now</div></div>
+            <div><div class="lab">Manual Sync</div><div class="desc">Upload and verify a complete backup of all app data</div></div>
             <button class="btn btn-ghost btn-sm" id="btn-drive-push">Push to Drive</button>
           </div>
           <div class="settings-row">
-            <div><div class="lab">Restore from Drive</div><div class="desc">Overwrite local progress with the version stored in Drive</div></div>
+            <div><div class="lab">Restore from Drive</div><div class="desc">Restore all banks, formulas, hierarchy, resources, and progress from Drive</div></div>
             <button class="btn btn-ghost btn-sm" id="btn-drive-pull">Pull from Drive</button>
           </div>
         </div>
@@ -4361,8 +4361,37 @@ const QuestionBankManager = (function(){
   }
 
   function clearAllBanks(){
-    if(!confirm('Delete all imported question banks?')) return;
-    STATE.questionBanks = []; invalidateCache(); persist(); UI.renderQuestionBanks();
+    const discipline = (STATE.activeDiscipline === 'sanitary') ? 'sanitary' : 'civil';
+    const disciplineLabel = discipline === 'sanitary' ? 'Sanitary Engineering' : 'Civil Engineering';
+    const count = (STATE.questionBanks || []).filter(
+      b => (b.discipline || 'civil') === discipline
+    ).length;
+
+    if(!count){
+      Notify.toast('info', 'No Banks to Clear', `There are no question banks in ${disciplineLabel}.`);
+      return;
+    }
+
+    if(!confirm(`Delete all ${count} imported question bank${count===1?'':'s'} in ${disciplineLabel}? Question banks in the other discipline will be kept.`)) return;
+
+    STATE.questionBanks = (STATE.questionBanks || []).filter(
+      b => (b.discipline || 'civil') !== discipline
+    );
+
+    invalidateCache();
+    persist();
+    UI.renderQuestionBanks();
+    UI.renderQuizSetupScreen();
+    UI.renderStatistics();
+    if(typeof DisciplineSystem !== 'undefined' && DisciplineSystem.refreshAll){
+      DisciplineSystem.refreshAll();
+    }
+
+    Notify.toast(
+      'info',
+      'Question Banks Cleared',
+      `Removed ${count} question bank${count===1?'':'s'} from ${disciplineLabel}.`
+    );
   }
 
   return { getAllBanks, getActiveBanks, getTopicsList, getTopics, addTopic, deleteTopic, setBankTopic, renameBank, getQuestionById, updateQuestionContent, autoAssignDifficulty, getMergedDatabase, getBankStats, addBankFiles, editBankMetadata, deleteBank, toggleBank, clearAllBanks, invalidateCache };
@@ -6180,6 +6209,154 @@ const Timer = (function(){
   return { start, pause, stop: pause, reset, applyMode, setCustom, resumeIfNeeded };
 })();
 
+
+/* ---- Full Backup / Restore helpers ----
+   Keep Drive sync and local JSON import/export on one canonical schema so
+   every imported bank, formula, resource, hierarchy item, and progression
+   field round-trips together. */
+const BACKUP_SCHEMA_VERSION = 3;
+
+function backupManifest(state){
+  const s = state || {};
+  const banks = Array.isArray(s.questionBanks) ? s.questionBanks : [];
+  const sheets = Array.isArray(s.formulaSheets) ? s.formulaSheets : [];
+  const resourceFormulas = Array.isArray(s.resourceFormulas) ? s.resourceFormulas : [];
+  return {
+    questionBanks: banks.length,
+    questions: banks.reduce((n,b)=>n + (Array.isArray(b.questions)?b.questions.length:0), 0),
+    resourceFormulas: resourceFormulas.length,
+    formulaSheets: sheets.length,
+    sheetFormulas: sheets.reduce((n,x)=>n + (Array.isArray(x.formulas)?x.formulas.length:0), 0),
+    resources: Array.isArray(s.customResources) ? s.customResources.length : 0,
+    civilTopics: s.topicHierarchy && Array.isArray(s.topicHierarchy.civil) ? s.topicHierarchy.civil.length : 0,
+    sanitaryTopics: s.topicHierarchy && Array.isArray(s.topicHierarchy.sanitary) ? s.topicHierarchy.sanitary.length : 0,
+    quizHistory: Array.isArray(s.quizHistory) ? s.quizHistory.length : 0,
+    sessions: Array.isArray(s.sessions) ? s.sessions.length : 0
+  };
+}
+
+function buildFullBackupPayload(){
+  // JSON round-trip creates a detached snapshot so a save that happens while
+  // an upload is in flight cannot mutate the backup body.
+  const snapshot = JSON.parse(JSON.stringify(STATE || defaultState()));
+  return {
+    schemaVersion: BACKUP_SCHEMA_VERSION,
+    exportedAt: new Date().toISOString(),
+    app: 'Study Ascension System',
+    manifest: backupManifest(snapshot),
+    state: snapshot
+  };
+}
+
+function normalizeRestoredState(rawState, opts){
+  opts = opts || {};
+  const incoming = (rawState && typeof rawState === 'object') ? rawState : {};
+  const base = defaultState();
+  const restored = Object.assign(base, incoming);
+
+  // Nested settings need their own merge; a shallow STATE merge can otherwise
+  // lose newer defaults when restoring an older backup.
+  restored.settings = Object.assign({}, base.settings, incoming.settings || {});
+  restored.settings.xpRates = Object.assign({}, DEFAULT_XP_RATES, (incoming.settings||{}).xpRates || {});
+  restored.settings.keybinds = Object.assign({}, DEFAULT_KEYBINDS, (incoming.settings||{}).keybinds || {});
+  restored.settings.driveSync = Object.assign(defaultDriveSync(), (incoming.settings||{}).driveSync || {});
+
+  // Canonical collection fields. Preserve all imported content, including
+  // fields added by newer versions.
+  [
+    'questionBanks','topics','quizHistory','customResources','formulaSheets',
+    'resourceFormulas','sessions'
+  ].forEach(k => { if(!Array.isArray(restored[k])) restored[k] = []; });
+
+  restored.topicHierarchy = restored.topicHierarchy && typeof restored.topicHierarchy === 'object'
+    ? restored.topicHierarchy : {civil:[], sanitary:[]};
+  if(!Array.isArray(restored.topicHierarchy.civil)) restored.topicHierarchy.civil = [];
+  if(!Array.isArray(restored.topicHierarchy.sanitary)) restored.topicHierarchy.sanitary = [];
+  restored.activeDiscipline = restored.activeDiscipline === 'sanitary' ? 'sanitary' : 'civil';
+
+  // Migrate imported content without deleting any unknown/new properties.
+  restored.questionBanks.forEach(b=>{
+    if(!b || typeof b !== 'object') return;
+    b.discipline = b.discipline === 'sanitary' ? 'sanitary' : (b.discipline || 'civil');
+    b.topic = String(b.topic || '');
+    b.lesson = String(b.lesson || '');
+    if(!Array.isArray(b.questions)) b.questions = [];
+    b.questionCount = b.questions.length;
+    b.questions.forEach(q=>{
+      if(!q || typeof q !== 'object') return;
+      q.discipline = q.discipline === 'sanitary' ? 'sanitary' : (q.discipline || b.discipline);
+      q.topic = String(q.topic || b.topic || '');
+      q.lesson = String(q.lesson || b.lesson || '');
+      if(!q.bankId) q.bankId = b.id;
+      if(!q.bankFileName) q.bankFileName = b.fileName || '';
+    });
+  });
+
+  restored.resourceFormulas.forEach(f=>{
+    if(!f || typeof f !== 'object') return;
+    f.discipline = f.discipline === 'sanitary' ? 'sanitary' : (f.discipline || 'civil');
+    f.topic = String(f.topic || '');
+    f.lesson = String(f.lesson || '');
+  });
+
+  restored.formulaSheets.forEach(sheet=>{
+    if(!sheet || typeof sheet !== 'object') return;
+    sheet.discipline = sheet.discipline === 'sanitary' ? 'sanitary' : (sheet.discipline || 'civil');
+    sheet.topic = String(sheet.topic || '');
+    sheet.lesson = String(sheet.lesson || '');
+    if(!Array.isArray(sheet.formulas)) sheet.formulas = [];
+    sheet.formulas.forEach(f=>{
+      if(!f || typeof f !== 'object') return;
+      f.discipline = f.discipline === 'sanitary' ? 'sanitary' : (f.discipline || sheet.discipline);
+      f.topic = String(f.topic || sheet.topic || '');
+      f.lesson = String(f.lesson || sheet.lesson || '');
+    });
+  });
+
+  // Keep the current browser's Drive credentials/folder binding when pulling
+  // from Drive. The backup's study data should not disconnect the live session.
+  if(opts.keepDriveSync){
+    restored.settings.driveSync = Object.assign(defaultDriveSync(), opts.keepDriveSync);
+  }
+
+  return restored;
+}
+
+function verifyBackupManifest(payload, state){
+  if(!payload || !payload.manifest) return {ok:true, legacy:true, actual:backupManifest(state)};
+  const expected = payload.manifest;
+  const actual = backupManifest(state);
+  const keys = Object.keys(expected);
+  const mismatches = keys.filter(k => Number(expected[k]) !== Number(actual[k]));
+  return {ok:mismatches.length===0, mismatches, expected, actual};
+}
+
+function refreshAfterFullRestore(){
+  if(typeof QuestionBankManager !== 'undefined' && QuestionBankManager.invalidateCache){
+    QuestionBankManager.invalidateCache();
+  }
+  FormulaEditState.kind = null;
+  FormulaEditState.id = null;
+  if(typeof FormulaLibraryNav !== 'undefined'){
+    FormulaLibraryNav.topic = '';
+    FormulaLibraryNav.lesson = '';
+  }
+
+  document.documentElement.setAttribute('data-theme', STATE.settings.theme || 'solo-blue');
+  document.documentElement.classList.toggle('pokemon-ui', !!STATE.settings.pokemonUI);
+
+  // RenderAll covers the main static sections. The discipline layer then
+  // rebuilds topic/lesson controls and re-filters banks/formulas against the
+  // newly restored STATE instead of leaving stale DOM from the pre-restore state.
+  RenderAll();
+  if(typeof DisciplineSystem !== 'undefined' && DisciplineSystem.refreshAll){
+    DisciplineSystem.refreshAll();
+  }
+  if(UI.renderQuizSetupScreen) UI.renderQuizSetupScreen();
+  if(UI.renderStatistics) UI.renderStatistics();
+  if(typeof DungeonMode !== 'undefined' && DungeonMode.render) DungeonMode.render();
+}
+
 /* ---- Google Drive Sync ---- */
 const DriveSync = (function(){
   const SCOPE = 'https://www.googleapis.com/auth/drive.file';
@@ -6361,15 +6538,28 @@ const DriveSync = (function(){
     try{
       const token = await getToken();
       if(!cfg().folderId) await resolveFolder(token);
-      const content = JSON.stringify({ exportedAt: new Date().toISOString(), app:'Study Ascension System', state: STATE });
+
+      const payload = buildFullBackupPayload();
+      const content = JSON.stringify(payload);
       let fileId = cfg().fileId || await findFileId(token);
       if(fileId){ await updateFile(token, fileId, content); }
       else { fileId = await createFile(token, content); }
+
+      // Do not report a successful sync until Drive can return the same complete
+      // backup manifest. This catches partial/stale uploads immediately.
+      const verifyRaw = await downloadFile(token, fileId);
+      const verifyPayload = JSON.parse(verifyRaw);
+      if(!verifyPayload.state) throw new Error('Drive verification returned an invalid backup.');
+      const check = verifyBackupManifest(payload, verifyPayload.state);
+      if(!check.ok) throw new Error('Drive backup verification failed: ' + check.mismatches.join(', '));
+
       cfg().fileId = fileId;
       cfg().lastSyncedAt = new Date().toISOString();
       persist();
-      setStatus('Synced · ' + new Date().toLocaleTimeString() + ' · "' + cfg().folderName + '"', 'connected');
-      if(!silent) Notify.toast('info', 'Synced to Drive', `Your progress has been backed up to "${cfg().folderName}".`);
+
+      const m = payload.manifest;
+      setStatus(`Synced · ${m.questionBanks} banks · ${m.resourceFormulas + m.sheetFormulas} formulas · "${cfg().folderName}"`, 'connected');
+      if(!silent) Notify.toast('success', 'Full Backup Synced', `${m.questionBanks} bank(s), ${m.questions} question(s), ${m.resourceFormulas + m.sheetFormulas} formula(s), and ${m.resources} resource(s) verified in Drive.`);
     }catch(err){
       setStatus('Sync failed: ' + (err.message||'unknown error'), 'error');
       if(!silent) Notify.toast('info', 'Sync Failed', err.message || 'Could not push to Drive.');
@@ -6385,19 +6575,23 @@ const DriveSync = (function(){
       const raw = await downloadFile(token, fileId);
       const data = JSON.parse(raw);
       if(!data.state) throw new Error('Backup file is not valid.');
+
+      const check = verifyBackupManifest(data, data.state);
+      if(!check.ok){
+        throw new Error('Backup is incomplete: ' + check.mismatches.join(', '));
+      }
+
       const keptDrive = Object.assign({}, cfg(), { fileId });
-      STATE = Object.assign(defaultState(), data.state);
-      STATE.settings = Object.assign(
-        { theme:'solo-blue', sound:true, animations:true, pokemonUI:false, xpRates: Object.assign({}, DEFAULT_XP_RATES), keybinds: Object.assign({}, DEFAULT_KEYBINDS), driveSync: defaultDriveSync() },
-        data.state.settings||{}
-      );
-      STATE.settings.driveSync = keptDrive;
-      persist();
-      document.documentElement.setAttribute('data-theme', STATE.settings.theme);
-      document.documentElement.classList.toggle('pokemon-ui', !!STATE.settings.pokemonUI);
-      RenderAll();
-      setStatus('Restored from Drive', 'connected');
-      Notify.toast('info', 'Restored from Drive', 'Your progress has been synced from Google Drive.');
+      STATE = normalizeRestoredState(data.state, {keepDriveSync: keptDrive});
+
+      // Save immediately rather than waiting for the debounced persist, then
+      // rebuild every state-dependent view from the restored collections.
+      await Storage.set('state', STATE);
+      refreshAfterFullRestore();
+
+      const m = backupManifest(STATE);
+      setStatus(`Restored · ${m.questionBanks} banks · ${m.resourceFormulas + m.sheetFormulas} formulas`, 'connected');
+      Notify.toast('success', 'Full Backup Restored', `${m.questionBanks} bank(s), ${m.questions} question(s), ${m.resourceFormulas + m.sheetFormulas} formula(s), and ${m.resources} resource(s) restored from Drive.`);
     }catch(err){
       setStatus('Restore failed: ' + (err.message||'unknown error'), 'error');
       Notify.toast('info', 'Restore Failed', err.message || 'Could not pull from Drive.');
@@ -7936,7 +8130,7 @@ const UI = {
 /* ---- Data Operations (Backup, Restore, Reset) ---- */
 const DataOps = {
   exportBackup(){
-    const payload = { exportedAt: new Date().toISOString(), app:'Study Ascension System', state: STATE };
+    const payload = buildFullBackupPayload();
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -7951,17 +8145,15 @@ const DataOps = {
       try{
         const data = JSON.parse(e.target.result);
         if(!data.state) throw new Error('Invalid backup file structure.');
-        STATE = Object.assign(defaultState(), data.state);
-        STATE.settings = Object.assign(
-          { theme:'solo-blue', sound:true, animations:true, pokemonUI:false, xpRates: Object.assign({}, DEFAULT_XP_RATES), keybinds: Object.assign({}, DEFAULT_KEYBINDS), driveSync: defaultDriveSync() },
-          data.state.settings||{}
-        );
-        STATE.settings.driveSync = Object.assign(defaultDriveSync(), (data.state.settings||{}).driveSync||{});
-        persist();
-        document.documentElement.setAttribute('data-theme', STATE.settings.theme);
-      document.documentElement.classList.toggle('pokemon-ui', !!STATE.settings.pokemonUI);
-        RenderAll();
-        Notify.toast('info', 'Backup Restored', 'Your progress has been imported successfully.');
+        const check = verifyBackupManifest(data, data.state);
+        if(!check.ok) throw new Error('Backup is incomplete: ' + check.mismatches.join(', '));
+
+        STATE = normalizeRestoredState(data.state);
+        Storage.set('state', STATE).then(()=>{
+          refreshAfterFullRestore();
+          const m = backupManifest(STATE);
+          Notify.toast('success', 'Full Backup Restored', `${m.questionBanks} bank(s), ${m.questions} question(s), ${m.resourceFormulas + m.sheetFormulas} formula(s), and ${m.resources} resource(s) restored.`);
+        });
       }catch(err){
         Notify.toast('info', 'Import Failed', err.message || 'Could not read backup file.');
       }
