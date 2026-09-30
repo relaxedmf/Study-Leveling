@@ -3227,18 +3227,270 @@ const LATEX_JSON_COMMANDS = [
   'mu','sigma','alpha','beta','gamma','theta','lambda','rho','omega','Omega',
   'sum','prod','int','oint','partial','nabla','infty','mathrm','mathbf','text',
   'left','right','begin','end','vec','hat','bar','overline','underline',
-  'sin','cos','tan','log','ln','exp','min','max'
+  'sin','cos','tan','log','ln','exp','min','max','tau','nu','phi','varphi','psi',
+  'eta','epsilon','varepsilon','kappa','zeta','xi','chi','ell','operatorname',
+  'underbrace','overbrace','overrightarrow','lim','limsup','liminf','not','rule'
 ];
 
 function protectLatexBackslashesInJson(raw){
-  let s = String(raw == null ? '' : raw);
-  // Escape a single slash before known LaTeX commands. Do not touch already
-  // escaped JSON backslashes.
-  const names = LATEX_JSON_COMMANDS.join('|');
-  const re = new RegExp('(^|[^\\\\])\\\\(' + names + ')', 'g');
-  s = s.replace(re, (m, prefix, cmd) => prefix + '\\\\\\\\' + cmd);
-  return s;
+  const s = String(raw == null ? '' : raw);
+  let out = '';
+
+  // JSON has a few valid one-character escapes (\n, \t, \b, etc.).
+  // Many LaTeX commands begin with those same letters, so raw commands such
+  // as \tau, \beta, \frac, or \nabla can be silently corrupted by JSON.parse.
+  // Protect single backslashes that look like commands while leaving genuine
+  // JSON escapes and already doubled backslashes alone.
+  for(let i=0;i<s.length;i++){
+    const ch = s[i];
+    if(ch !== '\\'){
+      out += ch;
+      continue;
+    }
+
+    let j=i;
+    while(j<s.length && s[j] === '\\') j++;
+    const run = j-i;
+    out += '\\'.repeat(run);
+    if(run % 2 === 0){
+      i = j-1;
+      continue;
+    }
+
+    const next = s[j] || '';
+    const after = s[j+1] || '';
+    let shouldProtect = false;
+
+    if(/[A-Za-z]/.test(next)){
+      const wordMatch = s.slice(j).match(/^([A-Za-z]+)/);
+      const word = wordMatch ? wordMatch[1] : next;
+      // Keep genuine JSON unicode escapes such as \u03BC.
+      if(next === 'u' && /^[0-9A-Fa-f]{4}/.test(s.slice(j+1,j+5))){
+        shouldProtect = false;
+      }else if(/[bfnrt]/.test(next)){
+        // These letters are valid JSON escapes by themselves, so only protect
+        // them when the whole token is a known LaTeX command. This preserves
+        // intentional JSON escapes such as \n followed by ordinary text.
+        shouldProtect = LATEX_JSON_COMMANDS.includes(word);
+      }else{
+        // Other alphabetic backslash sequences are invalid JSON escapes and
+        // are therefore safest to preserve literally.
+        shouldProtect = true;
+      }
+    }else if(next && !/["\\/bfnrtu]/.test(next)){
+      // Preserve invalid-JSON escapes commonly used by LaTeX: \%, \_, \{, …
+      shouldProtect = true;
+    }
+
+    if(shouldProtect) out += '\\';
+    i = j-1;
+  }
+  return out;
 }
+
+/* ---- Shared robust JSON reader -------------------------------------------
+   The MCQ and formula importers use this exact parser. Valid JSON is parsed
+   strictly first. Only if that fails do we use the tolerant fallback. The
+   fallback never evals or executes imported content. */
+function stripJsonEnvelope(raw){
+  let s = String(raw == null ? '' : raw).replace(/^\uFEFF/, '').trim();
+  s = s.replace(/^```(?:json|javascript|js)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+
+  // Accept accidental prose before the payload. The loose parser stops when
+  // the root array/object ends, so trailing prose is harmless as well.
+  const a = s.indexOf('['), o = s.indexOf('{');
+  let start = -1;
+  if(a >= 0 && o >= 0) start = Math.min(a,o);
+  else start = Math.max(a,o);
+  if(start > 0) s = s.slice(start);
+  return s.trim();
+}
+
+function parseLooseJson(raw){
+  const s = String(raw == null ? '' : raw);
+  let i = 0;
+
+  const fail = (msg) => {
+    const before = s.slice(0,i);
+    const line = (before.match(/\n/g)||[]).length + 1;
+    const lastNl = before.lastIndexOf('\n');
+    const col = i - lastNl;
+    throw new Error(`${msg} at line ${line}, column ${col}`);
+  };
+  const ws = () => { while(i < s.length && /\s/.test(s[i])) i++; };
+  const peekNonWs = (from=i) => {
+    let p=from;
+    while(p<s.length && /\s/.test(s[p])) p++;
+    return {ch:s[p]||'', pos:p};
+  };
+  const looksLikeQuotedKey = (pos) => {
+    const q=s[pos];
+    if(q !== '"' && q !== "'") return false;
+    let p=pos+1, esc=false;
+    for(;p<s.length;p++){
+      const c=s[p];
+      if(esc){ esc=false; continue; }
+      if(c==='\\'){ esc=true; continue; }
+      if(c===q){
+        p++;
+        while(p<s.length && /\s/.test(s[p])) p++;
+        return s[p] === ':';
+      }
+    }
+    return false;
+  };
+
+  function parseString(mode='value'){
+    const quote=s[i++];
+    let out='';
+    while(i<s.length){
+      const c=s[i++];
+      if(c==='\\'){
+        if(i>=s.length){ out+='\\'; break; }
+        const n=s[i++];
+        if(n==='"' || n==="'" || n==='\\' || n==='/'){ out+=n; continue; }
+        if(n==='b'){ out+='\b'; continue; }
+        if(n==='f'){ out+='\f'; continue; }
+        if(n==='n'){ out+='\n'; continue; }
+        if(n==='r'){ out+='\r'; continue; }
+        if(n==='t'){ out+='\t'; continue; }
+        if(n==='u' && /^[0-9A-Fa-f]{4}$/.test(s.slice(i,i+4))){
+          out+=String.fromCharCode(parseInt(s.slice(i,i+4),16));
+          i+=4;
+          continue;
+        }
+        // Unknown escape: keep the slash rather than silently deleting it.
+        out+='\\'+n;
+        continue;
+      }
+      if(c===quote){
+        const look=peekNonWs(i);
+        if(mode==='key'){
+          if(look.ch===':') return out;
+          out+=quote;
+          continue;
+        }
+
+        const structural = look.ch==='' || look.ch===',' || look.ch==='}' || look.ch===']';
+        const missingCommaBeforeKey = (look.ch==='"' || look.ch==="'") && looksLikeQuotedKey(look.pos);
+        const missingCommaBeforeValue = look.ch==='{' || look.ch==='[';
+        if(structural || missingCommaBeforeKey || missingCommaBeforeValue) return out;
+
+        // Treat an otherwise impossible quote as an unescaped quote inside text.
+        out+=quote;
+        continue;
+      }
+      if(c==='\n'){ out+='\n'; continue; }
+      if(c==='\r'){ out+='\r'; continue; }
+      if(c==='\t'){ out+='\t'; continue; }
+      if(c.charCodeAt(0)<0x20){ out+=' '; continue; }
+      out+=c;
+    }
+    fail('Unterminated string');
+  }
+
+  function parseBare(){
+    const start=i;
+    while(i<s.length && !/[\s,}\]]/.test(s[i])) i++;
+    const tok=s.slice(start,i).trim();
+    if(!tok) fail('Expected a JSON value');
+    if(tok==='true' || tok==='True') return true;
+    if(tok==='false' || tok==='False') return false;
+    if(tok==='null' || tok==='None' || tok==='undefined') return null;
+    if(/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(tok)) return Number(tok);
+    return tok;
+  }
+
+  function parseArray(){
+    const arr=[];
+    i++;
+    ws();
+    if(s[i]===']'){ i++; return arr; }
+    while(i<s.length){
+      ws();
+      if(s[i]===']'){ i++; return arr; }
+      arr.push(parseValue());
+      ws();
+      if(s[i]===','){ i++; continue; }
+      if(s[i]===']'){ i++; return arr; }
+      // Missing comma between array values.
+      const ch=s[i];
+      if(ch==='{' || ch==='[' || ch==='"' || ch==="'" || ch==='-' || /[0-9tTfFnNu]/.test(ch||'')) continue;
+      fail('Expected a comma or closing bracket');
+    }
+    fail('Unterminated array');
+  }
+
+  function parseObject(){
+    const obj={};
+    i++;
+    ws();
+    if(s[i]==='}'){ i++; return obj; }
+    while(i<s.length){
+      ws();
+      if(s[i]==='}'){ i++; return obj; }
+      if(s[i]!== '"' && s[i]!=="'") fail('Expected a quoted property name');
+      const key=parseString('key');
+      ws();
+      if(s[i]!==':') fail(`Expected ':' after property ${JSON.stringify(key)}`);
+      i++;
+      ws();
+      obj[key]=parseValue();
+      ws();
+      if(s[i]===','){ i++; continue; }
+      if(s[i]==='}'){ i++; return obj; }
+      // Missing comma between object properties.
+      if((s[i]==='"' || s[i]==="'") && looksLikeQuotedKey(i)) continue;
+      fail('Expected a comma or closing brace');
+    }
+    fail('Unterminated object');
+  }
+
+  function parseValue(){
+    ws();
+    const ch=s[i];
+    if(ch==='{') return parseObject();
+    if(ch==='[') return parseArray();
+    if(ch==='"' || ch==="'") return parseString('value');
+    return parseBare();
+  }
+
+  const value=parseValue();
+  ws();
+  return value;
+}
+
+function parseJsonRobust(rawText, label='JSON'){
+  const enveloped = stripJsonEnvelope(rawText);
+  if(!enveloped) throw new Error(`${label} is empty.`);
+  const protectedText = protectLatexBackslashesInJson(enveloped);
+
+  const attempts=[];
+  const add = (name, text) => {
+    if(text && !attempts.some(x=>x.text===text)) attempts.push({name,text});
+  };
+
+  add('strict', protectedText);
+  add('trailing-comma repair', protectedText.replace(/,\s*([}\]])/g,'$1'));
+  add('Python-literal repair', protectedText
+    .replace(/\bNone\b/g,'null')
+    .replace(/\bTrue\b/g,'true')
+    .replace(/\bFalse\b/g,'false')
+    .replace(/,\s*([}\]])/g,'$1'));
+
+  let lastErr=null;
+  for(const a of attempts){
+    try{return JSON.parse(a.text);}catch(err){lastErr=err;}
+  }
+
+  try{
+    return parseLooseJson(attempts[attempts.length-1].text);
+  }catch(looseErr){
+    const strictMsg = lastErr && lastErr.message ? lastErr.message : 'invalid JSON';
+    throw new Error(`Could not parse ${label}. Strict parser: ${strictMsg}. Repair parser: ${looseErr.message}.`);
+  }
+}
+
 
 function repairLatexArtifacts(value){
   let s = String(value == null ? '' : value);
@@ -4766,102 +5018,8 @@ END SOURCE MATERIAL`;
     return updatePrompt(count, customInstructions, options);
   }
 
-  function cleanJsonText(rawText){
-    let text = String(rawText||'').trim();
-    text = text.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
-    // Protect raw LaTeX commands BEFORE JSON.parse. This is essential for
-    // commands such as \frac because JSON otherwise interprets \f as form-feed.
-    text = protectLatexBackslashesInJson(text);
-    // Then repair other non-JSON backslash sequences.
-    text = text.replace(/(^|[^\\])\\(?!["\\/bfnrtu])/g, '$1\\\\');
-    return text;
-  }
-
-  function repairLooseJson(raw){
-    let s = String(raw == null ? '' : raw).trim();
-
-    const firstArray = s.indexOf('['), firstObj = s.indexOf('{');
-    let start = -1;
-    if(firstArray >= 0 && firstObj >= 0) start = Math.min(firstArray, firstObj);
-    else start = Math.max(firstArray, firstObj);
-    if(start > 0) s = s.slice(start);
-
-    const lastArray = s.lastIndexOf(']'), lastObj = s.lastIndexOf('}');
-    const end = Math.max(lastArray, lastObj);
-    if(end >= 0 && end < s.length - 1) s = s.slice(0, end + 1);
-
-    let out = '', inString = false, escaped = false;
-    for(let i=0;i<s.length;i++){
-      const ch = s[i];
-
-      if(inString){
-        if(escaped){
-          out += ch;
-          escaped = false;
-          continue;
-        }
-        if(ch === '\\'){
-          out += ch;
-          escaped = true;
-          continue;
-        }
-        if(ch === '"'){
-          let j=i+1;
-          while(j<s.length && /\s/.test(s[j])) j++;
-          const next = s[j] || '';
-          if(next === ':' || next === ',' || next === '}' || next === ']' || next === ''){
-            out += ch;
-            inString = false;
-          }else{
-            out += '\\"';
-          }
-          continue;
-        }
-        if(ch === '\n'){ out += '\\n'; continue; }
-        if(ch === '\r'){ out += '\\r'; continue; }
-        if(ch === '\t'){ out += '\\t'; continue; }
-        if(ch.charCodeAt(0) < 0x20){
-          out += '\\u' + ch.charCodeAt(0).toString(16).padStart(4,'0');
-          continue;
-        }
-        out += ch;
-      }else{
-        if(ch === '"'){
-          inString = true;
-          out += ch;
-        }else{
-          out += ch;
-        }
-      }
-    }
-
-    out = out.replace(/,\s*([}\]])/g, '$1');
-    out = out.replace(/\bNone\b/g, 'null')
-             .replace(/\bTrue\b/g, 'true')
-             .replace(/\bFalse\b/g, 'false');
-
-    return out;
-  }
-
   function loadJsonSafely(rawText){
-    const cleaned = cleanJsonText(rawText);
-
-    try{ return JSON.parse(cleaned); }
-    catch(firstErr){
-      const escaped = cleaned.replace(/(^|[^\\])\\(?!")/g, '$1\\\\');
-      try{ return JSON.parse(escaped); }
-      catch(_secondErr){
-        const repaired = repairLooseJson(escaped);
-        try{
-          return JSON.parse(repaired);
-        }catch(finalErr){
-          throw new Error(
-            `Could not parse the AI reply as JSON even after automatic repair. ` +
-            `${finalErr.message}. Press Update Prompt and ask the AI to regenerate only the JSON array.`
-          );
-        }
-      }
-    }
+    return parseJsonRobust(rawText, 'the AI question JSON');
   }
 
   function normalizeItem(item, index){
@@ -5037,18 +5195,8 @@ Example:
     promptText=buildPrompt(text,extra);
     return {prompt:promptText,meta:extractionMeta};
   }
-  function cleanJson(raw){
-    let t=String(raw||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
-    t=protectLatexBackslashesInJson(t);
-    t=t.replace(/(^|[^\\])\\(?!["\\/bfnrtu])/g,'$1\\\\');
-    return t;
-  }
   function parseJson(raw){
-    const cleaned=cleanJson(raw);
-    try{return JSON.parse(cleaned);}catch(first){
-      try{return JSON.parse(cleaned.replace(/(^|[^\\])\\(?!")/g,'$1\\\\'));}
-      catch(e){throw new Error(`Could not parse the AI reply as JSON: ${first.message}`);}
-    }
+    return parseJsonRobust(raw, 'the AI formula JSON');
   }
   function variablesToText(v){
     if(Array.isArray(v)) return v.map(x=>{
