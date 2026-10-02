@@ -461,6 +461,126 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-display) !important; font-weigh
   color: var(--text-hi); font-size: 12.5px; padding: 6px 10px; font-family: var(--font-body);
 }
 
+
+/* ---- Resources hierarchy ---- */
+.res-add-grid{display:grid;grid-template-columns:minmax(180px,1fr) minmax(220px,1.3fr) minmax(160px,.8fr) minmax(160px,.8fr) auto;gap:10px;align-items:center;}
+#view-resources .res-topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;}
+#view-resources .res-topic-tile{border:1px solid var(--panel-border);background:rgba(255,255,255,.025);color:var(--text-hi);border-radius:12px;padding:15px 16px;text-align:left;cursor:pointer;transition:.15s ease;min-height:88px;}
+#view-resources .res-topic-tile:hover,#view-resources .res-topic-tile.active{border-color:var(--accent-blue);background:rgba(41,211,255,.07);box-shadow:0 0 16px rgba(41,211,255,.08);transform:translateY(-1px);}
+#view-resources .res-topic-tile .name{font-family:var(--font-display);font-weight:800;font-size:13px;color:var(--text-hi);}
+#view-resources .res-topic-tile.active .name{color:var(--accent-blue);}
+#view-resources .res-topic-tile .meta{margin-top:7px;color:var(--text-dim);font:10px var(--font-mono);}
+#view-resources .res-add-tile{
+  border-style:dashed !important;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center !important;
+  color:var(--accent-blue) !important;
+  min-height:88px;
+}
+#view-resources .res-add-tile .plus{
+  font-family:var(--font-display);
+  font-size:22px;
+  line-height:1;
+  margin-bottom:7px;
+}
+#view-resources .res-add-tile .name{color:inherit !important;}
+#view-resources .res-add-tile:hover{
+  border-color:var(--accent-blue) !important;
+  background:rgba(41,211,255,.07) !important;
+}
+#view-resources .res-nav-title{font-family:var(--font-display);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+#view-resources .res-window{border:1px solid var(--panel-border);border-radius:14px;background:rgba(255,255,255,.015);padding:18px;}
+#view-resources .res-window-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+#view-resources .res-window-title{font-family:var(--font-display);font-size:17px;font-weight:800;color:var(--text-hi);}
+#view-resources .res-window-sub{font-size:11px;color:var(--text-dim);margin-top:4px;}
+#view-resources .res-back-btn{flex-shrink:0;}
+#view-resources .res-lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;}
+#view-resources .res-lesson-tile{border:1px solid var(--panel-border);background:rgba(255,255,255,.025);color:var(--text-hi);border-radius:12px;padding:15px 16px;text-align:left;cursor:pointer;transition:.15s ease;min-height:84px;}
+#view-resources .res-lesson-tile:hover{border-color:var(--accent-purple);background:rgba(176,107,255,.08);box-shadow:0 0 16px rgba(176,107,255,.08);transform:translateY(-1px);}
+#view-resources .res-lesson-tile .name{font-family:var(--font-display);font-weight:800;font-size:13px;color:var(--text-hi);}
+#view-resources .res-lesson-tile .meta{margin-top:7px;color:var(--text-dim);font:10px var(--font-mono);}
+#view-resources .res-lesson-tile.res-add-tile{
+  min-height:84px;
+  color:var(--accent-purple) !important;
+}
+#view-resources .res-lesson-tile.res-add-tile:hover{
+  border-color:var(--accent-purple) !important;
+  background:rgba(176,107,255,.08) !important;
+}
+#view-resources .res-resource-card .res-classification{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+#view-resources .res-edit-toggle.active{
+  border-color:var(--gold);
+  color:var(--gold);
+  background:rgba(255,209,102,.09);
+}
+#view-resources .res-topic-tile.is-editing,
+#view-resources .res-lesson-tile.is-editing{
+  cursor:grab;
+  position:relative;
+  padding:15px 16px 52px;
+  overflow:hidden;
+}
+#view-resources .res-topic-tile.is-editing:active,
+#view-resources .res-lesson-tile.is-editing:active{cursor:grabbing;}
+#view-resources .res-tile-edit-actions{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:10px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  pointer-events:auto;
+}
+#view-resources .res-tile-edit-actions button{
+  padding:5px 10px;
+  font-size:9px;
+  min-width:72px;
+  justify-content:center;
+}
+#view-resources .res-topic-tile,
+#view-resources .res-lesson-tile{
+  width:100%;
+  box-sizing:border-box;
+}
+#view-resources .res-topic-tile[role="button"],
+#view-resources .res-lesson-tile[role="button"]{
+  display:block;
+}
+
+#view-resources .res-delete-zone{
+  margin-top:16px;
+  min-height:72px;
+  border:1.5px dashed rgba(255,77,109,.5);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:14px;
+  color:var(--danger);
+  background:rgba(255,77,109,.045);
+  font-family:var(--font-display);
+  font-size:11px;
+  letter-spacing:.4px;
+  text-align:center;
+  transition:.15s ease;
+}
+#view-resources .res-delete-zone.drag-over{
+  border-color:var(--danger);
+  background:rgba(255,77,109,.14);
+  box-shadow:0 0 18px rgba(255,77,109,.12);
+  transform:scale(1.005);
+}
+#view-resources .res-delete-zone .trash{font-size:19px;}
+#view-resources .res-dragging{opacity:.45;transform:scale(.98);}
+
+@media(max-width:1100px){.res-add-grid{grid-template-columns:1fr 1fr;}.res-add-grid #btn-add-resource{grid-column:1/-1;justify-self:start;}}
+@media(max-width:620px){.res-add-grid{grid-template-columns:1fr;}.res-add-grid #btn-add-resource{grid-column:auto;width:100%;justify-content:center;}}
+
 /* ---- Formula cards (Formula Reference + quiz Formula Sheet share this look) ---- */
 .fm-card{ padding:14px 16px; background:rgba(255,255,255,0.02); border-radius:10px; margin-bottom:10px; border:1px solid var(--panel-border); }
 #quiz-formula-list .fm-card{ margin-bottom:0; }
@@ -837,8 +957,61 @@ select option, .select-mini option{
 .theme-swatches{ display: flex; gap: 10px; }
 .theme-swatch{ width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
 .theme-swatch.active{ border-color: var(--text-hi); }
+.discipline-theme-row .theme-swatches{flex-wrap:wrap;justify-content:flex-end;}
+.discipline-theme-row .theme-swatch{box-shadow:0 0 0 1px rgba(255,255,255,.06);}
+.discipline-theme-row .theme-swatch.active{box-shadow:0 0 0 2px var(--text-hi),0 0 12px rgba(255,255,255,.14);}
+@media(max-width:620px){
+  .discipline-theme-row{align-items:flex-start;gap:12px;flex-direction:column;}
+  .discipline-theme-row .theme-swatches{justify-content:flex-start;}
+}
+
 .xp-config-row{ display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
 .xp-config-row input{ width: 70px; background: rgba(255,255,255,0.04); border: 1px solid var(--panel-border); border-radius: 6px; color: var(--text-hi); padding: 6px 8px; font-family: var(--font-mono); text-align: center; }
+
+
+/* ============================================================
+   USABILITY MANAGEMENT LAYER
+   ============================================================ */
+.ux-section-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-left:auto}
+.ux-add-menu-wrap{position:relative}
+.ux-add-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:300;width:220px;padding:8px;border:1px solid var(--panel-border);border-radius:12px;background:var(--panel-bg-solid);box-shadow:0 16px 48px rgba(0,0,0,.35);display:none}
+.ux-add-menu.open{display:block}
+.ux-add-menu button{width:100%;text-align:left;justify-content:flex-start;margin:2px 0}
+.ux-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}
+.ux-toolbar .select-mini,.ux-toolbar input{min-height:36px}
+.ux-toolbar .grow{flex:1;min-width:180px}
+.ux-manage-toggle.active{border-color:var(--gold);color:var(--gold);background:rgba(255,209,102,.08)}
+.ux-pin{border:none;background:transparent;color:var(--text-dim);cursor:pointer;font-size:16px;line-height:1}
+.ux-pin.active{color:var(--gold)}
+.ux-card-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ux-card-selected{outline:2px solid var(--accent-blue);outline-offset:2px}
+.ux-drop-target{outline:2px dashed var(--accent-blue);outline-offset:3px;background:rgba(41,211,255,.08)!important}
+.ux-drag-source{opacity:.45}
+.ux-local-search{width:min(340px,100%)}
+.ux-modal-backdrop{position:fixed;inset:0;z-index:100000;background:rgba(3,5,12,.78);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px}
+.ux-modal{width:min(560px,100%);background:var(--panel-bg-solid);border:1px solid var(--panel-border-strong);border-radius:16px;box-shadow:0 24px 90px rgba(0,0,0,.5);padding:20px}
+.ux-modal h3{font-size:18px;margin-bottom:8px}
+.ux-modal p{font-size:12px;line-height:1.65;color:var(--text-mid)}
+.ux-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}
+.ux-modal .danger-copy{color:var(--danger)}
+.ux-undo{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:100001;background:var(--panel-bg-solid);border:1px solid var(--panel-border-strong);border-radius:12px;padding:10px 12px;display:flex;gap:12px;align-items:center;box-shadow:0 15px 50px rgba(0,0,0,.4)}
+.ux-undo span{font-size:11px;color:var(--text-mid)}
+.ux-home-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 16px}
+.ux-home-card{border:1px solid var(--panel-border);border-radius:12px;padding:14px;background:rgba(255,255,255,.02)}
+.ux-home-card .title{font-family:var(--font-display);font-size:12px;margin-bottom:8px}
+.ux-chip-list{display:flex;gap:6px;flex-wrap:wrap}
+.ux-chip{border:1px solid var(--panel-border);border-radius:999px;padding:6px 9px;font-size:10px;color:var(--text-mid);background:rgba(255,255,255,.02);cursor:pointer}
+.ux-storage-bar{height:8px;background:rgba(255,255,255,.04);border-radius:999px;overflow:hidden;border:1px solid var(--panel-border)}
+.ux-storage-fill{height:100%;background:var(--accent-gradient);width:0}
+.ux-bulk-bar{display:none;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--panel-border);border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:12px}
+.ux-bulk-bar.show{display:flex}
+.ux-check{width:16px;height:16px}
+.ux-resource-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:10px;color:var(--text-dim)}
+.ux-resource-domain{color:var(--accent-blue)}
+.ux-header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media(max-width:760px){
+  .ux-home-strip{grid-template-columns:1fr}
+}
 
 /* ============================================================
    NOTIFICATIONS / TOASTS / FX
@@ -2091,6 +2264,28 @@ html.no-animations *{
   }
 }
 
+
+/* ============================================================
+   USABILITY LAYER — command palette, global search, breadcrumbs,
+   collapsible import tools, and remembered navigation
+   ============================================================ */
+.ux-panel-toggle{margin-left:auto;white-space:nowrap}
+.panel.ux-collapsed > :not(.panel-title){display:none!important}
+.panel.ux-collapsed{padding-bottom:14px}
+.ux-breadcrumb{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:-7px 0 15px;color:var(--text-dim);font-size:11px}
+.ux-breadcrumb .ux-crumb{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border:1px solid var(--panel-border);border-radius:999px;background:rgba(255,255,255,.025);color:var(--text-mid)}
+.ux-breadcrumb .ux-crumb.active{color:var(--text-hi);border-color:var(--panel-border-strong)}
+.ux-breadcrumb .ux-sep{opacity:.55}
+#ux-command-overlay{position:fixed;inset:0;z-index:100000;background:rgba(2,3,8,.76);backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding:clamp(70px,10vh,120px) 16px 20px}
+#ux-command-overlay.open{display:flex}
+.ux-command-box{width:min(720px,100%);max-height:min(680px,78vh);display:flex;flex-direction:column;background:var(--panel-bg-solid);border:1px solid var(--panel-border-strong);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.55),var(--shadow-glow);overflow:hidden}
+.ux-command-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--panel-border)}
+.ux-command-head .ic{color:var(--accent-blue);font-size:16px}.ux-command-head input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--text-hi);font-size:15px;padding:4px}.ux-kbd{font:10px var(--font-mono);color:var(--text-dim);border:1px solid var(--panel-border);border-radius:6px;padding:3px 6px;background:rgba(255,255,255,.03)}
+.ux-command-results{overflow:auto;padding:8px}.ux-result-group{font:10px var(--font-display);letter-spacing:1.2px;text-transform:uppercase;color:var(--text-dim);padding:9px 9px 5px}.ux-result{width:100%;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;border:1px solid transparent;background:transparent;color:var(--text-hi);border-radius:9px;padding:9px 10px;cursor:pointer}.ux-result:hover,.ux-result.active{background:rgba(41,211,255,.07);border-color:var(--panel-border)}.ux-result-ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.04);color:var(--accent-blue)}.ux-result-main{min-width:0}.ux-result-title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ux-result-sub{font-size:10.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}.ux-result-type{font:9px var(--font-mono);color:var(--text-dim);text-transform:uppercase}.ux-command-empty{padding:38px 20px;text-align:center;color:var(--text-dim)}
+.search-wrap::after{content:'Ctrl K';position:absolute;right:9px;top:50%;transform:translateY(-50%);font:9px var(--font-mono);color:var(--text-dim);border:1px solid var(--panel-border);border-radius:5px;padding:2px 5px;pointer-events:none}.search-wrap input{padding-right:58px!important}
+.ux-flash{animation:ux-flash 1.25s ease}@keyframes ux-flash{0%,100%{box-shadow:inherit}35%{box-shadow:0 0 0 2px var(--accent-blue),0 0 28px rgba(41,211,255,.35)}}
+@media(max-width:620px){.search-wrap::after{display:none}.search-wrap input{padding-right:12px!important}.ux-command-box{max-height:82vh}.ux-result{grid-template-columns:28px minmax(0,1fr)}.ux-result-type{display:none}}
+
 </style>
 </head>
 <body>
@@ -2135,6 +2330,7 @@ html.no-animations *{
     </div>
     <button class="icon-btn" id="btn-sound" title="Toggle sound">&#128266;</button>
     <button class="icon-btn" id="btn-theme" title="Cycle theme">&#9681;</button>
+
   </header>
 
   <main id="main">
@@ -2455,19 +2651,59 @@ html.no-animations *{
           <div class="eyebrow">SUPPLY CACHE</div>
           <h2>Study Materials & Links</h2>
         </div>
-        <div class="sub">Manage review links, drives, books, and reference materials</div>
-      </div>
-
-      <div class="panel mb-16" style="margin-bottom:16px;">
-        <div class="panel-title"><span class="dot"></span>Add Custom Resource Link</div>
-        <div style="display:grid; grid-template-columns: 1fr 1.5fr auto; gap:12px; margin-top:14px; align-items:center;">
-          <input type="text" id="res-input-material" placeholder="Material Name (e.g. Formula Sheet PDF / Lecture Notes)" class="select-mini" style="padding:10px; width:100%;">
-          <input type="url" id="res-input-link" placeholder="URL Link (https://...)" class="select-mini" style="padding:10px; width:100%;">
-          <button class="btn btn-primary btn-sm" id="btn-add-resource" style="height:40px; white-space:nowrap;">+ Add Resource</button>
+        <div class="ux-header-actions">
+          <div class="sub">Manage review links, drives, books, and reference materials</div>
+          <div class="ux-add-menu-wrap">
+            <button class="btn btn-primary btn-sm" data-ux-add-menu="resources">+ Add</button>
+            <div class="ux-add-menu" data-ux-add-menu-panel="resources">
+              <button class="btn btn-ghost btn-sm" data-ux-action="add-resource-link">Add Web Link</button>
+              <button class="btn btn-ghost btn-sm" data-ux-action="add-resource-pdf">Upload PDF</button>
+              <button class="btn btn-ghost btn-sm" data-ux-action="add-topic">Add Topic</button>
+              <button class="btn btn-ghost btn-sm" data-ux-action="add-lesson">Add Lesson</button>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm ux-manage-toggle" data-ux-manage="resources">Manage</button>
         </div>
       </div>
+      <div class="ux-home-strip" id="ux-resource-home-strip">
+        <div class="ux-home-card"><div class="title">Pinned</div><div class="ux-chip-list" id="ux-resource-pinned"></div></div>
+        <div class="ux-home-card"><div class="title">Recent</div><div class="ux-chip-list" id="ux-resource-recent"></div></div>
+      </div>
+      <div class="ux-toolbar">
+        <input class="select-mini ux-local-search grow" id="ux-resource-search" placeholder="Search resources in this discipline…">
+        <select class="select-mini" id="ux-resource-sort">
+          <option value="name">Name</option>
+          <option value="recent-added">Recently Added</option>
+          <option value="recent-opened">Recently Opened</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" id="ux-resource-clear-filters">Clear</button>
+      </div>
+      <div class="ux-bulk-bar" id="ux-resource-bulk">
+        <strong id="ux-resource-selected-count">0 selected</strong>
+        <button class="btn btn-ghost btn-sm" data-ux-bulk="move">Move…</button>
+        <button class="btn btn-danger btn-sm" data-ux-bulk="delete">Delete</button>
+        <button class="btn btn-ghost btn-sm" data-ux-bulk="clear">Clear Selection</button>
+      </div>
+<div class="panel mb-16 ux-collapsed" id="res-add-panel" style="margin-bottom:16px;">
+        <div class="panel-title"><span><span class="dot"></span>Add Resource</span><button class="btn btn-ghost btn-sm ux-panel-toggle" data-collapse-target="res-add-panel">Show</button></div>
+        <div class="small-note" style="margin-bottom:12px;">Add either a web link or a local PDF, then assign it to a topic and lesson.</div>
+        <div class="res-add-grid">
+          <input type="text" id="res-input-material" placeholder="Material Name (optional for PDF — filename will be used)" class="select-mini" style="padding:10px; width:100%;">
+          <input type="url" id="res-input-link" placeholder="URL Link (https://...)" class="select-mini" style="padding:10px; width:100%;">
+          <select id="res-add-topic" class="select-mini" style="padding:10px; width:100%;"><option value="">Unassigned Topic</option></select>
+          <select id="res-add-lesson" class="select-mini" style="padding:10px; width:100%;" disabled><option value="">Unassigned / All Lessons</option></select>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" id="btn-add-resource" style="height:40px; white-space:nowrap;">+ Add Link</button>
+            <button class="btn btn-ghost btn-sm" id="btn-upload-resource-pdf" style="height:40px; white-space:nowrap;">↑ Upload PDF</button>
+            <input type="file" id="res-pdf-file-input" accept="application/pdf,.pdf" class="hidden">
+          </div>
+        </div>
+        <div class="small-note" id="res-pdf-status" style="margin-top:10px;">Uploaded PDFs are stored with the app and open in a new browser tab when selected.</div>
+      </div>
 
-      <div class="quest-grid" id="resources-grid"></div>
+      <div id="res-topic-nav"></div>
+      <div id="res-lesson-nav" class="mt-16"></div>
+      <div class="quest-grid mt-16" id="resources-grid"></div>
 
     </section>
 
@@ -2478,7 +2714,35 @@ html.no-animations *{
           <div class="eyebrow">FORMULA ARCHIVE</div>
           <h2>Formulas</h2>
         </div>
-        <div class="sub">LaTeX-ready formulas, variable definitions, use cases, and personal footnotes</div>
+        <div class="ux-header-actions">
+          <div class="sub">LaTeX-ready formulas, variable definitions, use cases, and personal footnotes</div>
+          <div class="ux-add-menu-wrap">
+            <button class="btn btn-primary btn-sm" data-ux-add-menu="formulas">+ Add</button>
+            <div class="ux-add-menu" data-ux-add-menu-panel="formulas">
+              <button class="btn btn-ghost btn-sm" data-ux-action="add-formula">Add Formula</button>
+              <button class="btn btn-ghost btn-sm" data-ux-action="open-formula-import">Import Formulas</button>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm ux-manage-toggle" data-ux-manage="formulas">Manage</button>
+        </div>
+      </div>
+      <div class="ux-toolbar">
+        <input class="select-mini ux-local-search grow" id="ux-formula-local-search" placeholder="Search formulas in this discipline…">
+        <select class="select-mini" id="ux-formula-sort">
+          <option value="name">Name</option>
+          <option value="recent-added">Recently Added</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" id="ux-formula-clear-filters">Clear</button>
+      </div>
+      <div class="ux-home-strip">
+        <div class="ux-home-card"><div class="title">Pinned Formulas</div><div class="ux-chip-list" id="ux-formula-pinned"></div></div>
+        <div class="ux-home-card"><div class="title">Recent Formulas</div><div class="ux-chip-list" id="ux-formula-recent"></div></div>
+      </div>
+      <div class="ux-bulk-bar" id="ux-formula-bulk">
+        <strong id="ux-formula-selected-count">0 selected</strong>
+        <button class="btn btn-ghost btn-sm" data-ux-formula-bulk="move">Move…</button>
+        <button class="btn btn-danger btn-sm" data-ux-formula-bulk="delete">Delete</button>
+        <button class="btn btn-ghost btn-sm" data-ux-formula-bulk="clear">Clear Selection</button>
       </div>
 
       <div class="panel mb-16" style="margin-bottom:16px;">
@@ -2602,7 +2866,33 @@ html.no-animations *{
       <div class="view-header">
         <div>
           <div class="eyebrow">DATABASE MANAGER</div>
-          <h2>Question Bank Manager</h2>
+                <div class="ux-toolbar">
+        <input class="select-mini ux-local-search grow" id="ux-bank-search" placeholder="Search question banks…">
+        <select class="select-mini" id="ux-bank-sort">
+          <option value="name">Name</option>
+          <option value="recent-added">Recently Added</option>
+          <option value="questions">Question Count</option>
+        </select>
+        <button class="btn btn-ghost btn-sm ux-manage-toggle" data-ux-manage="banks">Manage</button>
+        <div class="ux-add-menu-wrap">
+          <button class="btn btn-primary btn-sm" data-ux-add-menu="banks">+ Add</button>
+          <div class="ux-add-menu" data-ux-add-menu-panel="banks">
+            <button class="btn btn-ghost btn-sm" data-ux-action="open-bank-excel">Import Excel</button>
+            <button class="btn btn-ghost btn-sm" data-ux-action="open-bank-pdf">PDF / JSON Import</button>
+          </div>
+        </div>
+      </div>
+      <div class="ux-bulk-bar" id="ux-bank-bulk">
+        <strong id="ux-bank-selected-count">0 selected</strong>
+        <button class="btn btn-ghost btn-sm" data-ux-bank-bulk="classify">Classify…</button>
+        <button class="btn btn-danger btn-sm" data-ux-bank-bulk="delete">Delete</button>
+        <button class="btn btn-ghost btn-sm" data-ux-bank-bulk="clear">Clear Selection</button>
+      </div>
+      <div class="ux-home-strip">
+        <div class="ux-home-card"><div class="title">Pinned Banks</div><div class="ux-chip-list" id="ux-bank-pinned"></div></div>
+        <div class="ux-home-card"><div class="title">Recent Banks</div><div class="ux-chip-list" id="ux-bank-recent"></div></div>
+      </div>
+<h2>Question Bank Manager</h2>
         </div>
         <div class="sub" id="qb-summary">Import, merge, and deduplicate question banks</div>
       </div>
@@ -2752,17 +3042,6 @@ html.no-animations *{
           <div class="val" id="qb-stat-duplicates">0</div>
           <div class="lab">Duplicates Filtered</div>
         </div>
-      </div>
-
-      <div class="panel mt-24">
-        <div class="panel-title flex-between" style="flex-wrap:wrap; gap:10px;">
-          <span><span class="dot"></span>Topic Library</span>
-          <span class="small-note">Topics are created directly from each question bank</span>
-        </div>
-        <div class="small-note" style="margin-top:4px; line-height:1.6;">
-          Use the <strong>Topic</strong> field on a question bank below. Start typing to reuse an existing topic, or type a new name and press Enter. New topics are saved automatically and become available everywhere in the app.
-        </div>
-        <div id="topic-chip-list" class="mt-16" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
       </div>
 
       <div class="panel mt-24">
@@ -2999,13 +3278,28 @@ html.no-animations *{
       <div class="settings-grid">
         <div class="panel">
           <div class="panel-title"><span class="dot"></span>Appearance</div>
-          <div class="settings-row">
-            <div><div class="lab">Theme</div><div class="desc">Choose your System interface color scheme</div></div>
+          <div class="settings-row discipline-theme-row" data-theme-row="civil">
+            <div>
+              <div class="lab">Civil Engineering Theme</div>
+              <div class="desc">Used automatically whenever Civil Engineering is selected</div>
+            </div>
             <div class="theme-swatches">
-              <div class="theme-swatch" data-theme="solo-blue" style="background:linear-gradient(135deg,#29d3ff,#b06bff)" title="Solo Blue"></div>
-              <div class="theme-swatch" data-theme="shadow-purple" style="background:linear-gradient(135deg,#8a5bff,#ff6ec7)" title="Shadow Purple"></div>
-              <div class="theme-swatch" data-theme="monarch-black" style="background:linear-gradient(135deg,#7c3aed,#ffd166)" title="Monarch Black"></div>
-              <div class="theme-swatch" data-theme="light" style="background:linear-gradient(135deg,#0ea5e9,#9333ea)" title="Light Mode"></div>
+              <div class="theme-swatch" data-theme-discipline="civil" data-theme="solo-blue" style="background:linear-gradient(135deg,#29d3ff,#b06bff)" title="Solo Blue"></div>
+              <div class="theme-swatch" data-theme-discipline="civil" data-theme="shadow-purple" style="background:linear-gradient(135deg,#8a5bff,#ff6ec7)" title="Shadow Purple"></div>
+              <div class="theme-swatch" data-theme-discipline="civil" data-theme="monarch-black" style="background:linear-gradient(135deg,#7c3aed,#ffd166)" title="Monarch Black"></div>
+              <div class="theme-swatch" data-theme-discipline="civil" data-theme="light" style="background:linear-gradient(135deg,#0ea5e9,#9333ea)" title="Light Mode"></div>
+            </div>
+          </div>
+          <div class="settings-row discipline-theme-row" data-theme-row="sanitary">
+            <div>
+              <div class="lab">Sanitary Engineering Theme</div>
+              <div class="desc">Used automatically whenever Sanitary Engineering is selected</div>
+            </div>
+            <div class="theme-swatches">
+              <div class="theme-swatch" data-theme-discipline="sanitary" data-theme="solo-blue" style="background:linear-gradient(135deg,#29d3ff,#b06bff)" title="Solo Blue"></div>
+              <div class="theme-swatch" data-theme-discipline="sanitary" data-theme="shadow-purple" style="background:linear-gradient(135deg,#8a5bff,#ff6ec7)" title="Shadow Purple"></div>
+              <div class="theme-swatch" data-theme-discipline="sanitary" data-theme="monarch-black" style="background:linear-gradient(135deg,#7c3aed,#ffd166)" title="Monarch Black"></div>
+              <div class="theme-swatch" data-theme-discipline="sanitary" data-theme="light" style="background:linear-gradient(135deg,#0ea5e9,#9333ea)" title="Light Mode"></div>
             </div>
           </div>
           <div class="settings-row">
@@ -3019,6 +3313,16 @@ html.no-animations *{
           <div class="settings-row">
             <div><div class="lab">Sound Effects</div><div class="desc">UI clicks, level-ups, quest completions</div></div>
             <div class="switch on" id="toggle-sound"><div class="knob"></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span class="dot"></span>Storage & Data</div>
+          <div class="settings-row" style="display:block;">
+            <div class="lab">Local Storage Usage</div>
+            <div class="desc" id="ux-storage-summary">Calculating…</div>
+            <div class="ux-storage-bar" style="margin-top:10px;"><div class="ux-storage-fill" id="ux-storage-fill"></div></div>
+            <div class="desc" id="ux-storage-breakdown" style="margin-top:8px;"></div>
           </div>
         </div>
 
@@ -3609,6 +3913,8 @@ function formulaVariableLineHtml(line){
 // Only one formula card is edited at a time. kind: 'rf' (Formula Reference) or 'fm' (quiz formula sheet).
 const FormulaEditState = { kind: null, id: null };
 const FormulaLibraryNav = { topic:'', lesson:'' };
+const ResourceLibraryNav = { view:'topics', topic:'', lesson:'' };
+const ResourceHierarchyEdit = { enabled:false, drag:null };
 
 function formulaCardHtml(kind, f){
   const isRf = kind === 'rf';
@@ -3851,6 +4157,40 @@ const QUEST_TEMPLATES = [
 ];
 
 const THEME_ORDER = ['solo-blue','shadow-purple','monarch-black','light'];
+
+function normalizeThemeName(theme){
+  return THEME_ORDER.includes(theme) ? theme : 'solo-blue';
+}
+
+function ensureDisciplineThemes(settings){
+  settings = settings || {};
+  const legacy = normalizeThemeName(settings.theme || 'solo-blue');
+  if(!settings.disciplineThemes || typeof settings.disciplineThemes !== 'object'){
+    // Existing users keep their current theme for both disciplines on migration.
+    settings.disciplineThemes = {civil:legacy, sanitary:legacy};
+  }
+  settings.disciplineThemes.civil = normalizeThemeName(settings.disciplineThemes.civil || legacy);
+  settings.disciplineThemes.sanitary = normalizeThemeName(settings.disciplineThemes.sanitary || legacy);
+  return settings.disciplineThemes;
+}
+
+function themeForDiscipline(d){
+  d = d === 'sanitary' ? 'sanitary' : 'civil';
+  if(!STATE || !STATE.settings) return d === 'sanitary' ? 'shadow-purple' : 'solo-blue';
+  const map = ensureDisciplineThemes(STATE.settings);
+  return map[d];
+}
+
+function applyActiveDisciplineTheme(){
+  if(!STATE || !STATE.settings) return;
+  const d = STATE.activeDiscipline === 'sanitary' ? 'sanitary' : 'civil';
+  const theme = themeForDiscipline(d);
+  document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.classList.toggle('pokemon-ui', !!STATE.settings.pokemonUI);
+  // Keep the legacy field synchronized for older backup/code compatibility.
+  STATE.settings.theme = theme;
+}
+
 
 /* ---- Storage Engine ---- */
 const Storage = (function(){
@@ -5939,13 +6279,16 @@ function defaultState(){
     quests: { date: todayStr(), list: [] },
     today: { date: todayStr(), reviewCount:0, perfectQuizzes:0, masteredToday:0, studySeconds:0, questionsAnswered:0 },
     streak: { current:0, longest:0 }, activityLog: {}, dailyXP: {}, dailyQuestionsLog: {},
-    questionBanks: [], topics: [], topicHierarchy: {civil:[], sanitary:[]}, activeDiscipline:'civil', activeQuiz: null, quizHistory: [], questionStats: {}, questionMastery: {}, customResources: [],
+    questionBanks: [], topics: [], topicHierarchy: {civil:[], sanitary:[]}, activeDiscipline:'civil', activeQuiz: null, quizHistory: [], questionStats: {}, questionMastery: {}, customResources: [], usability:{pins:{resources:[],formulas:[],banks:[]},recent:[],manualOrder:{topics:{},lessons:{}},lastOpened:{}},
     dungeonCampaigns: {}, dungeonBossAvatars: {}, dungeonBossEdits: {}, dungeonCustomBosses: [], dungeonBackground: null,
     formulaSheets: [], resourceFormulas: [],
     questsCompletedTotal: 0, perfectQuizTotal: 0, sessions: [], dailyMasteredCount: {},
     timer: { mode:'25/5', focusMin:25, breakMin:5, phase:'focus', running:false, startedAt:null, remainingSec:25*60 },
     settings: {
-      theme:'solo-blue', sound:true, animations:true, xpRates: Object.assign({}, DEFAULT_XP_RATES),
+      // theme is retained as a compatibility mirror of the active discipline.
+      theme:'solo-blue',
+      disciplineThemes:{civil:'solo-blue', sanitary:'shadow-purple'},
+      sound:true, animations:true, xpRates: Object.assign({}, DEFAULT_XP_RATES),
       keybinds: Object.assign({}, DEFAULT_KEYBINDS),
       driveSync: defaultDriveSync()
     }
@@ -6405,6 +6748,15 @@ function normalizeRestoredState(rawState, opts){
   // Nested settings need their own merge; a shallow STATE merge can otherwise
   // lose newer defaults when restoring an older backup.
   restored.settings = Object.assign({}, base.settings, incoming.settings || {});
+  // Older backups stored only one global theme. Migrate that value to both
+  // disciplines, while preserving newer per-discipline choices when present.
+  if(!(incoming.settings||{}).disciplineThemes){
+    const legacyTheme=normalizeThemeName((incoming.settings||{}).theme || restored.settings.theme || 'solo-blue');
+    restored.settings.disciplineThemes={civil:legacyTheme,sanitary:legacyTheme};
+  }else{
+    restored.settings.disciplineThemes=Object.assign({}, base.settings.disciplineThemes, (incoming.settings||{}).disciplineThemes);
+  }
+  ensureDisciplineThemes(restored.settings);
   restored.settings.xpRates = Object.assign({}, DEFAULT_XP_RATES, (incoming.settings||{}).xpRates || {});
   restored.settings.keybinds = Object.assign({}, DEFAULT_KEYBINDS, (incoming.settings||{}).keybinds || {});
   restored.settings.driveSync = Object.assign(defaultDriveSync(), (incoming.settings||{}).driveSync || {});
@@ -6421,6 +6773,12 @@ function normalizeRestoredState(rawState, opts){
   if(!Array.isArray(restored.topicHierarchy.civil)) restored.topicHierarchy.civil = [];
   if(!Array.isArray(restored.topicHierarchy.sanitary)) restored.topicHierarchy.sanitary = [];
   restored.activeDiscipline = restored.activeDiscipline === 'sanitary' ? 'sanitary' : 'civil';
+  restored.usability = restored.usability && typeof restored.usability==='object' ? restored.usability : {};
+  restored.usability.pins = Object.assign({resources:[],formulas:[],banks:[]}, restored.usability.pins||{});
+  restored.usability.recent = Array.isArray(restored.usability.recent) ? restored.usability.recent : [];
+  restored.usability.manualOrder = restored.usability.manualOrder && typeof restored.usability.manualOrder==='object' ? restored.usability.manualOrder : {topics:{},lessons:{}};
+  restored.usability.lastOpened = restored.usability.lastOpened && typeof restored.usability.lastOpened==='object' ? restored.usability.lastOpened : {};
+
 
   // Migrate imported content without deleting any unknown/new properties.
   restored.questionBanks.forEach(b=>{
@@ -6445,6 +6803,14 @@ function normalizeRestoredState(rawState, opts){
     f.discipline = f.discipline === 'sanitary' ? 'sanitary' : (f.discipline || 'civil');
     f.topic = String(f.topic || '');
     f.lesson = String(f.lesson || '');
+  });
+
+  restored.customResources.forEach(r=>{
+    if(!r||typeof r!=='object')return;
+    r.discipline=r.discipline==='sanitary'?'sanitary':(r.discipline||'civil');
+    r.topic=String(r.topic||'');
+    r.lesson=String(r.lesson||'');
+    if(!r.createdAt)r.createdAt=Date.parse(r.importedAt||'')||0;
   });
 
   restored.formulaSheets.forEach(sheet=>{
@@ -6489,9 +6855,10 @@ function refreshAfterFullRestore(){
     FormulaLibraryNav.topic = '';
     FormulaLibraryNav.lesson = '';
   }
+  if(typeof ResourceLibraryNav !== 'undefined'){ ResourceLibraryNav.topic=''; ResourceLibraryNav.lesson=''; }
 
-  document.documentElement.setAttribute('data-theme', STATE.settings.theme || 'solo-blue');
-  document.documentElement.classList.toggle('pokemon-ui', !!STATE.settings.pokemonUI);
+  ensureDisciplineThemes(STATE.settings);
+  applyActiveDisciplineTheme();
 
   // RenderAll covers the main static sections. The discipline layer then
   // rebuilds topic/lesson controls and re-filters banks/formulas against the
@@ -7127,22 +7494,220 @@ const UI = {
   },
 
   renderResources(){
-    const grid = document.getElementById('resources-grid'); if(!grid) return;
-    const list = STATE.customResources || [];
-    if(!list.length){
-      grid.innerHTML = '<div class="empty-state">No resource links yet. Add one above.</div>';
+    const grid=document.getElementById('resources-grid'); if(!grid)return;
+    const topicNav=document.getElementById('res-topic-nav');
+    const lessonNav=document.getElementById('res-lesson-nav');
+    const discipline=(typeof DisciplineSystem!=='undefined'&&DisciplineSystem.active)
+      ? DisciplineSystem.active()
+      : ((STATE.activeDiscipline==='sanitary')?'sanitary':'civil');
+    const disciplineLabel=(typeof DisciplineSystem!=='undefined'&&DisciplineSystem.label)
+      ? DisciplineSystem.label(discipline)
+      : (discipline==='sanitary'?'Sanitary Engineering':'Civil Engineering');
+    const all=(STATE.customResources||[]).filter(r=>(r.discipline||'civil')===discipline);
+
+    let topics=[];
+    if(typeof DisciplineSystem!=='undefined'&&DisciplineSystem.topics){
+      topics=DisciplineSystem.topics(discipline).map(t=>t.name).filter(Boolean);
+    }
+    // Keep legacy classifications reachable even if they are no longer in the hierarchy.
+    all.forEach(r=>{
+      const t=String(r.topic||'').trim();
+      if(t&&!topics.some(x=>x.toLowerCase()===t.toLowerCase()))topics.push(t);
+    });
+    if(all.some(r=>!String(r.topic||'').trim()))topics.push('Unclassified');
+
+    // Keep the navigation state valid after discipline/topic hierarchy changes.
+    if(ResourceLibraryNav.view!=='topics' && (!ResourceLibraryNav.topic || !topics.includes(ResourceLibraryNav.topic))){
+      ResourceLibraryNav.view='topics';
+      ResourceLibraryNav.topic='';
+      ResourceLibraryNav.lesson='';
+    }
+
+    // ---------------- TOPICS WINDOW ----------------
+    if(ResourceLibraryNav.view==='topics'){
+      ResourceLibraryNav.topic='';
+      ResourceLibraryNav.lesson='';
+      if(lessonNav) lessonNav.innerHTML='';
+      grid.innerHTML='';
+
+      if(!topics.length){
+        if(topicNav) topicNav.innerHTML=`<div class="res-window">
+          <div class="res-window-head">
+            <div>
+              <div class="res-window-title">Topics</div>
+              <div class="res-window-sub">Create your first topic for ${escapeHtml(disciplineLabel)}.</div>
+            </div>
+            <button type="button" class="btn btn-ghost btn-sm res-edit-toggle ${ResourceHierarchyEdit.enabled?'active':''}" data-res-toggle-edit>
+              ${ResourceHierarchyEdit.enabled?'Done Editing':'Edit Hierarchy'}
+            </button>
+          </div>
+          <div class="res-topic-grid">
+            <button type="button" class="res-topic-tile res-add-tile" data-res-add-topic>
+              <div class="plus">＋</div>
+              <div class="name">Add Topic</div>
+              <div class="meta">Create the first topic</div>
+            </button>
+          </div>
+        </div>`;
+        return;
+      }
+
+      if(topicNav){
+        topicNav.innerHTML=`<div class="res-window">
+          <div class="res-window-head">
+            <div>
+              <div class="res-window-title">Topics</div>
+              <div class="res-window-sub">${ResourceHierarchyEdit.enabled?'Editing enabled — drag a topic to the delete area, or use Rename.':'Choose a topic to open its lessons.'}</div>
+            </div>
+            <button type="button" class="btn btn-ghost btn-sm res-edit-toggle ${ResourceHierarchyEdit.enabled?'active':''}" data-res-toggle-edit>
+              ${ResourceHierarchyEdit.enabled?'Done Editing':'Edit Hierarchy'}
+            </button>
+          </div>
+          <div class="res-topic-grid">${topics.map(topic=>{
+            const topicResources=all.filter(r=>topic==='Unclassified'
+              ? !String(r.topic||'').trim()
+              : String(r.topic||'').trim()===topic);
+            let lessonNames=[];
+            if(topic!=='Unclassified'&&typeof DisciplineSystem!=='undefined'&&DisciplineSystem.lessons){
+              lessonNames=DisciplineSystem.lessons(topic,discipline).slice();
+            }
+            topicResources.forEach(r=>{
+              const l=String(r.lesson||'').trim();
+              if(l&&!lessonNames.some(x=>x.toLowerCase()===l.toLowerCase()))lessonNames.push(l);
+            });
+            const unassignedCount=topicResources.filter(r=>!String(r.lesson||'').trim()).length;
+            const lessonCount=lessonNames.length+(unassignedCount?1:0);
+            const editable=ResourceHierarchyEdit.enabled && topic!=='Unclassified';
+            return `<div class="res-topic-tile ${editable?'is-editing':''}" data-res-topic="${escapeHtml(topic)}" role="button" tabindex="0" ${editable?'draggable="true" data-res-drag-type="topic"':''}>
+              <div class="name">${escapeHtml(topic)}</div>
+              <div class="meta">${lessonCount} lesson${lessonCount===1?'':'s'} · ${topicResources.length} resource${topicResources.length===1?'':'s'}</div>
+              ${editable?`<div class="res-tile-edit-actions"><button type="button" class="btn btn-ghost btn-sm" data-res-rename-topic="${escapeHtml(topic)}">Rename</button></div>`:''}
+            </div>`;
+          }).join('')}
+          <button type="button" class="res-topic-tile res-add-tile" data-res-add-topic>
+            <div class="plus">＋</div>
+            <div class="name">Add Topic</div>
+            <div class="meta">Create a new topic in ${escapeHtml(disciplineLabel)}</div>
+          </button></div>
+          ${ResourceHierarchyEdit.enabled?`<div class="res-delete-zone" data-res-delete-zone="topic"><span class="trash">🗑</span><span>Drag a topic here to delete it</span></div>`:''}
+        </div>`;
+      }
       return;
     }
-    grid.innerHTML = list.map(r => `
-      <div class="panel quest-card">
-        <div class="qtitle">&#128279; ${escapeHtml(r.material)}</div>
-        <div class="qdesc"><a href="${escapeHtml(r.link)}" target="_blank" style="color:var(--accent-blue);">${escapeHtml(r.link)}</a></div>
-        <div style="display:flex; gap:8px; margin-top:10px;">
-          <button class="btn btn-ghost btn-sm" data-edit-res="${r.id}">Edit</button>
-          <button class="btn btn-danger btn-sm" data-delete-res="${r.id}">Delete</button>
+
+    const topic=ResourceLibraryNav.topic;
+    const topicResources=all.filter(r=>topic==='Unclassified'
+      ? !String(r.topic||'').trim()
+      : String(r.topic||'').trim()===topic);
+
+    let lessons=[];
+    if(topic&&topic!=='Unclassified'&&typeof DisciplineSystem!=='undefined'&&DisciplineSystem.lessons){
+      lessons=DisciplineSystem.lessons(topic,discipline).slice();
+    }
+    topicResources.forEach(r=>{
+      const l=String(r.lesson||'').trim();
+      if(l&&!lessons.some(x=>x.toLowerCase()===l.toLowerCase()))lessons.push(l);
+    });
+    lessons.sort((a,b)=>a.localeCompare(b));
+    const hasUnassigned=topicResources.some(r=>!String(r.lesson||'').trim());
+
+    // ---------------- LESSONS WINDOW ----------------
+    if(ResourceLibraryNav.view==='lessons'){
+      ResourceLibraryNav.lesson='';
+      if(topicNav) topicNav.innerHTML='';
+      grid.innerHTML='';
+
+      const lessonTiles=[
+        ...lessons.map(lesson=>({
+          key:lesson,
+          label:lesson,
+          count:topicResources.filter(r=>String(r.lesson||'').trim()===lesson).length
+        })),
+        ...(hasUnassigned?[{
+          key:'Unassigned',
+          label:'Unassigned',
+          count:topicResources.filter(r=>!String(r.lesson||'').trim()).length
+        }]:[])
+      ];
+
+      if(lessonNav){
+        lessonNav.innerHTML=`<div class="res-window">
+          <div class="res-window-head">
+            <div>
+              <div class="res-window-title">${escapeHtml(topic)}</div>
+              <div class="res-window-sub">${ResourceHierarchyEdit.enabled?'Editing enabled — drag a lesson to the delete area, or use Rename.':'Lessons under this topic'}</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-ghost btn-sm res-edit-toggle ${ResourceHierarchyEdit.enabled?'active':''}" data-res-toggle-edit>${ResourceHierarchyEdit.enabled?'Done Editing':'Edit Hierarchy'}</button>
+              <button type="button" class="btn btn-ghost btn-sm res-back-btn" data-res-back-topics>← Back to Topics</button>
+            </div>
+          </div>
+          <div class="res-lesson-grid">
+            ${lessonTiles.map(item=>{
+              const editable=ResourceHierarchyEdit.enabled && item.key!=='Unassigned';
+              return `<div class="res-lesson-tile ${editable?'is-editing':''}" data-res-lesson="${escapeHtml(item.key)}" role="button" tabindex="0" ${editable?'draggable="true" data-res-drag-type="lesson"':''}>
+                <div class="name">${escapeHtml(item.label)}</div>
+                <div class="meta">${item.count} resource${item.count===1?'':'s'}</div>
+                ${editable?`<div class="res-tile-edit-actions"><button type="button" class="btn btn-ghost btn-sm" data-res-rename-lesson="${escapeHtml(item.key)}">Rename</button></div>`:''}
+              </div>`;
+            }).join('')}
+            ${topic!=='Unclassified' ? `<button type="button" class="res-lesson-tile res-add-tile" data-res-add-lesson>
+              <div class="plus">＋</div>
+              <div class="name">Add Lesson</div>
+              <div class="meta">Create a lesson under ${escapeHtml(topic)}</div>
+            </button>` : ''}
+          </div>
+          ${ResourceHierarchyEdit.enabled && topic!=='Unclassified'?`<div class="res-delete-zone" data-res-delete-zone="lesson"><span class="trash">🗑</span><span>Drag a lesson here to delete it</span></div>`:''}
+        </div>`;
+      }
+      return;
+    }
+
+    // ---------------- RESOURCES WINDOW ----------------
+    if(ResourceLibraryNav.view==='resources'){
+      if(topicNav) topicNav.innerHTML='';
+      if(lessonNav) lessonNav.innerHTML='';
+
+      const lesson=ResourceLibraryNav.lesson;
+      let visible=topicResources;
+      if(lesson==='Unassigned') visible=topicResources.filter(r=>!String(r.lesson||'').trim());
+      else visible=topicResources.filter(r=>String(r.lesson||'').trim()===lesson);
+
+      const lessonTitle=lesson==='Unassigned'?'Unassigned':lesson;
+      grid.innerHTML=`<div class="res-window" style="grid-column:1/-1;">
+        <div class="res-window-head">
+          <div>
+            <div class="res-window-title">${escapeHtml(lessonTitle||'Lesson')}</div>
+            <div class="res-window-sub">${escapeHtml(topic)} · ${visible.length} resource${visible.length===1?'':'s'}</div>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm res-back-btn" data-res-back-lessons>← Back to Lessons</button>
         </div>
-      </div>
-    `).join('');
+        <div class="quest-grid">${visible.length
+          ? visible.map(r=>`<div class="panel quest-card res-resource-card" data-resource-id="${r.id}">
+              <div class="qtitle">${(r.type==='pdf'||r.pdfData)?'&#128196;':'&#128279;'} ${escapeHtml(r.material)}</div>
+              <div class="qdesc">${(r.type==='pdf'||r.pdfData)
+                ? `<button type="button" class="btn btn-ghost btn-sm" data-open-res-pdf="${r.id}" style="padding:6px 10px;">Open PDF in New Tab ↗</button><span class="small-note" style="margin-left:8px;">${escapeHtml(r.fileName||'PDF')}${r.fileSize?` · ${(r.fileSize/1024/1024).toFixed(1)} MB`:''}</span>`
+                : `<a href="${escapeHtml(r.link)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent-blue);word-break:break-word;">${escapeHtml(r.link)}</a>`}</div>
+              <div class="res-classification">
+                <span class="nav-badge" style="margin-left:0;background:rgba(41,211,255,.10);color:var(--accent-blue);">${escapeHtml(r.topic||'Unclassified')}</span>
+                ${r.lesson?`<span class="nav-badge" style="margin-left:0;background:rgba(176,107,255,.10);color:var(--accent-purple);">${escapeHtml(r.lesson)}</span>`:''}
+              </div>
+              <div style="display:flex;gap:8px;margin-top:12px;">
+                <button class="btn btn-ghost btn-sm" data-edit-res="${r.id}">Edit</button>
+                <button class="btn btn-danger btn-sm" data-delete-res="${r.id}">Delete</button>
+              </div>
+            </div>`).join('')
+          : `<div class="empty-state">No resources are assigned to this lesson yet.</div>`}
+        </div>
+      </div>`;
+      return;
+    }
+
+    // Fallback if a legacy/invalid sub-view value is present.
+    ResourceLibraryNav.view='topics';
+    ResourceLibraryNav.topic='';
+    ResourceLibraryNav.lesson='';
+    UI.renderResources();
   },
 
   renderResourceFormulas(){
@@ -8236,7 +8801,11 @@ const UI = {
   },
 
   renderSettings(){
-    document.querySelectorAll('.theme-swatch').forEach(el => el.classList.toggle('active', el.dataset.theme === STATE.settings.theme));
+    ensureDisciplineThemes(STATE.settings);
+    document.querySelectorAll('.theme-swatch').forEach(el => {
+      const d=el.dataset.themeDiscipline || (STATE.activeDiscipline==='sanitary'?'sanitary':'civil');
+      el.classList.toggle('active', el.dataset.theme === themeForDiscipline(d));
+    });
     const toggleAnim = document.getElementById('toggle-animations');
     if(toggleAnim) toggleAnim.classList.toggle('on', STATE.settings.animations);
     const toggleSnd = document.getElementById('toggle-sound');
@@ -8266,12 +8835,19 @@ const UI = {
       </div>`;
     }).join('');
   },
-  applyTheme(theme){
-    document.documentElement.setAttribute('data-theme', theme);
-      document.documentElement.classList.toggle('pokemon-ui', !!STATE.settings.pokemonUI);
-    STATE.settings.theme = theme;
+  applyTheme(theme, discipline){
+    theme=normalizeThemeName(theme);
+    discipline=discipline==='sanitary'?'sanitary':(discipline==='civil'?'civil':(STATE.activeDiscipline==='sanitary'?'sanitary':'civil'));
+    const map=ensureDisciplineThemes(STATE.settings);
+    map[discipline]=theme;
+
+    // Only repaint immediately if the edited theme belongs to the discipline
+    // currently being viewed.
+    if((STATE.activeDiscipline==='sanitary'?'sanitary':'civil')===discipline){
+      applyActiveDisciplineTheme();
+    }
     persist();
-    document.querySelectorAll('.theme-swatch').forEach(el => el.classList.toggle('active', el.dataset.theme === theme));
+    UI.renderSettings();
   }
 };
 
@@ -8328,39 +8904,172 @@ const DataOps = {
     Notify.toast('info', 'Quiz Progress Reset', 'Quiz mastery, answers, spaced-repetition progress, due dates, and quiz history were cleared. Your banks and imports were kept.');
   },
   resetAll(){
+    const keptThemes=STATE&&STATE.settings?Object.assign({},ensureDisciplineThemes(STATE.settings)):null;
     STATE = defaultState();
-    STATE.settings.theme = document.documentElement.getAttribute('data-theme') || 'solo-blue';
+    if(keptThemes) STATE.settings.disciplineThemes=keptThemes;
+    applyActiveDisciplineTheme();
     persist(); RenderAll();
   }
 };
 
+/* ---- Resources hierarchy creation ---- */
+function resourcePromptAddTopic(){
+  const discipline=(STATE.activeDiscipline==='sanitary')?'sanitary':'civil';
+  const name=prompt('New Topic Name:');
+  if(name===null)return;
+  const clean=String(name||'').trim();
+  if(!clean)return;
+  if(typeof DisciplineSystem!=='undefined'&&DisciplineSystem.addTopic){
+    const result=DisciplineSystem.addTopic(discipline,clean);
+    ResourceLibraryNav.view='topics';
+    ResourceLibraryNav.topic='';
+    ResourceLibraryNav.lesson='';
+    UI.renderResources();
+    if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+    return result;
+  }
+}
+
+function resourcePromptAddLesson(topic){
+  const discipline=(STATE.activeDiscipline==='sanitary')?'sanitary':'civil';
+  const cleanTopic=String(topic||'').trim();
+  if(!cleanTopic||cleanTopic==='Unclassified')return;
+  const name=prompt(`New Lesson under "${cleanTopic}":`);
+  if(name===null)return;
+  const clean=String(name||'').trim();
+  if(!clean)return;
+  if(typeof DisciplineSystem!=='undefined'&&DisciplineSystem.addLesson){
+    const result=DisciplineSystem.addLesson(discipline,cleanTopic,clean);
+    ResourceLibraryNav.view='lessons';
+    ResourceLibraryNav.topic=cleanTopic;
+    ResourceLibraryNav.lesson='';
+    UI.renderResources();
+    if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+    return result;
+  }
+}
+
 /* ---- Resource Operations ---- */
 const ResourceOps = {
-  addResource(material, link){
+  addResource(material, link, topic, lesson, discipline){
     if(!material || !material.trim()){ Notify.toast('info', 'Title Required', 'Please enter a name for the resource.'); return false; }
     if(!link || !link.trim()){ Notify.toast('info', 'Link Required', 'Please enter a URL link.'); return false; }
     STATE.customResources = STATE.customResources || [];
-    STATE.customResources.push({ id: uid('res'), material: material.trim(), link: link.trim() });
+    STATE.customResources.push({
+      id: uid('res'),
+      type:'link',
+      material: material.trim(),
+      link: link.trim(),
+      topic:String(topic||'').trim(),
+      lesson:String(lesson||'').trim(),
+      discipline:(discipline==='sanitary'?'sanitary':'civil')
+    });
     persist(); UI.renderResources();
     Notify.toast('info', 'Resource Added', `Added "${material.trim()}".`);
     return true;
   },
-  deleteResource(id){
-    if(!confirm('Are you sure you want to delete this resource link?')) return;
-    STATE.customResources = (STATE.customResources || []).filter(r => r.id !== id);
-    persist();
-    UI.renderResources();
-    Notify.toast('info', 'Resource Deleted', 'Resource link has been removed.');
+
+  async addPdf(file, material, topic, lesson, discipline){
+    if(!file) return false;
+    const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '');
+    if(!isPdf){
+      Notify.toast('warning','PDF Required','Choose a PDF file.');
+      return false;
+    }
+
+    const title = String(material||'').trim() || String(file.name||'PDF Resource').replace(/\.pdf$/i,'');
+    try{
+      const dataUrl = await new Promise((resolve,reject)=>{
+        const reader=new FileReader();
+        reader.onload=()=>resolve(String(reader.result||''));
+        reader.onerror=()=>reject(reader.error||new Error('Could not read PDF.'));
+        reader.readAsDataURL(file);
+      });
+
+      if(!dataUrl.startsWith('data:application/pdf')){
+        throw new Error('The selected file could not be stored as a PDF.');
+      }
+
+      STATE.customResources = STATE.customResources || [];
+      STATE.customResources.push({
+        id:uid('res'),
+        type:'pdf',
+        material:title,
+        link:'',
+        pdfData:dataUrl,
+        fileName:file.name || `${title}.pdf`,
+        fileSize:Number(file.size)||0,
+        topic:String(topic||'').trim(),
+        lesson:String(lesson||'').trim(),
+        discipline:(discipline==='sanitary'?'sanitary':'civil')
+      });
+      persist();
+      UI.renderResources();
+      Notify.toast('success','PDF Added',`Added "${title}" to Resources.`);
+      return true;
+    }catch(err){
+      Notify.toast('warning','PDF Upload Failed',err.message||'Could not save this PDF.');
+      return false;
+    }
   },
+
+  openPdf(id){
+    const resource=(STATE.customResources||[]).find(r=>r.id===id);
+    if(!resource || !resource.pdfData){
+      Notify.toast('warning','PDF Missing','The stored PDF data could not be found.');
+      return;
+    }
+    try{
+      const parts=String(resource.pdfData).split(',');
+      if(parts.length<2) throw new Error('Invalid PDF data.');
+      const binary=atob(parts.slice(1).join(','));
+      const bytes=new Uint8Array(binary.length);
+      for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+      const blob=new Blob([bytes],{type:'application/pdf'});
+      const url=URL.createObjectURL(blob);
+      const win=window.open(url,'_blank','noopener,noreferrer');
+      if(!win){
+        URL.revokeObjectURL(url);
+        Notify.toast('warning','Popup Blocked','Allow popups for this page to open uploaded PDFs in a new tab.');
+        return;
+      }
+      setTimeout(()=>URL.revokeObjectURL(url),60000);
+    }catch(err){
+      Notify.toast('warning','Could Not Open PDF',err.message||'The stored PDF could not be opened.');
+    }
+  },
+
+  deleteResource(id){
+    const current=(STATE.customResources||[]).find(r=>r.id===id); if(!current)return;
+    const perform=()=>{
+      const snapshot=JSON.parse(JSON.stringify(current));
+      STATE.customResources=(STATE.customResources||[]).filter(r=>r.id!==id);
+      persist();UI.renderResources();
+      Notify.toast('info','Resource Deleted','Resource has been removed.');
+      if(typeof UsabilityManager!=='undefined')UsabilityManager.showUndo(`Deleted "${snapshot.material}"`,()=>{STATE.customResources=(STATE.customResources||[]).concat([snapshot]);persist();UI.renderResources();});
+    };
+    if(typeof UsabilityManager!=='undefined'){
+      UsabilityManager.showModal({title:'Delete Resource',message:`Delete "${current.material}"?`,danger:true,confirmText:'Delete'}).then(ok=>{if(ok)perform();});
+    }else if(confirm('Are you sure you want to delete this resource?'))perform();
+  },
+
   editResource(id){
     const current = (STATE.customResources || []).find(r => r.id === id);
     if(!current) return;
     const newMaterial = prompt('Edit Resource Title:', current.material);
     if(newMaterial === null) return;
-    const newLink = prompt('Edit URL Link:', current.link);
-    if(newLink === null) return;
-    if(!newMaterial.trim() || !newLink.trim()){ Notify.toast('info', 'Invalid Input', 'Title and Link cannot be empty.'); return; }
-    current.material = newMaterial.trim(); current.link = newLink.trim();
+    if(!newMaterial.trim()){ Notify.toast('info','Invalid Input','Title cannot be empty.'); return; }
+
+    if(current.type==='pdf' || current.pdfData){
+      current.material=newMaterial.trim();
+    }else{
+      const newLink = prompt('Edit URL Link:', current.link);
+      if(newLink === null) return;
+      if(!newLink.trim()){ Notify.toast('info','Invalid Input','Link cannot be empty.'); return; }
+      current.material=newMaterial.trim();
+      current.link=newLink.trim();
+      current.type=current.type||'link';
+    }
     persist();
     UI.renderResources();
     Notify.toast('info', 'Resource Updated', `Updated "${current.material}".`);
@@ -8432,9 +9141,11 @@ function wireEvents(){
     persist();
   });
   document.getElementById('btn-theme').addEventListener('click', () => {
-    const idx = THEME_ORDER.indexOf(STATE.settings.theme);
+    const d=STATE.activeDiscipline==='sanitary'?'sanitary':'civil';
+    const current=themeForDiscipline(d);
+    const idx = THEME_ORDER.indexOf(current);
     const next = THEME_ORDER[(idx+1)%THEME_ORDER.length];
-    UI.applyTheme(next);
+    UI.applyTheme(next,d);
   });
 
   // --- Focus Timer ---
@@ -8976,17 +9687,258 @@ function wireEvents(){
   const btnAddRes = document.getElementById('btn-add-resource');
   if(btnAddRes){
     btnAddRes.addEventListener('click', () => {
-      const matInput = document.getElementById('res-input-material');
-      const linkInput = document.getElementById('res-input-link');
-      if(matInput && linkInput && ResourceOps.addResource(matInput.value, linkInput.value)){
-        matInput.value = ''; linkInput.value = '';
+      const matInput=document.getElementById('res-input-material');
+      const linkInput=document.getElementById('res-input-link');
+      const topicSel=document.getElementById('res-add-topic');
+      const lessonSel=document.getElementById('res-add-lesson');
+      const discipline=(STATE.activeDiscipline==='sanitary')?'sanitary':'civil';
+      if(matInput&&linkInput&&ResourceOps.addResource(matInput.value,linkInput.value,topicSel?topicSel.value:'',lessonSel?lessonSel.value:'',discipline)){
+        matInput.value=''; linkInput.value='';
       }
+    });
+  }
+
+  const resPdfBtn=document.getElementById('btn-upload-resource-pdf');
+  const resPdfInput=document.getElementById('res-pdf-file-input');
+  if(resPdfBtn&&resPdfInput){
+    resPdfBtn.addEventListener('click',()=>resPdfInput.click());
+    resPdfInput.addEventListener('change',async()=>{
+      const file=resPdfInput.files&&resPdfInput.files[0];
+      if(!file)return;
+      const matInput=document.getElementById('res-input-material');
+      const topicSel=document.getElementById('res-add-topic');
+      const lessonSel=document.getElementById('res-add-lesson');
+      const status=document.getElementById('res-pdf-status');
+      const discipline=(STATE.activeDiscipline==='sanitary')?'sanitary':'civil';
+      if(status)status.textContent=`Saving ${file.name}…`;
+      resPdfBtn.disabled=true;
+      const ok=await ResourceOps.addPdf(file,matInput?matInput.value:'',topicSel?topicSel.value:'',lessonSel?lessonSel.value:'',discipline);
+      resPdfBtn.disabled=false;
+      resPdfInput.value='';
+      if(ok){
+        if(matInput)matInput.value='';
+        if(status)status.textContent='PDF saved. Clicking it in the lesson view will open it in a new browser tab.';
+      }else if(status){
+        status.textContent='PDF upload failed. Try another PDF.';
+      }
+    });
+  }
+
+  const resAddTopic=document.getElementById('res-add-topic');
+  if(resAddTopic)resAddTopic.addEventListener('change',()=>{
+    const lessonSel=document.getElementById('res-add-lesson');
+    const topic=resAddTopic.value;
+    const lessons=(topic&&typeof DisciplineSystem!=='undefined'&&DisciplineSystem.lessons)?DisciplineSystem.lessons(topic):[];
+    if(lessonSel){lessonSel.innerHTML='<option value="">Unassigned / All Lessons</option>'+lessons.map(l=>`<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');lessonSel.disabled=!topic;}
+  });
+
+  function resToggleHierarchyEdit(){
+    ResourceHierarchyEdit.enabled=!ResourceHierarchyEdit.enabled;
+    ResourceHierarchyEdit.drag=null;
+    UI.renderResources();
+  }
+
+  function resRenameTopic(oldName){
+    const next=prompt('Rename Topic:',oldName);
+    if(next===null)return;
+    const clean=String(next||'').trim();
+    if(!clean||clean===oldName)return;
+    const d=(STATE.activeDiscipline==='sanitary')?'sanitary':'civil';
+    if(DisciplineSystem.renameTopic(d,oldName,clean)){
+      if(ResourceLibraryNav.topic===oldName)ResourceLibraryNav.topic=clean;
+      UI.renderResources();
+    }
+  }
+
+  function resRenameLesson(oldName){
+    const topic=ResourceLibraryNav.topic;
+    const next=prompt(`Rename Lesson under "${topic}":`,oldName);
+    if(next===null)return;
+    const clean=String(next||'').trim();
+    if(!clean||clean===oldName)return;
+    const d=(STATE.activeDiscipline==='sanitary')?'sanitary':'civil';
+    if(DisciplineSystem.renameLesson(d,topic,oldName,clean)){
+      if(ResourceLibraryNav.lesson===oldName)ResourceLibraryNav.lesson=clean;
+      UI.renderResources();
+    }
+  }
+
+  function resWireHierarchyDrag(host){
+    if(!host || host.dataset.resDragWired==='1')return;
+    host.dataset.resDragWired='1';
+
+    host.addEventListener('dragstart',e=>{
+      const tile=e.target.closest('[data-res-drag-type]');
+      if(!tile || !ResourceHierarchyEdit.enabled)return;
+      const type=tile.dataset.resDragType;
+      const name=type==='topic'?tile.dataset.resTopic:tile.dataset.resLesson;
+      ResourceHierarchyEdit.drag={type,name,topic:ResourceLibraryNav.topic||''};
+      tile.classList.add('res-dragging');
+      if(e.dataTransfer){
+        e.dataTransfer.effectAllowed='move';
+        try{e.dataTransfer.setData('text/plain',JSON.stringify(ResourceHierarchyEdit.drag));}catch(_err){}
+      }
+    });
+
+    host.addEventListener('dragend',e=>{
+      e.target.closest('.res-dragging')?.classList.remove('res-dragging');
+      host.querySelectorAll('.res-delete-zone.drag-over').forEach(z=>z.classList.remove('drag-over'));
+    });
+
+    host.addEventListener('dragover',e=>{
+      const zone=e.target.closest('[data-res-delete-zone]');
+      if(!zone || !ResourceHierarchyEdit.enabled)return;
+      const drag=ResourceHierarchyEdit.drag;
+      if(!drag || drag.type!==zone.dataset.resDeleteZone)return;
+      e.preventDefault();
+      if(e.dataTransfer)e.dataTransfer.dropEffect='move';
+      zone.classList.add('drag-over');
+    });
+
+    host.addEventListener('dragleave',e=>{
+      const zone=e.target.closest('[data-res-delete-zone]');
+      if(zone && !zone.contains(e.relatedTarget))zone.classList.remove('drag-over');
+    });
+
+    host.addEventListener('drop',e=>{
+      const zone=e.target.closest('[data-res-delete-zone]');
+      if(!zone || !ResourceHierarchyEdit.enabled)return;
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const drag=ResourceHierarchyEdit.drag;
+      ResourceHierarchyEdit.drag=null;
+      if(!drag || drag.type!==zone.dataset.resDeleteZone)return;
+
+      const d=(STATE.activeDiscipline==='sanitary')?'sanitary':'civil';
+      if(drag.type==='topic'){
+        const msg=`Delete topic "${drag.name}" from ${d==='sanitary'?'Sanitary Engineering':'Civil Engineering'}? Its banks, formulas, and resources will be kept but become Unclassified.`;
+        if(confirm(msg)){
+          DisciplineSystem.removeTopic(d,drag.name);
+          ResourceLibraryNav.view='topics';ResourceLibraryNav.topic='';ResourceLibraryNav.lesson='';
+          UI.renderResources();
+        }
+      }else if(drag.type==='lesson'){
+        const parent=drag.topic||ResourceLibraryNav.topic;
+        const msg=`Delete lesson "${drag.name}" from "${parent}"? Its study content will be kept but become Unassigned within the topic.`;
+        if(confirm(msg)){
+          DisciplineSystem.removeLesson(d,parent,drag.name);
+          ResourceLibraryNav.view='lessons';ResourceLibraryNav.topic=parent;ResourceLibraryNav.lesson='';
+          UI.renderResources();
+        }
+      }
+    });
+  }
+
+  const resTopicNav=document.getElementById('res-topic-nav');
+  if(resTopicNav){
+    resWireHierarchyDrag(resTopicNav);
+    resTopicNav.addEventListener('keydown',e=>{
+      if(ResourceHierarchyEdit.enabled)return;
+      if(e.key!=='Enter'&&e.key!==' ')return;
+      const tile=e.target.closest('[data-res-topic]');
+      if(!tile)return;
+      e.preventDefault();
+      ResourceLibraryNav.topic=tile.dataset.resTopic||'';
+      ResourceLibraryNav.lesson='';
+      ResourceLibraryNav.view='lessons';
+      UI.renderResources();
+      if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+    });
+    resTopicNav.addEventListener('click',e=>{
+    if(e.target.closest('[data-res-toggle-edit]')){
+      resToggleHierarchyEdit();
+      return;
+    }
+    const renameTopicBtn=e.target.closest('[data-res-rename-topic]');
+    if(renameTopicBtn){
+      e.preventDefault();e.stopPropagation();
+      resRenameTopic(renameTopicBtn.dataset.resRenameTopic);
+      return;
+    }
+    if(e.target.closest('[data-res-add-topic]')){
+      resourcePromptAddTopic();
+      return;
+    }
+    const topicBtn=e.target.closest('[data-res-topic]');
+    if(topicBtn){
+      if(ResourceHierarchyEdit.enabled)return;
+      ResourceLibraryNav.topic=topicBtn.dataset.resTopic||'';
+      ResourceLibraryNav.lesson='';
+      ResourceLibraryNav.view='lessons';
+      UI.renderResources();
+      if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+      return;
+    }
+    if(e.target.closest('[data-res-back-topics]')){
+      ResourceLibraryNav.view='topics';
+      ResourceLibraryNav.topic='';
+      ResourceLibraryNav.lesson='';
+      UI.renderResources();
+      if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+    }
+    });
+  }
+
+  const resLessonNav=document.getElementById('res-lesson-nav');
+  if(resLessonNav){
+    resWireHierarchyDrag(resLessonNav);
+    resLessonNav.addEventListener('keydown',e=>{
+      if(ResourceHierarchyEdit.enabled)return;
+      if(e.key!=='Enter'&&e.key!==' ')return;
+      const tile=e.target.closest('[data-res-lesson]');
+      if(!tile)return;
+      e.preventDefault();
+      ResourceLibraryNav.lesson=tile.dataset.resLesson||'';
+      ResourceLibraryNav.view='resources';
+      UI.renderResources();
+      if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+    });
+    resLessonNav.addEventListener('click',e=>{
+    if(e.target.closest('[data-res-toggle-edit]')){
+      resToggleHierarchyEdit();
+      return;
+    }
+    const renameLessonBtn=e.target.closest('[data-res-rename-lesson]');
+    if(renameLessonBtn){
+      e.preventDefault();e.stopPropagation();
+      resRenameLesson(renameLessonBtn.dataset.resRenameLesson);
+      return;
+    }
+    if(e.target.closest('[data-res-add-lesson]')){
+      resourcePromptAddLesson(ResourceLibraryNav.topic);
+      return;
+    }
+    const lessonBtn=e.target.closest('[data-res-lesson]');
+    if(lessonBtn){
+      if(ResourceHierarchyEdit.enabled)return;
+      ResourceLibraryNav.lesson=lessonBtn.dataset.resLesson||'';
+      ResourceLibraryNav.view='resources';
+      UI.renderResources();
+      if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+      return;
+    }
+    if(e.target.closest('[data-res-back-topics]')){
+      ResourceLibraryNav.view='topics';
+      ResourceLibraryNav.topic='';
+      ResourceLibraryNav.lesson='';
+      UI.renderResources();
+      if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+    }
     });
   }
 
   const resGrid = document.getElementById('resources-grid');
   if(resGrid){
     resGrid.addEventListener('click', (e) => {
+      if(e.target.closest('[data-res-back-lessons]')){
+        ResourceLibraryNav.view='lessons';
+        ResourceLibraryNav.lesson='';
+        UI.renderResources();
+        if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+        return;
+      }
+      const pdfBtn=e.target.closest('[data-open-res-pdf]');
+      if(pdfBtn){ e.preventDefault(); ResourceOps.openPdf(pdfBtn.dataset.openResPdf); return; }
       const editBtn = e.target.closest('[data-edit-res]');
       if(editBtn){ e.preventDefault(); ResourceOps.editResource(editBtn.dataset.editRes); return; }
       const delBtn = e.target.closest('[data-delete-res]');
@@ -9541,7 +10493,7 @@ function wireEvents(){
 
   // --- Settings Event Listeners ---
   document.querySelectorAll('.theme-swatch').forEach(el => {
-    el.addEventListener('click', () => UI.applyTheme(el.dataset.theme));
+    el.addEventListener('click', () => UI.applyTheme(el.dataset.theme, el.dataset.themeDiscipline));
   });
 
   const togglePokemonUI = document.getElementById('toggle-pokemon-ui');
@@ -10670,6 +11622,7 @@ const DisciplineSystem = (function(){
     });
     (STATE.formulaSheets||[]).forEach(x=>{ x.discipline=x.discipline||'civil'; x.lesson=x.lesson||''; (x.formulas||[]).forEach(f=>{f.discipline=f.discipline||x.discipline;f.lesson=f.lesson||x.lesson||'';}); });
     (STATE.resourceFormulas||[]).forEach(f=>{f.discipline=f.discipline||'civil';f.lesson=f.lesson||'';});
+    (STATE.customResources||[]).forEach(r=>{r.discipline=r.discipline||'civil';r.topic=r.topic||'';r.lesson=r.lesson||'';});
 
     // Migration only: preserve legacy topic labels without creating new ones from future imports.
     const civilNames=new Set((STATE.topicHierarchy.civil||[]).map(t=>String(t.name||'').toLowerCase()));
@@ -10715,14 +11668,152 @@ const DisciplineSystem = (function(){
     (STATE.resourceFormulas||[]).forEach(f=>{
       if((f.discipline||'civil')===d && String(f.topic||'').trim().toLowerCase()===key){ f.topic=''; f.lesson=''; }
     });
+    (STATE.customResources||[]).forEach(r=>{if((r.discipline||'civil')===d&&String(r.topic||'').trim().toLowerCase()===key){r.topic='';r.lesson='';}});
     STATE.topics=(STATE.topics||[]).filter(t=>String(t||'').trim().toLowerCase()!==key);
     QuestionBankManager.invalidateCache(); persist(); refreshAll();
     Notify.toast('success','Topic Removed',`${target.name} was removed. Its banks and formulas were kept and are now unclassified.`);
     return true;
   }
+  function removeLesson(d,topicName,lessonName){
+    d=(d==='sanitary'?'sanitary':'civil');
+    const t=findTopic(topicName,d); if(!t)return false;
+    const lessonKey=String(lessonName||'').trim().toLowerCase();
+    if(!lessonKey)return false;
+    const exists=(t.lessons||[]).some(x=>String(typeof x==='string'?x:x.name||'').trim().toLowerCase()===lessonKey);
+    if(!exists)return false;
+    t.lessons=(t.lessons||[]).filter(x=>String(typeof x==='string'?x:x.name||'').trim().toLowerCase()!==lessonKey);
+
+    // Keep all study content, but remove only the deleted lesson classification.
+    (STATE.questionBanks||[]).forEach(b=>{
+      if((b.discipline||'civil')===d &&
+         String(b.topic||'').trim().toLowerCase()===String(topicName||'').trim().toLowerCase() &&
+         String(b.lesson||'').trim().toLowerCase()===lessonKey){
+        b.lesson='';
+        (b.questions||[]).forEach(q=>{q.lesson='';q.topic=b.topic;q.discipline=d;});
+      }
+    });
+    (STATE.formulaSheets||[]).forEach(x=>{
+      if((x.discipline||'civil')===d &&
+         String(x.topic||'').trim().toLowerCase()===String(topicName||'').trim().toLowerCase() &&
+         String(x.lesson||'').trim().toLowerCase()===lessonKey) x.lesson='';
+      (x.formulas||[]).forEach(f=>{
+        if((f.discipline||x.discipline||'civil')===d &&
+           String(f.topic||x.topic||'').trim().toLowerCase()===String(topicName||'').trim().toLowerCase() &&
+           String(f.lesson||'').trim().toLowerCase()===lessonKey) f.lesson='';
+      });
+    });
+    (STATE.resourceFormulas||[]).forEach(f=>{
+      if((f.discipline||'civil')===d &&
+         String(f.topic||'').trim().toLowerCase()===String(topicName||'').trim().toLowerCase() &&
+         String(f.lesson||'').trim().toLowerCase()===lessonKey) f.lesson='';
+    });
+    (STATE.customResources||[]).forEach(r=>{
+      if((r.discipline||'civil')===d &&
+         String(r.topic||'').trim().toLowerCase()===String(topicName||'').trim().toLowerCase() &&
+         String(r.lesson||'').trim().toLowerCase()===lessonKey) r.lesson='';
+    });
+    QuestionBankManager.invalidateCache(); persist(); refreshAll();
+    Notify.toast('success','Lesson Removed',`${lessonName} was removed from ${topicName}. Its study content was kept and is now unassigned within the topic.`);
+    return true;
+  }
+
+  function renameTopic(d,oldName,newName){
+    d=(d==='sanitary'?'sanitary':'civil');
+    const t=findTopic(oldName,d); newName=String(newName||'').trim().replace(/\s+/g,' ');
+    if(!t||!newName)return false;
+    const existing=findTopic(newName,d);
+    if(existing && existing!==t){Notify.toast('info','Topic Already Exists',`${newName} already exists under ${label(d)}.`);return false;}
+    const oldKey=String(t.name||'').trim().toLowerCase();
+    const oldDisplay=t.name;
+    t.name=newName;
+    (STATE.questionBanks||[]).forEach(b=>{
+      if((b.discipline||'civil')===d && String(b.topic||'').trim().toLowerCase()===oldKey){
+        b.topic=newName;(b.questions||[]).forEach(q=>{q.topic=newName;q.discipline=d;});
+      }
+    });
+    (STATE.formulaSheets||[]).forEach(x=>{
+      if((x.discipline||'civil')===d && String(x.topic||'').trim().toLowerCase()===oldKey)x.topic=newName;
+      (x.formulas||[]).forEach(f=>{
+        if((f.discipline||x.discipline||'civil')===d && String(f.topic||x.topic||'').trim().toLowerCase()===oldKey)f.topic=newName;
+      });
+    });
+    (STATE.resourceFormulas||[]).forEach(f=>{if((f.discipline||'civil')===d&&String(f.topic||'').trim().toLowerCase()===oldKey)f.topic=newName;});
+    (STATE.customResources||[]).forEach(r=>{if((r.discipline||'civil')===d&&String(r.topic||'').trim().toLowerCase()===oldKey)r.topic=newName;});
+    STATE.topics=(STATE.topics||[]).map(x=>String(x||'').trim().toLowerCase()===oldKey?newName:x);
+    QuestionBankManager.invalidateCache(); persist(); refreshAll();
+    Notify.toast('success','Topic Renamed',`${oldDisplay} → ${newName}`);
+    return true;
+  }
+
+  function renameLesson(d,topicName,oldName,newName){
+    d=(d==='sanitary'?'sanitary':'civil');
+    const t=findTopic(topicName,d); newName=String(newName||'').trim().replace(/\s+/g,' ');
+    if(!t||!newName)return false;
+    const oldKey=String(oldName||'').trim().toLowerCase();
+    const exists=(t.lessons||[]).some(x=>{
+      const nm=String(typeof x==='string'?x:x.name||'').trim();
+      return nm.toLowerCase()===newName.toLowerCase() && nm.toLowerCase()!==oldKey;
+    });
+    if(exists){Notify.toast('info','Lesson Already Exists',`${newName} is already listed under ${topicName}.`);return false;}
+    let found=false;
+    t.lessons=(t.lessons||[]).map(x=>{
+      const nm=String(typeof x==='string'?x:x.name||'').trim();
+      if(nm.toLowerCase()!==oldKey)return x;
+      found=true;
+      return typeof x==='string'?newName:Object.assign({},x,{name:newName});
+    });
+    if(!found)return false;
+    const topicKey=String(topicName||'').trim().toLowerCase();
+    (STATE.questionBanks||[]).forEach(b=>{
+      if((b.discipline||'civil')===d && String(b.topic||'').trim().toLowerCase()===topicKey && String(b.lesson||'').trim().toLowerCase()===oldKey){
+        b.lesson=newName;(b.questions||[]).forEach(q=>{q.lesson=newName;q.topic=b.topic;q.discipline=d;});
+      }
+    });
+    (STATE.formulaSheets||[]).forEach(x=>{
+      if((x.discipline||'civil')===d && String(x.topic||'').trim().toLowerCase()===topicKey && String(x.lesson||'').trim().toLowerCase()===oldKey)x.lesson=newName;
+      (x.formulas||[]).forEach(f=>{
+        if((f.discipline||x.discipline||'civil')===d &&
+           String(f.topic||x.topic||'').trim().toLowerCase()===topicKey &&
+           String(f.lesson||'').trim().toLowerCase()===oldKey)f.lesson=newName;
+      });
+    });
+    (STATE.resourceFormulas||[]).forEach(f=>{
+      if((f.discipline||'civil')===d && String(f.topic||'').trim().toLowerCase()===topicKey && String(f.lesson||'').trim().toLowerCase()===oldKey)f.lesson=newName;
+    });
+    (STATE.customResources||[]).forEach(r=>{
+      if((r.discipline||'civil')===d && String(r.topic||'').trim().toLowerCase()===topicKey && String(r.lesson||'').trim().toLowerCase()===oldKey)r.lesson=newName;
+    });
+    QuestionBankManager.invalidateCache(); persist(); refreshAll();
+    Notify.toast('success','Lesson Renamed',`${oldName} → ${newName}`);
+    return true;
+  }
+
   function setDiscipline(d){
-    d=(d==='sanitary'?'sanitary':'civil'); if(STATE.activeDiscipline===d){refreshAll();return;}
-    STATE.activeDiscipline=d; persist(); refreshAll();
+    d=(d==='sanitary'?'sanitary':'civil');
+
+    // Resource navigation is discipline-specific. Reset stale Civil/Sanitary
+    // topic selections before re-rendering the new discipline.
+    if(typeof ResourceLibraryNav!=='undefined'){
+      ResourceLibraryNav.view='topics';
+      ResourceLibraryNav.topic='';
+      ResourceLibraryNav.lesson='';
+    }
+
+    if(STATE.activeDiscipline===d){
+      applyActiveDisciplineTheme();
+      refreshAll();
+      UI.renderSettings();
+      if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
+      return;
+    }
+
+    STATE.activeDiscipline=d;
+    applyActiveDisciplineTheme();
+    persist();
+    refreshAll();
+    UI.renderSettings();
+    if(typeof UsabilityManager!=='undefined')UsabilityManager.renderAllEnhancements();
+    if(typeof UsabilityEnhancements!=='undefined'&&UsabilityEnhancements.updateBreadcrumbs)UsabilityEnhancements.updateBreadcrumbs();
     Notify.toast('info',label(d),`Now viewing ${label(d)} content. Your XP, achievements, mastery, and overall progression remain unified.`);
   }
   function assignBank(bankId,d,topic,lesson){
@@ -10746,7 +11837,7 @@ const DisciplineSystem = (function(){
     </div>`;
   }
   function injectToggles(){
-    ['quiz-engine','dungeon','question-banks','formulas'].forEach(v=>{
+    ['quiz-engine','dungeon','question-banks','formulas','resources'].forEach(v=>{
       const sec=document.getElementById('view-'+v); if(!sec)return;
       let host=sec.querySelector('.discipline-switch-host');
       if(!host){ host=document.createElement('div'); host.className='discipline-switch-host'; const hdr=sec.querySelector('.view-header'); if(hdr)hdr.after(host); else sec.prepend(host); }
@@ -10757,9 +11848,9 @@ const DisciplineSystem = (function(){
     const host=document.getElementById('topic-chip-list'); if(!host)return;
     const arr=topics();
     host.style.display='block';
-    host.innerHTML=`<div class="hierarchy-toolbar"><div><strong>${escapeHtml(label(active()))}</strong><div class="small-note">Topics are created manually and can branch into specific lessons.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" data-open-add-topic>+ Add Topic</button><button class="btn btn-ghost btn-sm" data-open-add-lesson ${arr.length?'':'disabled'}>+ Add Lesson</button></div></div>`+
+    host.innerHTML=`<div class="hierarchy-toolbar"><div><strong>${escapeHtml(label(active()))}</strong><div class="small-note">Manage the shared Topic → Lesson structure from Resources.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" data-open-add-topic>+ Add Topic</button><button class="btn btn-ghost btn-sm" data-open-add-lesson ${arr.length?'':'disabled'}>+ Add Lesson</button></div></div>`+
       (arr.length?arr.map(t=>`<div class="hier-topic"><div class="hier-topic-head"><strong>${escapeHtml(t.name)}</strong><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end"><span class="small-note">${(t.lessons||[]).length} lesson${(t.lessons||[]).length===1?'':'s'}</span><button type="button" class="btn btn-ghost btn-sm" data-remove-topic="${escapeHtml(t.name)}" title="Remove topic">Remove</button></div></div><div class="hier-lessons">${(t.lessons||[]).length?(t.lessons||[]).map(l=>`<span>${escapeHtml(typeof l==='string'?l:l.name)}</span>`).join(''):'<span class="muted">No lessons yet</span>'}</div></div>`).join(''):'<div class="empty-state">No topics yet for this discipline. Use + Add Topic to create the first one.</div>');
-    const panel=host.closest('.panel'); if(panel){ const title=panel.querySelector('.panel-title'); if(title)title.innerHTML='<span><span class="dot"></span>Topic & Lesson Library</span><span class="small-note">Manual hierarchy</span>'; const note=panel.querySelector('.panel-title + .small-note'); if(note)note.innerHTML='Create topics deliberately under the selected discipline, then add lessons beneath them. Question banks are classified into this hierarchy; imports never create topics automatically.'; }
+    const panel=host.closest('.panel'); if(panel){ const title=panel.querySelector('.panel-title'); if(title)title.innerHTML='<span><span class="dot"></span>Topic & Lesson Library</span><span class="small-note">Manual hierarchy</span>'; const note=panel.querySelector('.panel-title + .small-note'); if(note)note.innerHTML='Create topics under the selected discipline, then add lessons beneath them. This shared hierarchy is managed here in Resources and is available to Question Banks, Formulas, Dungeon Mode, and other study tools.'; }
   }
   function filterBankRows(){
     const host=document.getElementById('qb-bank-list'); if(!host)return;
@@ -10794,9 +11885,10 @@ const DisciplineSystem = (function(){
     lessonEl.disabled=!topic;
   }
   function refreshTopicSelects(){
-    ['ai-gen-topic','ai-review-topic','formula-ai-topic','fs-upload-topic'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">Unassigned</option>'+topicNames().map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');if(topicNames().includes(cur))el.value=cur;});
+    ['ai-gen-topic','ai-review-topic','formula-ai-topic','fs-upload-topic','res-add-topic'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">Unassigned</option>'+topicNames().map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');if(topicNames().includes(cur))el.value=cur;});
     populateAiLessonSelect('ai-gen-topic','ai-gen-lesson');
     populateAiLessonSelect('ai-review-topic','ai-review-lesson');
+    const rt=document.getElementById('res-add-topic'),rl=document.getElementById('res-add-lesson');if(rl){const arr=rt&&rt.value?lessons(rt.value,active()):[];const cur=rl.value;rl.innerHTML='<option value="">Unassigned / All Lessons</option>'+arr.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');if(arr.includes(cur))rl.value=cur;rl.disabled=!(rt&&rt.value);}
   }
   function filterFormulaCards(){
     document.querySelectorAll('[data-fm-card][data-fm-kind="rf"]').forEach(card=>{ const id=card.dataset.fmId; const f=(STATE.resourceFormulas||[]).find(x=>x.id===id); if(f)card.style.display=(f.discipline||'civil')===active()?'':'none'; });
@@ -10807,6 +11899,7 @@ const DisciplineSystem = (function(){
     if(originals.renderQuestionBanks) originals.renderQuestionBanks();
     renderHierarchy(); filterBankRows(); refreshQuizSelectors(); refreshTopicSelects();
     if(originals.renderResourceFormulas) originals.renderResourceFormulas(); filterFormulaCards();
+    if(UI.renderResources) UI.renderResources();
     if(originals.renderFormulaSheets) originals.renderFormulaSheets();
     if(originals.renderQuizSetupScreen) originals.renderQuizSetupScreen(); refreshQuizSelectors();
     if(typeof DungeonMode!=='undefined'&&DungeonMode.render) DungeonMode.render();
@@ -10892,14 +11985,826 @@ const DisciplineSystem = (function(){
 
     injectToggles();
   }
-  return {install,refreshAll,active,label,topics,lessons,addTopic,addLesson,removeTopic,setDiscipline};
+  return {install,refreshAll,active,label,topics,lessons,addTopic,addLesson,removeTopic,removeLesson,renameTopic,renameLesson,setDiscipline};
+})();
+
+
+
+/* ================================================================
+   USABILITY ENHANCEMENTS
+   - Ctrl/Cmd+K command palette + app-wide search
+   - Collapsible import/generator panels
+   - Remember last view, scroll, filters and formula location
+   - Shared discipline/topic/lesson breadcrumb
+   ================================================================ */
+const UsabilityEnhancements = (function(){
+  const KEY='studyLeveling.ui.v1';
+  let prefs={lastView:'dashboard',scroll:{},collapsed:{qbExcel:true,qbPdf:true,formulaAi:true},formulaTopic:'',formulaLesson:'',filters:{}};
+  let activeResult=0;
+  let currentResults=[];
+  let installed=false;
+
+  function load(){
+    try{ prefs=Object.assign(prefs,JSON.parse(localStorage.getItem(KEY)||'{}')); }catch(_e){}
+    prefs.scroll=prefs.scroll||{};prefs.collapsed=prefs.collapsed||{};prefs.filters=prefs.filters||{};
+  }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(prefs));}catch(_e){} }
+  function esc(s){ return escapeHtml(String(s==null?'':s)); }
+  function activeDiscipline(){ return STATE.activeDiscipline==='sanitary'?'sanitary':'civil'; }
+  function disciplineLabel(d){ return d==='sanitary'?'Sanitary Engineering':'Civil Engineering'; }
+
+  function ensureOverlay(){
+    if(document.getElementById('ux-command-overlay'))return;
+    document.body.insertAdjacentHTML('beforeend',`<div id="ux-command-overlay" aria-hidden="true">
+      <div class="ux-command-box" role="dialog" aria-modal="true" aria-label="Search Study Leveling">
+        <div class="ux-command-head"><span class="ic">⌕</span><input id="ux-command-input" type="text" autocomplete="off" placeholder="Search pages, topics, lessons, banks, formulas, questions, resources…"><span class="ux-kbd">Esc</span></div>
+        <div class="ux-command-results" id="ux-command-results"></div>
+      </div>
+    </div>`);
+    const ov=document.getElementById('ux-command-overlay'), input=document.getElementById('ux-command-input');
+    ov.addEventListener('mousedown',e=>{if(e.target===ov)closePalette();});
+    input.addEventListener('input',()=>renderResults(input.value));
+    input.addEventListener('keydown',e=>{
+      if(e.key==='ArrowDown'){e.preventDefault();moveResult(1);}
+      else if(e.key==='ArrowUp'){e.preventDefault();moveResult(-1);}
+      else if(e.key==='Enter'){e.preventDefault();activateResult(activeResult);}
+      else if(e.key==='Escape'){e.preventDefault();closePalette();}
+    });
+    document.getElementById('ux-command-results').addEventListener('click',e=>{
+      const row=e.target.closest('[data-ux-result]');if(row)activateResult(Number(row.dataset.uxResult));
+    });
+  }
+  function openPalette(query){
+    ensureOverlay();
+    const ov=document.getElementById('ux-command-overlay'), input=document.getElementById('ux-command-input');
+    ov.classList.add('open');ov.setAttribute('aria-hidden','false');
+    input.value=query||'';renderResults(input.value);setTimeout(()=>input.focus(),0);
+  }
+  function closePalette(){const ov=document.getElementById('ux-command-overlay');if(ov){ov.classList.remove('open');ov.setAttribute('aria-hidden','true');}}
+
+  function staticCommands(){
+    const pages=[
+      ['dashboard','Dashboard','⌂'],['statistics','Statistics','◫'],['achievements','Achievements','★'],['timer','Focus Timer','◷'],
+      ['question-banks','Question Banks','▤'],['formulas','Formula Library','Σ'],['dungeon','Dungeon Mode','⚔'],['resources','Resources','↗'],['settings','Settings','⚙']
+    ];
+    const out=pages.map(([view,title,icon])=>({group:'Pages',type:'Page',title,sub:'Open '+title,icon,action:()=>UI.switchView(view)}));
+    out.push({group:'Commands',type:'Command',title:'Switch to Civil Engineering',sub:'Change active discipline',icon:'CE',action:()=>DisciplineSystem.setDiscipline('civil')});
+    out.push({group:'Commands',type:'Command',title:'Switch to Sanitary Engineering',sub:'Change active discipline',icon:'SE',action:()=>DisciplineSystem.setDiscipline('sanitary')});
+    out.push({group:'Commands',type:'Command',title:'Import Question Bank',sub:'Open Excel question-bank importer',icon:'↑',action:()=>openTool('qbExcel','question-banks','qb-dropzone')});
+    out.push({group:'Commands',type:'Command',title:'Generate / Extract Questions from PDF',sub:'Open PDF → Question Bank tools',icon:'PDF',action:()=>openTool('qbPdf','question-banks','ai-pdf-dropzone')});
+    out.push({group:'Commands',type:'Command',title:'Import Formulas from PDF / JSON',sub:'Open formula AI bridge',icon:'Σ',action:()=>openTool('formulaAi','formulas','formula-ai-pdf-dropzone')});
+    return out;
+  }
+
+  function buildIndex(){
+    const out=staticCommands();
+    const hier=STATE.topicHierarchy||{civil:[],sanitary:[]};
+    ['civil','sanitary'].forEach(d=>{
+      (hier[d]||[]).forEach(t=>{
+        const tn=String(t.name||'');if(!tn)return;
+        out.push({group:'Topics & Lessons',type:'Topic',title:tn,sub:disciplineLabel(d),icon:'T',action:()=>openTopic(d,tn,'')});
+        (t.lessons||[]).forEach(l=>{const ln=String(typeof l==='string'?l:l.name||'');if(ln)out.push({group:'Topics & Lessons',type:'Lesson',title:ln,sub:`${disciplineLabel(d)} › ${tn}`,icon:'L',action:()=>openTopic(d,tn,ln)});});
+      });
+    });
+    (STATE.questionBanks||[]).forEach(b=>{
+      const d=b.discipline||'civil';
+      out.push({group:'Question Banks',type:'Bank',title:b.fileName||'Question Bank',sub:`${disciplineLabel(d)} › ${b.topic||'Unclassified'}${b.lesson?' › '+b.lesson:''} · ${(b.questions||[]).length} questions`,icon:'▤',action:()=>openBank(b)});
+      (b.questions||[]).slice(0,250).forEach(q=>out.push({group:'Questions',type:'Question',title:q.questionText||'Question',sub:`${b.fileName||'Bank'} · ${b.topic||'Unclassified'}${b.lesson?' › '+b.lesson:''}`,icon:'?',action:()=>openQuestion(b,q)}));
+    });
+    (STATE.resourceFormulas||[]).forEach(f=>out.push({group:'Formulas',type:'Formula',title:f.term||f.name||'Formula',sub:`${disciplineLabel(f.discipline||'civil')} › ${f.topic||'Unclassified'}${f.lesson?' › '+f.lesson:''}`,icon:'Σ',action:()=>openFormula(f)}));
+    (STATE.formulaSheets||[]).forEach(s=>(s.formulas||[]).forEach(f=>out.push({group:'Formulas',type:'Formula',title:f.name||f.term||'Formula',sub:`${s.fileName||'Formula Sheet'} · ${f.topic||s.topic||'Unclassified'}`,icon:'Σ',action:()=>{DisciplineSystem.setDiscipline(f.discipline||s.discipline||'civil');UI.switchView('formulas');}})));
+    (STATE.customResources||[]).forEach(r=>out.push({group:'Resources',type:'Resource',title:r.material||r.name||r.title||'Resource',sub:r.link||r.url||'',icon:'↗',action:()=>UI.switchView('resources')}));
+    return out;
+  }
+
+  function renderResults(query){
+    const q=String(query||'').trim().toLowerCase();
+    const idx=buildIndex();
+    let found;
+    if(!q){found=idx.filter(x=>x.group==='Pages'||x.group==='Commands').slice(0,14);}
+    else{
+      const terms=q.split(/\s+/).filter(Boolean);
+      found=idx.map(x=>{
+        const hay=(x.title+' '+x.sub+' '+x.type+' '+x.group).toLowerCase();
+        let score=0;terms.forEach(t=>{if(hay.includes(t))score+=2;if(x.title.toLowerCase().startsWith(t))score+=3;if(x.title.toLowerCase()===t)score+=5;});
+        return {x,score};
+      }).filter(v=>v.score>0).sort((a,b)=>b.score-a.score||a.x.title.localeCompare(b.x.title)).slice(0,40).map(v=>v.x);
+    }
+    currentResults=found;activeResult=0;
+    const host=document.getElementById('ux-command-results');if(!host)return;
+    if(!found.length){host.innerHTML='<div class="ux-command-empty">No matching page, topic, lesson, bank, formula, question, or resource.</div>';return;}
+    let last='';
+    host.innerHTML=found.map((r,i)=>{
+      const head=r.group!==last?(last=r.group,`<div class="ux-result-group">${esc(r.group)}</div>`):'';
+      return head+`<button type="button" class="ux-result ${i===0?'active':''}" data-ux-result="${i}"><span class="ux-result-ic">${esc(r.icon||'•')}</span><span class="ux-result-main"><span class="ux-result-title">${esc(r.title)}</span><span class="ux-result-sub">${esc(r.sub||'')}</span></span><span class="ux-result-type">${esc(r.type)}</span></button>`;
+    }).join('');
+  }
+  function moveResult(delta){if(!currentResults.length)return;activeResult=(activeResult+delta+currentResults.length)%currentResults.length;document.querySelectorAll('[data-ux-result]').forEach((el,i)=>el.classList.toggle('active',i===activeResult));document.querySelector(`[data-ux-result="${activeResult}"]`)?.scrollIntoView({block:'nearest'});}
+  function activateResult(i){const r=currentResults[i];if(!r)return;closePalette();r.action();}
+
+  function flash(el){if(!el)return;el.classList.remove('ux-flash');void el.offsetWidth;el.classList.add('ux-flash');el.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>el.classList.remove('ux-flash'),1400);}
+  function openBank(b){DisciplineSystem.setDiscipline(b.discipline||'civil');UI.switchView('question-banks');setTimeout(()=>{UI.renderQuestionBanks();const inp=document.querySelector(`[data-rename-bank="${CSS.escape(b.id)}"]`);flash(inp?.closest('.session-row')||inp);},60);}
+  function openQuestion(b,q){DisciplineSystem.setDiscipline(b.discipline||'civil');UI.switchView('question-banks');setTimeout(()=>{const s=document.getElementById('qb-preview-search');if(s){s.value=(q.questionText||'').slice(0,70);UI.filters.search=s.value;UI.renderQuestionBankPreview();flash(document.getElementById('qb-database-preview'));}},50);}
+  function openFormula(f){DisciplineSystem.setDiscipline(f.discipline||'civil');FormulaLibraryNav.topic=f.topic||'Unclassified';FormulaLibraryNav.lesson=f.lesson||'All Lessons';prefs.formulaTopic=FormulaLibraryNav.topic;prefs.formulaLesson=FormulaLibraryNav.lesson;save();UI.switchView('formulas');setTimeout(()=>{UI.renderResourceFormulas();flash(document.querySelector(`[data-fm-card][data-fm-id="${CSS.escape(f.id)}"]`));updateBreadcrumbs();},50);}
+  function openTopic(d,topic,lesson){DisciplineSystem.setDiscipline(d);FormulaLibraryNav.topic=topic||'';FormulaLibraryNav.lesson=lesson||'All Lessons';prefs.formulaTopic=FormulaLibraryNav.topic;prefs.formulaLesson=FormulaLibraryNav.lesson;save();UI.switchView('formulas');setTimeout(()=>{UI.renderResourceFormulas();updateBreadcrumbs();},30);}
+
+  function makeCollapsible(descendantId,key,buttonLabel){
+    const child=document.getElementById(descendantId);const panel=child&&child.closest('.panel');if(!panel||panel.dataset.uxCollapse)return;
+    panel.dataset.uxCollapse=key;
+    const title=panel.querySelector('.panel-title');if(!title)return;
+    const btn=document.createElement('button');btn.type='button';btn.className='btn btn-ghost btn-sm ux-panel-toggle';btn.dataset.uxToggle=key;
+    title.appendChild(btn);
+    function render(){const collapsed=prefs.collapsed[key]!==false;panel.classList.toggle('ux-collapsed',collapsed);btn.textContent=collapsed?`+ ${buttonLabel}`:'Hide tools';btn.setAttribute('aria-expanded',collapsed?'false':'true');}
+    btn.addEventListener('click',e=>{e.preventDefault();prefs.collapsed[key]=!(prefs.collapsed[key]!==false);save();render();});
+    render();
+  }
+  function openTool(key,view,descendantId){prefs.collapsed[key]=false;save();UI.switchView(view);setTimeout(()=>{setupCollapsibles();const p=document.getElementById(descendantId)?.closest('.panel');if(p){p.classList.remove('ux-collapsed');const b=p.querySelector('.ux-panel-toggle');if(b){b.textContent='Hide tools';b.setAttribute('aria-expanded','true');}flash(p);}},30);}
+  function setupCollapsibles(){
+    makeCollapsible('qb-dropzone','qbExcel','Import Excel');
+    makeCollapsible('ai-pdf-dropzone','qbPdf','PDF / AI Tools');
+    makeCollapsible('formula-ai-pdf-dropzone','formulaAi','PDF / JSON Tools');
+  }
+
+  function saveScroll(){const main=document.getElementById('main');const active=document.querySelector('.view.active');if(main&&active){prefs.scroll[active.id.replace('view-','')]=main.scrollTop;save();}}
+  function restoreScroll(view){const main=document.getElementById('main');if(!main)return;requestAnimationFrame(()=>{main.scrollTop=Number(prefs.scroll[view]||0);});}
+  function wrapSwitchView(){
+    if(UI._uxSwitchWrapped)return;UI._uxSwitchWrapped=true;
+    const orig=UI.switchView.bind(UI);
+    UI.switchView=function(name){saveScroll();const r=orig(name);prefs.lastView=name;save();restoreScroll(name);setTimeout(updateBreadcrumbs,0);return r;};
+  }
+
+  function breadcrumbHost(view){const sec=document.getElementById('view-'+view);if(!sec)return null;let host=sec.querySelector(':scope > .ux-breadcrumb');if(!host){host=document.createElement('div');host.className='ux-breadcrumb';const dhost=sec.querySelector(':scope > .discipline-switch-host');const hdr=sec.querySelector(':scope > .view-header');(dhost||hdr)?.after(host);}return host;}
+  function updateBreadcrumbs(){
+    const d=activeDiscipline(),dl=disciplineLabel(d);
+    const qh=breadcrumbHost('question-banks');if(qh)qh.innerHTML=`<span class="ux-crumb active">${esc(dl)}</span><span class="ux-sep">›</span><span class="ux-crumb">Topic &amp; Lesson Library</span>`;
+    const fh=breadcrumbHost('formulas');if(fh){const t=FormulaLibraryNav.topic||prefs.formulaTopic||'';const l=FormulaLibraryNav.lesson||prefs.formulaLesson||'';fh.innerHTML=`<span class="ux-crumb active">${esc(dl)}</span>${t?`<span class="ux-sep">›</span><span class="ux-crumb">${esc(t)}</span>`:''}${l&&l!=='All Lessons'?`<span class="ux-sep">›</span><span class="ux-crumb">${esc(l)}</span>`:''}`;}
+    const rh=breadcrumbHost('resources');if(rh){const t=ResourceLibraryNav.topic||'';const l=ResourceLibraryNav.lesson||'';rh.innerHTML=`<span class="ux-crumb active">${esc(dl)}</span>${t?`<span class="ux-sep">›</span><span class="ux-crumb">${esc(t)}</span>`:''}${l&&l!=='All Lessons'?`<span class="ux-sep">›</span><span class="ux-crumb">${esc(l)}</span>`:''}`;}
+  }
+
+  function rememberFilters(){
+    const ids=['qb-preview-filter-subject','qb-preview-search','rf-search','quiz-cfg-scope-type','quiz-cfg-bank','quiz-cfg-subject','ai-gen-topic','ai-gen-lesson','formula-ai-topic'];
+    ids.forEach(id=>{const el=document.getElementById(id);if(!el)return;if(prefs.filters[id]!==undefined){const apply=()=>{if([...el.options||[]].some?.(o=>o.value===prefs.filters[id])||el.tagName!=='SELECT')el.value=prefs.filters[id];};apply();setTimeout(apply,50);}el.addEventListener('change',()=>{prefs.filters[id]=el.value;save();});if(el.tagName==='INPUT')el.addEventListener('input',debounce(()=>{prefs.filters[id]=el.value;save();},250));});
+    document.addEventListener('click',e=>{const t=e.target.closest('[data-rf-topic]');if(t){prefs.formulaTopic=t.dataset.rfTopic||'';prefs.formulaLesson='All Lessons';save();setTimeout(updateBreadcrumbs,0);}const l=e.target.closest('[data-rf-lesson]');if(l){prefs.formulaLesson=l.dataset.rfLesson||'All Lessons';save();setTimeout(updateBreadcrumbs,0);}});
+  }
+
+  function hijackTopSearch(){
+    const input=document.getElementById('global-search');if(!input)return;
+    input.placeholder='Search everything…';
+    const handler=e=>{e.stopImmediatePropagation();openPalette(e.target.value);};
+    input.addEventListener('input',handler,true);
+    input.addEventListener('focus',e=>{e.stopImmediatePropagation();openPalette(input.value);},true);
+    input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();openPalette(input.value);}},true);
+  }
+
+  function init(){
+    if(installed)return;installed=true;load();ensureOverlay();wrapSwitchView();setupCollapsibles();rememberFilters();hijackTopSearch();
+    document.addEventListener('keydown',e=>{
+      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette('');return;}
+      if(e.key==='Escape'&&document.getElementById('ux-command-overlay')?.classList.contains('open'))closePalette();
+    });
+    const main=document.getElementById('main');if(main)main.addEventListener('scroll',debounce(saveScroll,250));
+    if(prefs.formulaTopic)FormulaLibraryNav.topic=prefs.formulaTopic;
+    if(prefs.formulaLesson)FormulaLibraryNav.lesson=prefs.formulaLesson;
+    updateBreadcrumbs();
+  }
+  function restoreLastView(){const valid=document.getElementById('view-'+prefs.lastView)?prefs.lastView:'dashboard';UI.switchView(valid);}
+  return {init,restoreLastView,openPalette,updateBreadcrumbs,setupCollapsibles};
+})();
+
+
+const UsabilityManager = (function(){
+  let installed=false;
+  const manage={resources:false,formulas:false,banks:false};
+  const selected={resources:new Set(),banks:new Set(),formulas:new Set()};
+  let undoTimer=null;
+
+  function ensureState(){
+    STATE.usability=STATE.usability||{};
+    STATE.usability.pins=Object.assign({resources:[],formulas:[],banks:[]},STATE.usability.pins||{});
+    STATE.usability.recent=Array.isArray(STATE.usability.recent)?STATE.usability.recent:[];
+    STATE.usability.manualOrder=STATE.usability.manualOrder||{topics:{},lessons:{}};
+    STATE.usability.lastOpened=STATE.usability.lastOpened||{};
+  }
+
+  function markSaving(){
+    const el=document.getElementById('ux-save-status');
+    if(el){el.textContent='Saving…';el.classList.remove('saved');el.classList.add('saving');}
+    clearTimeout(markSaving._t);
+    markSaving._t=setTimeout(()=>markSaved(),500);
+  }
+  function markSaved(){
+    const el=document.getElementById('ux-save-status');
+    if(el){el.textContent='Saved';el.classList.remove('saving');el.classList.add('saved');}
+  }
+  function updateDisciplineBadge(){
+    const el=document.getElementById('ux-active-discipline');
+    if(el)el.textContent=STATE.activeDiscipline==='sanitary'?'Sanitary Engineering':'Civil Engineering';
+  }
+  function updateDriveMini(){
+    const el=document.getElementById('ux-drive-status-mini'); if(!el)return;
+    const ds=STATE.settings&&STATE.settings.driveSync||{};
+    el.textContent=ds.lastSyncedAt?'Drive synced':'Drive idle';
+  }
+
+  function recordRecent(type,id,label,view){
+    ensureState();
+    const d=STATE.activeDiscipline==='sanitary'?'sanitary':'civil';
+    const item={type,id,label:String(label||''),view:view||'',discipline:d,at:Date.now()};
+    STATE.usability.recent=STATE.usability.recent.filter(x=>!(x.type===type&&x.id===id));
+    STATE.usability.recent.unshift(item);
+    STATE.usability.recent=STATE.usability.recent.slice(0,30);
+    STATE.usability.lastOpened[type]=id;
+    persist();
+    renderResourceHome();
+  }
+
+  function togglePin(type,id){
+    ensureState();
+    const arr=STATE.usability.pins[type]||[];
+    const idx=arr.indexOf(id);
+    if(idx>=0)arr.splice(idx,1);else arr.push(id);
+    STATE.usability.pins[type]=arr;
+    persist();
+    renderResourceHome();
+  }
+  function isPinned(type,id){
+    ensureState();
+    return (STATE.usability.pins[type]||[]).includes(id);
+  }
+
+  function showModal(opts){
+    document.querySelector('.ux-modal-backdrop')?.remove();
+    const danger=opts.danger?'danger-copy':'';
+    document.body.insertAdjacentHTML('beforeend',`<div class="ux-modal-backdrop" data-ux-modal>
+      <div class="ux-modal">
+        <h3>${escapeHtml(opts.title||'Confirm')}</h3>
+        <p class="${danger}">${opts.html||escapeHtml(opts.message||'')}</p>
+        <div class="ux-modal-actions">
+          <button class="btn btn-ghost" data-ux-modal-cancel>Cancel</button>
+          <button class="btn ${opts.danger?'btn-danger':'btn-primary'}" data-ux-modal-confirm>${escapeHtml(opts.confirmText||'Confirm')}</button>
+        </div>
+      </div>
+    </div>`);
+    const root=document.querySelector('[data-ux-modal]');
+    return new Promise(resolve=>{
+      const close=v=>{root?.remove();resolve(v);};
+      root.querySelector('[data-ux-modal-cancel]').onclick=()=>close(false);
+      root.querySelector('[data-ux-modal-confirm]').onclick=()=>close(true);
+      root.addEventListener('mousedown',e=>{if(e.target===root)close(false);});
+    });
+  }
+
+  function showChoiceModal({title,bodyHtml,confirmText='Apply'}){
+    document.querySelector('.ux-modal-backdrop')?.remove();
+    document.body.insertAdjacentHTML('beforeend',`<div class="ux-modal-backdrop" data-ux-modal>
+      <div class="ux-modal">
+        <h3>${escapeHtml(title)}</h3>${bodyHtml}
+        <div class="ux-modal-actions">
+          <button class="btn btn-ghost" data-ux-modal-cancel>Cancel</button>
+          <button class="btn btn-primary" data-ux-modal-confirm>${escapeHtml(confirmText)}</button>
+        </div>
+      </div></div>`);
+    const root=document.querySelector('[data-ux-modal]');
+    return new Promise(resolve=>{
+      root.querySelector('[data-ux-modal-cancel]').onclick=()=>{root.remove();resolve(null);};
+      root.querySelector('[data-ux-modal-confirm]').onclick=()=>resolve(root);
+      root.addEventListener('mousedown',e=>{if(e.target===root){root.remove();resolve(null);}});
+    });
+  }
+
+  function showUndo(message,undoFn){
+    document.querySelector('.ux-undo')?.remove();
+    const div=document.createElement('div');div.className='ux-undo';
+    div.innerHTML=`<span>${escapeHtml(message)}</span><button class="btn btn-ghost btn-sm">Undo</button>`;
+    document.body.appendChild(div);
+    clearTimeout(undoTimer);
+    const remove=()=>div.remove();
+    div.querySelector('button').onclick=()=>{remove();undoFn&&undoFn();};
+    undoTimer=setTimeout(remove,8000);
+  }
+
+  function domainOf(url){
+    try{return new URL(url).hostname.replace(/^www\./,'');}catch(_e){return '';}
+  }
+
+  function formatBytes(n){
+    n=Number(n)||0;
+    if(n<1024)return `${n} B`;
+    if(n<1024**2)return `${(n/1024).toFixed(1)} KB`;
+    return `${(n/1024**2).toFixed(1)} MB`;
+  }
+
+  function storageStats(){
+    const json=JSON.stringify(STATE||{});
+    const total=new Blob([json]).size;
+    const pdf=(STATE.customResources||[]).filter(r=>r.pdfData).reduce((n,r)=>n+String(r.pdfData||'').length*0.75,0);
+    return {total,pdf,app:Math.max(0,total-pdf)};
+  }
+  function renderStorage(){
+    const sum=document.getElementById('ux-storage-summary'), fill=document.getElementById('ux-storage-fill'), br=document.getElementById('ux-storage-breakdown');
+    if(!sum||!fill||!br)return;
+    const s=storageStats();
+    const assumed=50*1024*1024;
+    const pct=Math.min(100,Math.round(s.total/assumed*100));
+    sum.textContent=`Approx. ${formatBytes(s.total)} stored locally`;
+    fill.style.width=pct+'%';
+    br.textContent=`PDFs: ${formatBytes(s.pdf)} · App data: ${formatBytes(s.app)}`;
+  }
+
+  function renderResourceHome(){
+    ensureState();
+    const d=STATE.activeDiscipline==='sanitary'?'sanitary':'civil';
+    const pinned=document.getElementById('ux-resource-pinned'), recent=document.getElementById('ux-resource-recent');
+    if(pinned){
+      const items=(STATE.usability.pins.resources||[]).map(id=>(STATE.customResources||[]).find(r=>r.id===id)).filter(r=>(r&&((r.discipline||'civil')===d))).slice(0,8);
+      pinned.innerHTML=items.length?items.map(r=>`<button class="ux-chip" data-ux-open-resource="${r.id}">★ ${escapeHtml(r.material)}</button>`).join(''):'<span class="small-note">Nothing pinned yet.</span>';
+    }
+    if(recent){
+      const items=STATE.usability.recent.filter(x=>x.type==='resources'&&x.discipline===d).slice(0,8);
+      recent.innerHTML=items.length?items.map(x=>`<button class="ux-chip" data-ux-open-resource="${x.id}">${escapeHtml(x.label)}</button>`).join(''):'<span class="small-note">Nothing opened yet.</span>';
+    }
+  }
+
+
+  function renderFormulaHome(){
+    ensureState();
+    const d=STATE.activeDiscipline==='sanitary'?'sanitary':'civil';
+    const pin=document.getElementById('ux-formula-pinned'),rec=document.getElementById('ux-formula-recent');
+    if(pin){
+      const items=(STATE.usability.pins.formulas||[]).map(id=>(STATE.resourceFormulas||[]).find(f=>f.id===id)).filter(f=>f&&((f.discipline||'civil')===d)).slice(0,8);
+      pin.innerHTML=items.length?items.map(f=>`<button class="ux-chip" data-ux-open-formula="${f.id}">★ ${escapeHtml(f.term||'Formula')}</button>`).join(''):'<span class="small-note">Nothing pinned yet.</span>';
+    }
+    if(rec){
+      const items=STATE.usability.recent.filter(x=>x.type==='formulas'&&x.discipline===d).slice(0,8);
+      rec.innerHTML=items.length?items.map(x=>`<button class="ux-chip" data-ux-open-formula="${x.id}">${escapeHtml(x.label)}</button>`).join(''):'<span class="small-note">Nothing opened yet.</span>';
+    }
+  }
+  function renderBankHome(){
+    ensureState();
+    const d=STATE.activeDiscipline==='sanitary'?'sanitary':'civil';
+    const pin=document.getElementById('ux-bank-pinned'),rec=document.getElementById('ux-bank-recent');
+    if(pin){
+      const items=(STATE.usability.pins.banks||[]).map(id=>(STATE.questionBanks||[]).find(b=>b.id===id)).filter(b=>b&&((b.discipline||'civil')===d)).slice(0,8);
+      pin.innerHTML=items.length?items.map(b=>`<button class="ux-chip" data-ux-open-bank="${b.id}">★ ${escapeHtml(b.fileName||'Bank')}</button>`).join(''):'<span class="small-note">Nothing pinned yet.</span>';
+    }
+    if(rec){
+      const items=STATE.usability.recent.filter(x=>x.type==='banks'&&x.discipline===d).slice(0,8);
+      rec.innerHTML=items.length?items.map(x=>`<button class="ux-chip" data-ux-open-bank="${x.id}">${escapeHtml(x.label)}</button>`).join(''):'<span class="small-note">Nothing opened yet.</span>';
+    }
+  }
+
+  function filteredResources(list){
+    let arr=list.slice();
+    const q=(document.getElementById('ux-resource-search')?.value||'').trim().toLowerCase();
+    if(q)arr=arr.filter(r=>[r.material,r.link,r.topic,r.lesson,r.fileName].some(v=>String(v||'').toLowerCase().includes(q)));
+    const sort=document.getElementById('ux-resource-sort')?.value||'name';
+    if(sort==='name')arr.sort((a,b)=>String(a.material||'').localeCompare(String(b.material||'')));
+    if(sort==='recent-added')arr.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    if(sort==='recent-opened'){
+      const recentMap=new Map((STATE.usability.recent||[]).filter(x=>x.type==='resources').map(x=>[x.id,x.at]));
+      arr.sort((a,b)=>(recentMap.get(b.id)||0)-(recentMap.get(a.id)||0));
+    }
+    return arr;
+  }
+
+  function enhanceResourceCards(){
+    const grid=document.getElementById('resources-grid');if(!grid)return;
+    grid.querySelectorAll('[data-resource-id]').forEach(card=>{
+      const id=card.dataset.resourceId;
+      const r=(STATE.customResources||[]).find(x=>x.id===id);if(!r)return;
+      if(!card.querySelector('[data-ux-pin-resource]')){
+        const qtitle=card.querySelector('.qtitle');
+        if(qtitle){
+          const pin=document.createElement('button');pin.className='ux-pin '+(isPinned('resources',id)?'active':'');pin.dataset.uxPinResource=id;pin.title='Pin resource';pin.textContent='★';
+          qtitle.appendChild(pin);
+        }
+      }
+      if(manage.resources && !card.querySelector('[data-ux-select-resource]')){
+        const box=document.createElement('input');box.type='checkbox';box.className='ux-check';box.dataset.uxSelectResource=id;box.checked=selected.resources.has(id);
+        card.prepend(box);
+      }
+      if(manage.resources){
+        card.draggable=true;card.dataset.uxDragResource=id;
+      }else{
+        card.draggable=false;delete card.dataset.uxDragResource;
+      }
+      const meta=card.querySelector('.ux-resource-meta')||document.createElement('div');
+      meta.className='ux-resource-meta';
+      meta.innerHTML=`<span>${r.type==='pdf'?'PDF':'Link'}</span>${r.type!=='pdf'&&r.link?`<span class="ux-resource-domain">${escapeHtml(domainOf(r.link))}</span>`:''}${r.fileSize?`<span>${formatBytes(r.fileSize)}</span>`:''}<span>${r.createdAt?new Date(r.createdAt).toLocaleDateString():''}</span>`;
+      if(!meta.parentNode)card.querySelector('.qdesc')?.after(meta);
+    });
+    updateBulkBars();
+  }
+
+  function updateBulkBars(){
+    const rb=document.getElementById('ux-resource-bulk'), rc=document.getElementById('ux-resource-selected-count');
+    if(rb){rb.classList.toggle('show',manage.resources);if(rc)rc.textContent=`${selected.resources.size} selected`;}
+    const bb=document.getElementById('ux-bank-bulk'), bc=document.getElementById('ux-bank-selected-count');
+    if(bb){bb.classList.toggle('show',manage.banks);if(bc)bc.textContent=`${selected.banks.size} selected`;}
+    const fb=document.getElementById('ux-formula-bulk'), fc=document.getElementById('ux-formula-selected-count');
+    if(fb){fb.classList.toggle('show',manage.formulas);if(fc)fc.textContent=`${selected.formulas.size} selected`;}
+  }
+
+  async function bulkMoveResources(){
+    const ids=[...selected.resources];if(!ids.length)return;
+    const d=STATE.activeDiscipline==='sanitary'?'sanitary':'civil';
+    const topics=DisciplineSystem.topics(d);
+    document.body.insertAdjacentHTML('beforeend',`<div class="ux-modal-backdrop" data-ux-bulk-move-modal><div class="ux-modal">
+      <h3>Move Selected Resources</h3>
+      <label class="small-note">Topic</label>
+      <select id="ux-bulk-topic" class="select-mini" style="width:100%;padding:9px;margin:5px 0 12px;"><option value="">Unclassified</option>${topics.map(t=>`<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)}</option>`).join('')}</select>
+      <label class="small-note">Lesson</label>
+      <select id="ux-bulk-lesson" class="select-mini" style="width:100%;padding:9px;margin-top:5px;"><option value="">Unassigned</option></select>
+      <div class="ux-modal-actions"><button class="btn btn-ghost" data-cancel>Cancel</button><button class="btn btn-primary" data-apply>Move</button></div>
+    </div></div>`);
+    const root=document.querySelector('[data-ux-bulk-move-modal]'),t=root.querySelector('#ux-bulk-topic'),l=root.querySelector('#ux-bulk-lesson');
+    const fill=()=>{const ls=t.value?DisciplineSystem.lessons(t.value,d):[];l.innerHTML='<option value="">Unassigned</option>'+ls.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');};
+    t.addEventListener('change',fill);fill();
+    root.querySelector('[data-cancel]').onclick=()=>root.remove();
+    root.querySelector('[data-apply]').onclick=()=>{
+      const topic=t.value,lesson=l.value;root.remove();
+      const snapshot=(STATE.customResources||[]).filter(r=>ids.includes(r.id)).map(r=>({id:r.id,topic:r.topic||'',lesson:r.lesson||'',discipline:r.discipline||'civil'}));
+      (STATE.customResources||[]).forEach(r=>{if(ids.includes(r.id)){r.topic=topic;r.lesson=lesson;r.discipline=d;}});
+      selected.resources.clear();persist();UI.renderResources();
+      showUndo(`${ids.length} resource(s) moved`,()=>{snapshot.forEach(s=>{const r=(STATE.customResources||[]).find(x=>x.id===s.id);if(r){r.topic=s.topic;r.lesson=s.lesson;r.discipline=s.discipline;}});persist();UI.renderResources();});
+    };
+  }
+
+  async function bulkDeleteResources(){
+    const ids=[...selected.resources];if(!ids.length)return;
+    const snapshot=(STATE.customResources||[]).filter(r=>ids.includes(r.id)).map(r=>JSON.parse(JSON.stringify(r)));
+    if(!await showModal({title:'Delete Resources',message:`Delete ${ids.length} selected resource(s)?`,danger:true,confirmText:'Delete'}))return;
+    STATE.customResources=(STATE.customResources||[]).filter(r=>!ids.includes(r.id));
+    selected.resources.clear();persist();UI.renderResources();
+    showUndo(`${ids.length} resource(s) deleted`,()=>{STATE.customResources=(STATE.customResources||[]).concat(snapshot);persist();UI.renderResources();});
+  }
+
+  async function bulkDeleteBanks(){
+    const ids=[...selected.banks];if(!ids.length)return;
+    const snapshot=(STATE.questionBanks||[]).filter(b=>ids.includes(b.id)).map(b=>JSON.parse(JSON.stringify(b)));
+    if(!await showModal({title:'Delete Question Banks',message:`Delete ${ids.length} selected question bank(s)?`,danger:true,confirmText:'Delete'}))return;
+    STATE.questionBanks=(STATE.questionBanks||[]).filter(b=>!ids.includes(b.id));
+    selected.banks.clear();QuestionBankManager.invalidateCache();persist();UI.renderQuestionBanks();
+    showUndo(`${ids.length} bank(s) deleted`,()=>{STATE.questionBanks=(STATE.questionBanks||[]).concat(snapshot);QuestionBankManager.invalidateCache();persist();UI.renderQuestionBanks();});
+  }
+
+
+  function bulkClassifyBanks(){
+    const ids=[...selected.banks];if(!ids.length)return;
+    const d=STATE.activeDiscipline==='sanitary'?'sanitary':'civil';
+    const topics=DisciplineSystem.topics(d);
+    document.body.insertAdjacentHTML('beforeend',`<div class="ux-modal-backdrop" data-ux-bank-classify-modal><div class="ux-modal">
+      <h3>Classify Selected Banks</h3>
+      <label class="small-note">Topic</label>
+      <select id="ux-bank-topic" class="select-mini" style="width:100%;padding:9px;margin:5px 0 12px;"><option value="">Unclassified</option>${topics.map(t=>`<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)}</option>`).join('')}</select>
+      <label class="small-note">Lesson</label>
+      <select id="ux-bank-lesson" class="select-mini" style="width:100%;padding:9px;margin-top:5px;"><option value="">All / Mixed Lessons</option></select>
+      <div class="ux-modal-actions"><button class="btn btn-ghost" data-cancel>Cancel</button><button class="btn btn-primary" data-apply>Apply</button></div>
+    </div></div>`);
+    const root=document.querySelector('[data-ux-bank-classify-modal]'),t=root.querySelector('#ux-bank-topic'),l=root.querySelector('#ux-bank-lesson');
+    const fill=()=>{const ls=t.value?DisciplineSystem.lessons(t.value,d):[];l.innerHTML='<option value="">All / Mixed Lessons</option>'+ls.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');};
+    t.onchange=fill;fill();root.querySelector('[data-cancel]').onclick=()=>root.remove();
+    root.querySelector('[data-apply]').onclick=()=>{
+      const topic=t.value,lesson=l.value;root.remove();
+      const snapshot=[];
+      (STATE.questionBanks||[]).forEach(b=>{if(ids.includes(b.id)){snapshot.push({id:b.id,discipline:b.discipline,topic:b.topic,lesson:b.lesson});b.discipline=d;b.topic=topic;b.lesson=lesson;(b.questions||[]).forEach(q=>{q.discipline=d;q.topic=topic;q.lesson=lesson;});}});
+      selected.banks.clear();QuestionBankManager.invalidateCache();persist();UI.renderQuestionBanks();
+      showUndo(`${ids.length} bank(s) classified`,()=>{snapshot.forEach(s=>{const b=(STATE.questionBanks||[]).find(x=>x.id===s.id);if(b){b.discipline=s.discipline;b.topic=s.topic;b.lesson=s.lesson;(b.questions||[]).forEach(q=>{q.discipline=s.discipline;q.topic=s.topic;q.lesson=s.lesson;});}});QuestionBankManager.invalidateCache();persist();UI.renderQuestionBanks();});
+    };
+  }
+
+  function bulkMoveFormulas(){
+    const ids=[...selected.formulas];if(!ids.length)return;
+    const d=STATE.activeDiscipline==='sanitary'?'sanitary':'civil';
+    const topics=DisciplineSystem.topics(d);
+    document.body.insertAdjacentHTML('beforeend',`<div class="ux-modal-backdrop" data-ux-formula-move-modal><div class="ux-modal">
+      <h3>Move Selected Formulas</h3>
+      <label class="small-note">Topic</label>
+      <select id="ux-formula-topic" class="select-mini" style="width:100%;padding:9px;margin:5px 0 12px;"><option value="">Unclassified</option>${topics.map(t=>`<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)}</option>`).join('')}</select>
+      <label class="small-note">Lesson</label>
+      <select id="ux-formula-lesson" class="select-mini" style="width:100%;padding:9px;margin-top:5px;"><option value="">Unassigned</option></select>
+      <div class="ux-modal-actions"><button class="btn btn-ghost" data-cancel>Cancel</button><button class="btn btn-primary" data-apply>Move</button></div>
+    </div></div>`);
+    const root=document.querySelector('[data-ux-formula-move-modal]'),t=root.querySelector('#ux-formula-topic'),l=root.querySelector('#ux-formula-lesson');
+    const fill=()=>{const ls=t.value?DisciplineSystem.lessons(t.value,d):[];l.innerHTML='<option value="">Unassigned</option>'+ls.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join('');};
+    t.onchange=fill;fill();root.querySelector('[data-cancel]').onclick=()=>root.remove();
+    root.querySelector('[data-apply]').onclick=()=>{
+      const topic=t.value,lesson=l.value;root.remove();
+      const snapshot=[];
+      (STATE.resourceFormulas||[]).forEach(f=>{if(ids.includes(f.id)){snapshot.push({id:f.id,discipline:f.discipline,topic:f.topic,lesson:f.lesson});f.discipline=d;f.topic=topic;f.lesson=lesson;}});
+      selected.formulas.clear();persist();UI.renderResourceFormulas();
+      showUndo(`${ids.length} formula(s) moved`,()=>{snapshot.forEach(s=>{const f=(STATE.resourceFormulas||[]).find(x=>x.id===s.id);if(f){f.discipline=s.discipline;f.topic=s.topic;f.lesson=s.lesson;}});persist();UI.renderResourceFormulas();});
+    };
+  }
+
+  async function bulkDeleteFormulas(){
+    const ids=[...selected.formulas];if(!ids.length)return;
+    const snapshot=(STATE.resourceFormulas||[]).filter(f=>ids.includes(f.id)).map(f=>JSON.parse(JSON.stringify(f)));
+    if(!await showModal({title:'Delete Formulas',message:`Delete ${ids.length} selected formula(s)?`,danger:true,confirmText:'Delete'}))return;
+    STATE.resourceFormulas=(STATE.resourceFormulas||[]).filter(f=>!ids.includes(f.id));selected.formulas.clear();persist();UI.renderResourceFormulas();
+    showUndo(`${ids.length} formula(s) deleted`,()=>{STATE.resourceFormulas=(STATE.resourceFormulas||[]).concat(snapshot);persist();UI.renderResourceFormulas();});
+  }
+
+  function enhanceBankRows(){
+    const host=document.getElementById('qb-bank-list');if(!host)return;
+    const q=(document.getElementById('ux-bank-search')?.value||'').trim().toLowerCase();
+    const sort=document.getElementById('ux-bank-sort')?.value||'name';
+    const rows=[...host.querySelectorAll('.session-row')];
+    rows.forEach(row=>{
+      const inp=row.querySelector('[data-rename-bank]');if(!inp)return;
+      const b=(STATE.questionBanks||[]).find(x=>x.id===inp.dataset.renameBank);if(!b)return;
+      if(q)row.style.display=([b.fileName,b.topic,b.lesson].join(' ').toLowerCase().includes(q)&&((b.discipline||'civil')===STATE.activeDiscipline))?'':'none';
+      if(!row.querySelector('[data-ux-pin-bank]')){
+        const actions=row.querySelector('div[style*="margin-left:auto"]');
+        if(actions){const pin=document.createElement('button');pin.className='ux-pin '+(isPinned('banks',b.id)?'active':'');pin.dataset.uxPinBank=b.id;pin.textContent='★';pin.title='Pin bank';actions.prepend(pin);}
+      }
+      if(manage.banks&&!row.querySelector('[data-ux-select-bank]')){
+        const cb=document.createElement('input');cb.type='checkbox';cb.className='ux-check';cb.dataset.uxSelectBank=b.id;cb.checked=selected.banks.has(b.id);row.prepend(cb);
+      }
+    });
+    if(sort!=='name'){
+      const parent=host;
+      rows.sort((ra,rb)=>{
+        const a=(STATE.questionBanks||[]).find(x=>x.id===ra.querySelector('[data-rename-bank]')?.dataset.renameBank)||{};
+        const b=(STATE.questionBanks||[]).find(x=>x.id===rb.querySelector('[data-rename-bank]')?.dataset.renameBank)||{};
+        if(sort==='recent-added')return new Date(b.importedAt||0)-new Date(a.importedAt||0);
+        if(sort==='questions')return (b.questionCount||0)-(a.questionCount||0);
+        return 0;
+      }).forEach(r=>parent.appendChild(r));
+    }
+    renderBankHome();updateBulkBars();
+  }
+
+  function enhanceFormulaCards(){
+    const q=(document.getElementById('ux-formula-local-search')?.value||'').trim().toLowerCase();
+    const cards=[...document.querySelectorAll('#rf-list [data-fm-card]')];
+    cards.forEach(card=>{
+      const id=card.dataset.fmId;
+      const f=(STATE.resourceFormulas||[]).find(x=>x.id===id);if(!f)return;
+      if(q)card.style.display=([f.term,f.formula,f.variables,f.use,f.topic,f.lesson].join(' ').toLowerCase().includes(q))?'':'none';
+      if(!card.querySelector('[data-ux-pin-formula]')){
+        const actions=card.querySelector('.fm-actions');
+        if(actions){
+          const pin=document.createElement('button');pin.className='ux-pin '+(isPinned('formulas',id)?'active':'');pin.dataset.uxPinFormula=id;pin.title='Pin formula';pin.textContent='★';actions.prepend(pin);
+        }
+      }
+      if(manage.formulas&&!card.querySelector('[data-ux-select-formula]')){
+        const cb=document.createElement('input');cb.type='checkbox';cb.className='ux-check';cb.dataset.uxSelectFormula=id;cb.checked=selected.formulas.has(id);card.prepend(cb);
+      }
+    });
+    renderFormulaHome();
+    updateBulkBars();
+  }
+
+  function openResource(id){
+    const r=(STATE.customResources||[]).find(x=>x.id===id);if(!r)return;
+    recordRecent('resources',id,r.material,'resources');
+    if(r.type==='pdf'||r.pdfData)ResourceOps.openPdf(id);
+    else if(r.link)window.open(r.link,'_blank','noopener,noreferrer');
+  }
+
+  function resourceDuplicate(fileOrUrl){
+    if(typeof fileOrUrl==='string'){
+      const norm=fileOrUrl.trim().toLowerCase();
+      return (STATE.customResources||[]).find(r=>String(r.link||'').trim().toLowerCase()===norm);
+    }
+    const f=fileOrUrl;
+    return (STATE.customResources||[]).find(r=>r.type==='pdf'&&r.fileName===f.name&&Number(r.fileSize||0)===Number(f.size||0));
+  }
+
+  async function replacePdf(id,file){
+    const r=(STATE.customResources||[]).find(x=>x.id===id);if(!r||!file)return;
+    const dataUrl=await new Promise((resolve,reject)=>{const rd=new FileReader();rd.onload=()=>resolve(String(rd.result||''));rd.onerror=()=>reject(rd.error);rd.readAsDataURL(file);});
+    r.pdfData=dataUrl;r.fileName=file.name;r.fileSize=file.size;r.updatedAt=Date.now();persist();UI.renderResources();
+    Notify.toast('success','PDF Replaced',`Updated "${r.material}".`);
+  }
+
+  function toggleManage(which){
+    manage[which]=!manage[which];
+    document.querySelectorAll(`[data-ux-manage="${which}"]`).forEach(b=>b.classList.toggle('active',manage[which]));
+    if(which==='resources'){selected.resources.clear();UI.renderResources();}
+    if(which==='banks'){selected.banks.clear();UI.renderQuestionBanks();}
+    if(which==='formulas'){selected.formulas.clear();UI.renderResourceFormulas();}
+    updateBulkBars();
+  }
+
+  function openAddPanel(mode){
+    const panel=document.getElementById('res-add-panel');if(!panel)return;
+    panel.classList.remove('ux-collapsed');
+    const btn=panel.querySelector('[data-collapse-target]');if(btn)btn.textContent='Hide';
+    if(mode==='pdf')document.getElementById('btn-upload-resource-pdf')?.click();
+    else document.getElementById('res-input-material')?.focus();
+  }
+
+  function toggleAddMenu(name){
+    document.querySelectorAll('.ux-add-menu').forEach(x=>{if(x.dataset.uxAddMenuPanel!==name)x.classList.remove('open');});
+    document.querySelector(`[data-ux-add-menu-panel="${name}"]`)?.classList.toggle('open');
+  }
+
+  function renderAllEnhancements(){
+    ensureState();updateDisciplineBadge();updateDriveMini();renderResourceHome();renderFormulaHome();renderBankHome();renderStorage();enhanceResourceCards();enhanceBankRows();enhanceFormulaCards();updateBulkBars();
+  }
+
+  function install(){
+    if(installed)return;installed=true;ensureState();
+
+    const oldPersist=persist;
+    // visual saving state is triggered by user changes via click/change/input events.
+    document.addEventListener('input',e=>{if(e.target.matches('input,textarea,select'))markSaving();},true);
+    document.addEventListener('change',()=>markSaving(),true);
+    document.addEventListener('click',e=>{
+      const menuBtn=e.target.closest('[data-ux-add-menu]');
+      if(menuBtn){e.stopPropagation();toggleAddMenu(menuBtn.dataset.uxAddMenu);return;}
+      if(!e.target.closest('.ux-add-menu-wrap'))document.querySelectorAll('.ux-add-menu').forEach(x=>x.classList.remove('open'));
+
+      const manageBtn=e.target.closest('[data-ux-manage]');
+      if(manageBtn){toggleManage(manageBtn.dataset.uxManage);return;}
+
+      const act=e.target.closest('[data-ux-action]');
+      if(act){
+        const a=act.dataset.uxAction;
+        document.querySelectorAll('.ux-add-menu').forEach(x=>x.classList.remove('open'));
+        if(a==='add-resource-link')openAddPanel('link');
+        if(a==='add-resource-pdf')openAddPanel('pdf');
+        if(a==='add-topic')resourcePromptAddTopic();
+        if(a==='add-lesson')resourcePromptAddLesson(ResourceLibraryNav.topic);
+        if(a==='add-formula')ResourceFormulaOps.addBlankFormula();
+        if(a==='open-formula-import'){document.getElementById('formula-ai-pdf-dropzone')?.scrollIntoView({behavior:'smooth',block:'center'});}
+        if(a==='open-bank-excel'){document.getElementById('qb-file-dropzone')?.scrollIntoView({behavior:'smooth',block:'center'});}
+        if(a==='open-bank-pdf'){document.getElementById('ai-pdf-dropzone')?.scrollIntoView({behavior:'smooth',block:'center'});}
+        return;
+      }
+
+      const pinR=e.target.closest('[data-ux-pin-resource]');if(pinR){e.preventDefault();e.stopPropagation();togglePin('resources',pinR.dataset.uxPinResource);enhanceResourceCards();return;}
+      const pinF=e.target.closest('[data-ux-pin-formula]');if(pinF){e.preventDefault();e.stopPropagation();togglePin('formulas',pinF.dataset.uxPinFormula);enhanceFormulaCards();return;}
+      const pinB=e.target.closest('[data-ux-pin-bank]');if(pinB){e.preventDefault();e.stopPropagation();togglePin('banks',pinB.dataset.uxPinBank);enhanceBankRows();renderBankHome();return;}
+      const openR=e.target.closest('[data-ux-open-resource]');if(openR){openResource(openR.dataset.uxOpenResource);return;}
+      const openF=e.target.closest('[data-ux-open-formula]');if(openF){const f=(STATE.resourceFormulas||[]).find(x=>x.id===openF.dataset.uxOpenFormula);if(f){recordRecent('formulas',f.id,f.term||'Formula','formulas');FormulaLibraryNav.topic=f.topic||'Unclassified';FormulaLibraryNav.lesson=f.lesson||'All Lessons';UI.switchView('formulas');UI.renderResourceFormulas();setTimeout(()=>document.querySelector(`[data-fm-id="${f.id}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}),0);}return;}
+      const openB=e.target.closest('[data-ux-open-bank]');if(openB){const b=(STATE.questionBanks||[]).find(x=>x.id===openB.dataset.uxOpenBank);if(b){recordRecent('banks',b.id,b.fileName||'Bank','question-banks');UI.switchView('question-banks');UI.renderQuestionBanks();setTimeout(()=>document.querySelector(`[data-rename-bank="${b.id}"]`)?.closest('.session-row')?.scrollIntoView({behavior:'smooth',block:'center'}),0);}return;}
+
+      const bulk=e.target.closest('[data-ux-bulk]');
+      if(bulk){
+        if(bulk.dataset.uxBulk==='move')bulkMoveResources();
+        if(bulk.dataset.uxBulk==='delete')bulkDeleteResources();
+        if(bulk.dataset.uxBulk==='clear'){selected.resources.clear();UI.renderResources();}
+        return;
+      }
+      const fbulk=e.target.closest('[data-ux-formula-bulk]');
+      if(fbulk){
+        if(fbulk.dataset.uxFormulaBulk==='move')bulkMoveFormulas();
+        if(fbulk.dataset.uxFormulaBulk==='delete')bulkDeleteFormulas();
+        if(fbulk.dataset.uxFormulaBulk==='clear'){selected.formulas.clear();UI.renderResourceFormulas();}
+        return;
+      }
+      const bbulk=e.target.closest('[data-ux-bank-bulk]');
+      if(bbulk){
+        if(bbulk.dataset.uxBankBulk==='delete')bulkDeleteBanks();
+        if(bbulk.dataset.uxBankBulk==='clear'){selected.banks.clear();UI.renderQuestionBanks();}
+        if(bbulk.dataset.uxBankBulk==='classify')bulkClassifyBanks();
+        return;
+      }
+
+      if(e.target.id==='ux-resource-clear-filters'){document.getElementById('ux-resource-search').value='';document.getElementById('ux-resource-sort').value='name';UI.renderResources();return;}
+      if(e.target.id==='ux-formula-clear-filters'){document.getElementById('ux-formula-local-search').value='';UI.renderResourceFormulas();return;}
+
+      const rep=e.target.closest('[data-replace-res-pdf]');
+      if(rep){
+        const input=document.createElement('input');input.type='file';input.accept='application/pdf,.pdf';
+        input.onchange=()=>{const f=input.files&&input.files[0];if(f)replacePdf(rep.dataset.replaceResPdf,f);};
+        input.click();return;
+      }
+    });
+
+    document.addEventListener('change',e=>{
+      const sr=e.target.closest('[data-ux-select-resource]');
+      if(sr){sr.checked?selected.resources.add(sr.dataset.uxSelectResource):selected.resources.delete(sr.dataset.uxSelectResource);updateBulkBars();return;}
+      const sb=e.target.closest('[data-ux-select-bank]');
+      if(sb){sb.checked?selected.banks.add(sb.dataset.uxSelectBank):selected.banks.delete(sb.dataset.uxSelectBank);updateBulkBars();return;}
+      const sf=e.target.closest('[data-ux-select-formula]');
+      if(sf){sf.checked?selected.formulas.add(sf.dataset.uxSelectFormula):selected.formulas.delete(sf.dataset.uxSelectFormula);updateBulkBars();return;}
+      if(e.target.id==='ux-resource-sort'){UI.renderResources();return;}
+      if(e.target.id==='ux-bank-sort'){enhanceBankRows();return;}
+      if(e.target.id==='ux-formula-sort'){UI.renderResourceFormulas();return;}
+    });
+
+    document.addEventListener('input',e=>{
+      if(e.target.id==='ux-resource-search'){UI.renderResources();}
+      if(e.target.id==='ux-bank-search'){enhanceBankRows();}
+      if(e.target.id==='ux-formula-local-search'){enhanceFormulaCards();}
+    });
+
+    document.addEventListener('dblclick',e=>{
+      const card=e.target.closest('[data-resource-id]');if(card&&!e.target.closest('button,a,input'))openResource(card.dataset.resourceId);
+    });
+    document.addEventListener('click',e=>{
+      const fm=e.target.closest('#rf-list [data-fm-card]');
+      if(fm&&!e.target.closest('button,input,textarea,select')){const f=(STATE.resourceFormulas||[]).find(x=>x.id===fm.dataset.fmId);if(f)recordRecent('formulas',f.id,f.term||'Formula','formulas');}
+      const take=e.target.closest('[data-start-bank-quiz]');
+      if(take){const b=(STATE.questionBanks||[]).find(x=>x.id===take.dataset.startBankQuiz);if(b)recordRecent('banks',b.id,b.fileName||'Bank','question-banks');}
+    },true);
+
+    document.addEventListener('dragstart',e=>{
+      const card=e.target.closest('[data-ux-drag-resource]');
+      if(card&&manage.resources){card.classList.add('ux-drag-source');e.dataTransfer.setData('text/resource-id',card.dataset.uxDragResource);}
+    });
+    document.addEventListener('dragend',e=>e.target.closest('.ux-drag-source')?.classList.remove('ux-drag-source'));
+
+    // Drag resource onto topic/lesson tiles to reclassify.
+    document.addEventListener('dragover',e=>{
+      const tile=e.target.closest('[data-res-topic],[data-res-lesson]');
+      if(!tile||!manage.resources)return;
+      if(e.dataTransfer.types.includes('text/resource-id')){e.preventDefault();tile.classList.add('ux-drop-target');}
+    });
+    document.addEventListener('dragleave',e=>{const tile=e.target.closest('.ux-drop-target');if(tile&&!tile.contains(e.relatedTarget))tile.classList.remove('ux-drop-target');});
+    document.addEventListener('drop',e=>{
+      const tile=e.target.closest('[data-res-topic],[data-res-lesson]');
+      if(!tile||!manage.resources)return;
+      const id=e.dataTransfer.getData('text/resource-id');if(!id)return;
+      e.preventDefault();tile.classList.remove('ux-drop-target');
+      const r=(STATE.customResources||[]).find(x=>x.id===id);if(!r)return;
+      if(tile.dataset.resTopic!==undefined){r.topic=tile.dataset.resTopic==='Unclassified'?'':tile.dataset.resTopic;r.lesson='';}
+      if(tile.dataset.resLesson!==undefined){r.topic=ResourceLibraryNav.topic==='Unclassified'?'':ResourceLibraryNav.topic;r.lesson=tile.dataset.resLesson==='Unassigned'?'':tile.dataset.resLesson;}
+      persist();UI.renderResources();
+      Notify.toast('success','Resource Moved',`Moved "${r.material}".`);
+    });
+
+    // Patch resource open buttons to record recent.
+    document.addEventListener('click',e=>{
+      const p=e.target.closest('[data-open-res-pdf]');if(p){const r=(STATE.customResources||[]).find(x=>x.id===p.dataset.openResPdf);if(r)recordRecent('resources',r.id,r.material,'resources');}
+      const a=e.target.closest('#resources-grid a[href]');if(a){const card=a.closest('[data-resource-id]');const r=card&&(STATE.customResources||[]).find(x=>x.id===card.dataset.resourceId);if(r)recordRecent('resources',r.id,r.material,'resources');}
+    },true);
+
+    // Make current resource card render richer without rewriting original renderer.
+    const oldRenderResources=UI.renderResources.bind(UI);
+    UI.renderResources=function(){
+      oldRenderResources();
+      const grid=document.getElementById('resources-grid');
+      if(grid){
+        const cards=[...grid.querySelectorAll('[data-resource-id]')];
+        const list=filteredResources(cards.map(c=>(STATE.customResources||[]).find(r=>r.id===c.dataset.resourceId)).filter(Boolean));
+        const order=new Map(list.map((r,i)=>[r.id,i]));
+        cards.forEach(c=>{const r=(STATE.customResources||[]).find(x=>x.id===c.dataset.resourceId);if(r&&!order.has(r.id))c.style.display='none';});
+        cards.sort((a,b)=>(order.get(a.dataset.resourceId)??9999)-(order.get(b.dataset.resourceId)??9999)).forEach(c=>grid.appendChild(c));
+      }
+      enhanceResourceCards();renderResourceHome();
+    };
+
+    const oldRenderBanks=UI.renderQuestionBanks.bind(UI);
+    UI.renderQuestionBanks=function(){oldRenderBanks();enhanceBankRows();};
+
+    const oldRenderFormulas=UI.renderResourceFormulas.bind(UI);
+    UI.renderResourceFormulas=function(){oldRenderFormulas();enhanceFormulaCards();};
+
+    // Resource PDF duplicate check + created timestamps by wrapping add methods.
+    const oldAddResource=ResourceOps.addResource.bind(ResourceOps);
+    ResourceOps.addResource=function(material,link,topic,lesson,discipline){
+      const dup=resourceDuplicate(link);
+      if(dup){Notify.toast('warning','Duplicate Resource',`That link already exists as "${dup.material}".`);return false;}
+      const before=(STATE.customResources||[]).length;
+      const ok=oldAddResource(material,link,topic,lesson,discipline);
+      if(ok){const r=(STATE.customResources||[])[before];if(r)r.createdAt=Date.now();persist();}
+      return ok;
+    };
+    const oldAddPdf=ResourceOps.addPdf.bind(ResourceOps);
+    ResourceOps.addPdf=async function(file,material,topic,lesson,discipline){
+      const dup=resourceDuplicate(file);
+      if(dup){Notify.toast('warning','Duplicate PDF',`This PDF already exists as "${dup.material}".`);return false;}
+      const before=(STATE.customResources||[]).length;
+      const ok=await oldAddPdf(file,material,topic,lesson,discipline);
+      if(ok){const r=(STATE.customResources||[])[before];if(r)r.createdAt=Date.now();persist();}
+      return ok;
+    };
+
+    // Add replace PDF button to PDF cards post-render.
+    const oldEnh=enhanceResourceCards;
+    enhanceResourceCards=function(){
+      oldEnh();
+      document.querySelectorAll('#resources-grid [data-resource-id]').forEach(card=>{
+        const r=(STATE.customResources||[]).find(x=>x.id===card.dataset.resourceId);
+        if(r&&(r.type==='pdf'||r.pdfData)&&!card.querySelector('[data-replace-res-pdf]')){
+          const actions=card.querySelector('div[style*="display:flex"]');
+          if(actions){
+            const b=document.createElement('button');b.className='btn btn-ghost btn-sm';b.dataset.replaceResPdf=r.id;b.textContent='Replace PDF';actions.insertBefore(b,actions.firstChild);
+          }
+        }
+      });
+    };
+
+    setTimeout(renderAllEnhancements,0);
+  }
+
+  return {install,renderAllEnhancements,renderStorage,recordRecent,showModal,showUndo,markSaving,markSaved,updateDisciplineBadge,updateDriveMini};
 })();
 
 function launchApp(){
   document.getElementById('app-shell').classList.remove('hidden');
-  document.documentElement.setAttribute('data-theme', STATE.settings.theme || 'solo-blue');
-      document.documentElement.classList.toggle('pokemon-ui', !!STATE.settings.pokemonUI);
-  RenderAll(); UI.switchView('dashboard');
+  ensureDisciplineThemes(STATE.settings);
+  applyActiveDisciplineTheme();
+  RenderAll();
+  UsabilityManager.install();
+  UsabilityManager.renderAllEnhancements();
+  UsabilityEnhancements.init();
+  UsabilityEnhancements.restoreLastView();
 }
 
 async function init(){
@@ -10912,9 +12817,15 @@ async function init(){
   // to initialize STATE in that case, crashing everything after it.
   STATE = savedSt ? Object.assign(defaultState(), savedSt) : defaultState();
   STATE.settings = Object.assign(
-    { theme:'solo-blue', sound:true, animations:true, pokemonUI:false, xpRates: Object.assign({}, DEFAULT_XP_RATES), keybinds: Object.assign({}, DEFAULT_KEYBINDS), driveSync: defaultDriveSync() },
+    { theme:'solo-blue', disciplineThemes:{civil:'solo-blue',sanitary:'shadow-purple'}, sound:true, animations:true, pokemonUI:false, xpRates: Object.assign({}, DEFAULT_XP_RATES), keybinds: Object.assign({}, DEFAULT_KEYBINDS), driveSync: defaultDriveSync() },
     (savedSt && savedSt.settings) || {}
   );
+  // Migrate the old single-theme setting without changing the user's current appearance.
+  if(!((savedSt&&savedSt.settings)||{}).disciplineThemes){
+    const legacyTheme=normalizeThemeName(STATE.settings.theme || 'solo-blue');
+    STATE.settings.disciplineThemes={civil:legacyTheme,sanitary:legacyTheme};
+  }
+  ensureDisciplineThemes(STATE.settings);
   STATE.settings.driveSync = Object.assign(defaultDriveSync(), ((savedSt && savedSt.settings) || {}).driveSync || {});
   DisciplineSystem.install();
   wireEvents();
